@@ -41,4 +41,7 @@ public class User {
     }
 
     //Create getter & setter methods
+    public void setId(String id) {
+        this.id = id;
+    }
 }
