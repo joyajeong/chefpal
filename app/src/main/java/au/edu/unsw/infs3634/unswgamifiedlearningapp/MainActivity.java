@@ -10,6 +10,13 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import okhttp3.OkHttpClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class MainActivity extends AppCompatActivity {
 
     //test push
@@ -31,7 +38,24 @@ public class MainActivity extends AppCompatActivity {
             Log.i("Added user", userDao.findById("joyaj").firstName);
         });
 
+        getRecipes();
+    }
 
+    //Gets recipes from API - just a test
+    private void getRecipes() {
+        Call<RecipeSearchResult> call = RetrofitClient.getInstance().getMyApi().recipeResults();
+        call.enqueue(new Callback<RecipeSearchResult>() {
+            @Override
+            public void onResponse(Call<RecipeSearchResult> call, Response<RecipeSearchResult> response) {
+                RecipeSearchResult recipes = response.body();
+                Log.i("Main Activity API Test", recipes.getResults().get(0).getTitle());
+            }
 
+            @Override
+            public void onFailure(Call<RecipeSearchResult> call, Throwable t) {
+                Log.i("Main Activity API Test", "Failed" + t.getCause());
+
+            }
+        });
     }
 }
