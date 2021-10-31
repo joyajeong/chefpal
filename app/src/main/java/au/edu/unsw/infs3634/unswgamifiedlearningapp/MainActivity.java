@@ -11,18 +11,8 @@ import android.view.MenuItem;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
-import okhttp3.OkHttpClient;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     HomeFragment homeFragment = new HomeFragment();
     LearnFragment learnFragment = new LearnFragment();
     RecipesFragment recipesFragment = new RecipesFragment();
-    FavouritesFragment favouritesFragment = new FavouritesFragment();
+    AccountFragment favouritesFragment = new AccountFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
