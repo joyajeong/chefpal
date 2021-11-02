@@ -90,7 +90,6 @@ public class SignUpActivity extends AppCompatActivity {
             Toast.makeText(SignUpActivity.this,"Password and confirm password should be same!"
             ,Toast.LENGTH_SHORT).show();
             return false;
-
         }
         return true;
     }
@@ -107,13 +106,12 @@ public class SignUpActivity extends AppCompatActivity {
                             Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
                             startActivity(intent);
                             SignUpActivity.this.finish();
-                            Log.d(TAG, "createUserWithEmail:success");
+                            //Log.d(TAG, "createUserWithEmail:success");
                         } else {
                             // If sign in fails, display a message to the user.
-
                             Toast.makeText(SignUpActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            //Log.w(TAG, "createUserWithEmail:failure", task.getException());
                         }
                     }
                 });
