@@ -3,14 +3,17 @@ package au.edu.unsw.infs3634.unswgamifiedlearningapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,6 +28,8 @@ public class SignUpActivity extends AppCompatActivity {
     private ImageView backB;
     private FirebaseAuth mAuth;
     private String emailStr, passwordStr, confirmPassStr, nameStr;
+    private Dialog progressDialog;
+    private TextView dialogueText;
     private static String TAG = "SignUpActivity";
 
     @Override
@@ -38,7 +43,15 @@ public class SignUpActivity extends AppCompatActivity {
         confirmPass = findViewById(R.id.confirm_pass);
         backB = findViewById(R.id.backB);
         signUpB = findViewById(R.id.signupB);
+
         mAuth = FirebaseAuth.getInstance();
+        progressDialog = new Dialog(SignUpActivity.this);
+        progressDialog.setContentView(R.layout.dialogue);
+        progressDialog.setCancelable(false);
+        progressDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        dialogueText = progressDialog.findViewById(R.id.dialogue_text);
+        dialogueText.setText("Registering user...");
 
 
         backB.setOnClickListener(new View.OnClickListener() {
@@ -95,20 +108,24 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void signupNewUser(){
+        progressDialog.show();
         mAuth.createUserWithEmailAndPassword(emailStr, passwordStr)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    // (task) ->
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
 
                             Toast.makeText(SignUpActivity.this, "Sign Up Successful",Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
                             Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
                             startActivity(intent);
                             SignUpActivity.this.finish();
                             //Log.d(TAG, "createUserWithEmail:success");
                         } else {
                             // If sign in fails, display a message to the user.
+                            progressDialog.dismiss();
                             Toast.makeText(SignUpActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                             //Log.w(TAG, "createUserWithEmail:failure", task.getException());
