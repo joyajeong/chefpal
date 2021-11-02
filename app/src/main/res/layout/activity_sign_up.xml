@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/LoginTheme"
-    tools:context=".LoginActivity">
+    tools:context=".SignUpActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -37,44 +37,71 @@
 
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/email"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="32dp"
-        android:drawableLeft="@drawable/ic_account"
-        android:drawableTint="@color/primary"
-        android:drawablePadding="16dp"
-        android:backgroundTint="@color/primary"
-        android:textColor="@color/black"
-        android:hint="E-Mail Id"
-        android:ems="10"
-        android:inputType="textEmailAddress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        android:id="@+id/edit_layout"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        >
 
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="0dp"
+        <EditText
+        android:id="@+id/userName"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="64dp"
         android:layout_marginEnd="32dp"
-        android:drawableLeft="@drawable/ic_lock"
-        android:drawableTint="@color/primary"
-        android:drawablePadding="16dp"
         android:backgroundTint="@color/primary"
         android:textColor="@color/black"
-        android:hint="Password"
+        android:hint="Full Name"
         android:ems="10"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email" />
+        android:inputType="text" />
+
+        <EditText
+            android:id="@+id/emailID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp"
+            android:backgroundTint="@color/primary"
+            android:textColor="@color/black"
+            android:hint="E-Mail ID"
+            android:ems="10"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/userName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp"
+            android:backgroundTint="@color/primary"
+            android:textColor="@color/black"
+            android:hint="Password"
+            android:ems="10"
+            android:inputType="textPassword" />
+
+        <EditText
+            android:id="@+id/userName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="64dp"
+            android:layout_marginEnd="32dp"
+            android:backgroundTint="@color/primary"
+            android:textColor="@color/black"
+            android:hint="Full Name"
+            android:ems="10"
+            android:inputType="text" />
+
+
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/forgot_pass"
