@@ -62,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
     private void login(){
-        // next tim...sdfsdfsd
+        // next tim...sdfsdfsd....
     }
 
 
