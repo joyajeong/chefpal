@@ -5,11 +5,12 @@
       <map>
         <entry key="..\:/Users/xulin/AndroidStudioProjects/unsw-gamified-learning-app-group-76/app/src/main/res/drawable/greident_background.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/xulin/AndroidStudioProjects/unsw-gamified-learning-app-group-76/app/src/main/res/drawable/ic_account.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/xulin/AndroidStudioProjects/unsw-gamified-learning-app-group-76/app/src/main/res/drawable/ic_back.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/xulin/AndroidStudioProjects/unsw-gamified-learning-app-group-76/app/src/main/res/drawable/ic_lock.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/xulin/AndroidStudioProjects/unsw-gamified-learning-app-group-76/app/src/main/res/drawable/round_corner.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/xulin/AndroidStudioProjects/unsw-gamified-learning-app-group-76/app/src/main/res/layout/activity_login.xml" value="0.22" />
         <entry key="..\:/Users/xulin/AndroidStudioProjects/unsw-gamified-learning-app-group-76/app/src/main/res/layout/activity_main.xml" value="0.22" />
-        <entry key="..\:/Users/xulin/AndroidStudioProjects/unsw-gamified-learning-app-group-76/app/src/main/res/layout/activity_sign_up.xml" value="0.1" />
+        <entry key="..\:/Users/xulin/AndroidStudioProjects/unsw-gamified-learning-app-group-76/app/src/main/res/layout/activity_sign_up.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/xulin/AndroidStudioProjects/unsw-gamified-learning-app-group-76/app/src/main/res/layout/activity_splash.xml" value="0.22" />
         <entry key="..\:/Users/xulin/AndroidStudioProjects/unsw-gamified-learning-app-group-76/app/src/main/res/layout/fragment_favourites.xml" value="0.12" />
         <entry key="..\:/Users/xulin/AndroidStudioProjects/unsw-gamified-learning-app-group-76/app/src/main/res/layout/fragment_home.xml" value="0.1" />
