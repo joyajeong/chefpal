@@ -127,13 +127,13 @@ public class LoginActivity extends AppCompatActivity {
                             Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                             startActivity(intent);
                             finish();
-                            //Log.d(TAG, "signInWithEmail:success");
+                            Log.d(TAG, "signInWithEmail:success");
                         } else {
                             // If sign in fails, display error message to the user.
                             progressDialog.dismiss();
                             Toast.makeText(LoginActivity.this, task.getException().getMessage(),
                                     Toast.LENGTH_SHORT).show();
-                            //Log.w(TAG, "signInWithEmail:failure", task.getException());
+                            Log.w(TAG, "signInWithEmail:failure", task.getException());
 
                         }
                     }
