@@ -11,10 +11,12 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.TypeAdapterFactory;
 
 public class SplashActivity extends AppCompatActivity {
     private TextView appName;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +31,7 @@ public class SplashActivity extends AppCompatActivity {
         //animation
         Animation anim = AnimationUtils.loadAnimation(this,R.anim.myanim);
         appName.setAnimation(anim);
-
+        mAuth = FirebaseAuth.getInstance();
         //load Main Activity
         new Thread(){
             @Override
@@ -39,8 +41,20 @@ public class SplashActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
-                startActivity(intent);
+                //check already log in?
+                if(mAuth.getCurrentUser() != null){
+                    //already Logged in, go to MainActivity directly
+                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    SplashActivity.this.finish();
+                }
+                else{
+                    //to Log in
+                    Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    SplashActivity.this.finish();
+                }
+
             }
         }.start();
 
