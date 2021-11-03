@@ -10,6 +10,7 @@ import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -21,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
     LearnFragment learnFragment = new LearnFragment();
     RecipesFragment recipesFragment = new RecipesFragment();
     AccountFragment favouritesFragment = new AccountFragment();
+    private FirebaseAuth mAuth;
+    private static String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,13 +32,19 @@ public class MainActivity extends AppCompatActivity {
 
         //Testing out database
         AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "users").build();
+                AppDatabase.class, "user").build();
 
+
+        mAuth = FirebaseAuth.getInstance();
         UserDao userDao = db.userDao();
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {
-            userDao.insertAll(User.userData());
-            Log.i("Added user", userDao.findById("joyaj").firstName);
+            //if user doesn't already exist add user to database TODO - need to check if it actually works
+            if (userDao.findById(mAuth.getCurrentUser().getUid()) == null) {
+                userDao.insertAll(new User(mAuth.getCurrentUser().getUid(), 0));
+                Log.d(TAG, "Added new user!");
+            }
+            Log.d(TAG, "Current user id: " +  mAuth.getCurrentUser().getUid());
         });
 
         //Setting up bottom navigation

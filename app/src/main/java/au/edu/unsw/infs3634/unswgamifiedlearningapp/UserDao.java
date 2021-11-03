@@ -16,17 +16,17 @@ public interface UserDao {
     @Query("SELECT * FROM user WHERE id IN (:userIds)")
     List<User> loadAllByIds(int[] userIds);
 
-    @Query("SELECT * FROM user WHERE first_name LIKE :first AND " +
-            "last_name LIKE :last LIMIT 1")
-    User findByName(String first, String last);
-
     @Query("SELECT * FROM user WHERE " +
             "id LIKE :id LIMIT 1")
     User findById(String id);
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(User... users);
+    void insertAll(User... user);
 
     @Delete
     void delete(User user);
+
+    @Query("DELETE FROM user")
+    void delete();
 }
+
