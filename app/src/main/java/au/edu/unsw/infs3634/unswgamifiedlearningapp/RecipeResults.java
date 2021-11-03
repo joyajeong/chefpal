@@ -3,7 +3,9 @@ package au.edu.unsw.infs3634.unswgamifiedlearningapp;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Result {
+import java.util.ArrayList;
+
+public class RecipeResults {
 
     @SerializedName("id")
     @Expose

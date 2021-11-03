@@ -115,6 +115,53 @@ public class RecipeInformationResult {
     @Expose
     private String summary;
 
+    public RecipeInformationResult(Integer id, String title, String image, String imageType, Integer servings,
+                                   Integer readyInMinutes, String license, String sourceName, String sourceUrl,
+                                   String spoonacularSourceUrl, Integer aggregateLikes, Double spoonacularScore,
+                                   Double pricePerServing, List<Object> analyzedInstructions, Boolean cheap,
+                                   String creditsText, List<Object> cuisines, Boolean dairyFree, List<Object> diets,
+                                   String gaps, Boolean glutenFree, String instructions, Boolean ketogenic,
+                                   Boolean lowFodmap, List<Object> occasions, Boolean sustainable, Boolean vegan,
+                                   Boolean vegetarian, Boolean veryHealthy, Boolean veryPopular, Boolean whole30,
+                                   Integer weightWatcherSmartPoints, List<String> dishTypes, List<ExtendedIngredient>
+                                   extendedIngredients, String summary) {
+        this.id = id;
+        this.title = title;
+        this.image = image;
+        this.imageType = imageType;
+        this.servings = servings;
+        this.readyInMinutes = readyInMinutes;
+        this.license = license;
+        this.sourceName = sourceName;
+        this.sourceUrl = sourceUrl;
+        this.spoonacularSourceUrl = spoonacularSourceUrl;
+        this.aggregateLikes = aggregateLikes;
+        this.spoonacularScore = spoonacularScore;
+        this.pricePerServing = pricePerServing;
+        this.analyzedInstructions = analyzedInstructions;
+        this.cheap = cheap;
+        this.creditsText = creditsText;
+        this.cuisines = cuisines;
+        this.dairyFree = dairyFree;
+        this.diets = diets;
+        this.gaps = gaps;
+        this.glutenFree = glutenFree;
+        this.instructions = instructions;
+        this.ketogenic = ketogenic;
+        this.lowFodmap = lowFodmap;
+        this.occasions = occasions;
+        this.sustainable = sustainable;
+        this.vegan = vegan;
+        this.vegetarian = vegetarian;
+        this.veryHealthy = veryHealthy;
+        this.veryPopular = veryPopular;
+        this.whole30 = whole30;
+        this.weightWatcherSmartPoints = weightWatcherSmartPoints;
+        this.dishTypes = dishTypes;
+        this.extendedIngredients = extendedIngredients;
+        this.summary = summary;
+    }
+
     public Integer getId() {
         return id;
     }

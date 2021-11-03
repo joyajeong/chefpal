@@ -14,7 +14,7 @@ public class RecipeSearchResult {
     private Integer number;
     @SerializedName("results")
     @Expose
-    private List<Result> results = null;
+    private List<RecipeResults> recipeResults = null;
     @SerializedName("totalResults")
     @Expose
     private Integer totalResults;
@@ -35,12 +35,12 @@ public class RecipeSearchResult {
         this.number = number;
     }
 
-    public List<Result> getResults() {
-        return results;
+    public List<RecipeResults> getResults() {
+        return recipeResults;
     }
 
-    public void setResults(List<Result> results) {
-        this.results = results;
+    public void setResults(List<RecipeResults> recipeResults) {
+        this.recipeResults = recipeResults;
     }
 
     public Integer getTotalResults() {

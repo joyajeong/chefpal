@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,6 +35,8 @@ public class RecipesFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private int recipeId;
     private static final String TAG = "RecipeFragment";
+    private List<RecipeInformationResult> recipeList = RecipeLevelsActivity.recipeResults;
+    RecipeSearchResult searchResult;
     TextView recipeTitle;
     RecipeSearchResult recipes;
     Button btnVeg;
@@ -93,25 +97,27 @@ public class RecipesFragment extends Fragment {
                 ((Activity) getActivity()).overridePendingTransition(0, 0);
             }
         });
-        //Test out Spoonacular API
+        //Get recipes from Spoonacular API
         getRecipes();
     }
 
-    //Gets recipes from API - just a test
+    //Gets recipes from API - 10
     private void getRecipes() {
         Call<RecipeSearchResult> call = RetrofitClient.getInstance().getMyApi()
-                .recipeResults(null, null, null, true, 20, SpoonacularClient.apiKey);
+                //change maxReadyTime to adjust difficulty level
+                .recipeResults(null, null, "vegetarian", true, 15, SpoonacularClient.apiKey);
 
         call.enqueue(new Callback<RecipeSearchResult>() {
             @Override
             public void onResponse(Call<RecipeSearchResult> call, Response<RecipeSearchResult> response) {
-                recipes = response.body();
+                searchResult = response.body();
+                int sizeOfResult = searchResult.getResults().size();
 
                 if (response.body() != null) {
-                    recipeId = recipes.getResults().get(0).getId();
-                    getRecipeInfo(recipeId);
-                    recipeTitle.setText(recipes.getResults().get(0).getTitle());
-                    Log.d(TAG, "Recipe Title: " + recipes.getResults().get(0).getTitle());
+                    for (int i = 0; i < 3 ; i++) {
+                        Log.d(TAG, "Current index: " + i);
+                        getRecipeInfo(searchResult.getResults().get(i).getId());
+                    }
                 } else {
                     Log.d(TAG, "No results :(");
                 }
@@ -127,13 +133,15 @@ public class RecipesFragment extends Fragment {
 
     private void getRecipeInfo(int id) {
         Call<RecipeInformationResult> call = RetrofitClient.getInstance().getMyApi()
-                .recipeInformationResults(id, SpoonacularClient.apiKey);
+                .recipeInformationResults(id, false, SpoonacularClient.apiKey);
 
         call.enqueue(new Callback<RecipeInformationResult>() {
             @Override
             public void onResponse(Call<RecipeInformationResult> call, Response<RecipeInformationResult> response) {
                 RecipeInformationResult recipeInfo = response.body();
-                Log.i(TAG, recipeInfo.getSourceUrl());
+                Log.i(TAG, "Source URL: " + recipeInfo.getSourceUrl());
+                Log.d(TAG, "Recipe Title: " + recipeInfo.getTitle());
+                addRecipes(recipeInfo);
             }
 
             @Override
@@ -144,4 +152,21 @@ public class RecipesFragment extends Fragment {
         });
     }
 
+    private void addRecipes(RecipeInformationResult result) {
+        Log.d(TAG, "Recipes are being added...");
+        if (result != null && recipeList.size() < 3) {
+            recipeList.add(new RecipeInformationResult(result.getId(), result.getTitle(), result.getImage(), result.getImageType(),
+                    result.getServings(), result.getReadyInMinutes(), result.getLicense(), result.getSourceName(), result.getSourceUrl(),
+                    result.getSpoonacularSourceUrl(), result.getAggregateLikes(), result.getSpoonacularScore(), result.getPricePerServing(),
+                    result.getAnalyzedInstructions(), result.getCheap(), result.getCreditsText(), result.getCuisines(), result.getDairyFree(),
+                    result.getDiets(), result.getGaps(), result.getGlutenFree(), result.getInstructions(), result.getKetogenic(),
+                    result.getLowFodmap(), result.getOccasions(), result.getSustainable(), result.getVegan(), result.getVegetarian(),
+                    result.getVeryHealthy(), result.getVeryPopular(), result.getWhole30(), result.getWeightWatcherSmartPoints(),
+                    result.getDishTypes(), result.getExtendedIngredients(), result.getSummary()));
+            Log.d(TAG, "Number of recipes: " + String.valueOf(recipeList.size()));
+        } else {
+            Log.e(TAG, "Result is null");
+        }
+
+    }
 }
