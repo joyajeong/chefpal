@@ -1,15 +1,19 @@
 package au.edu.unsw.infs3634.unswgamifiedlearningapp;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import retrofit2.Call;
@@ -31,7 +35,7 @@ public class RecipesFragment extends Fragment {
     private static final String TAG = "RecipeFragment";
     TextView recipeTitle;
     RecipeSearchResult recipes;
-
+    Button btnVeg;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -80,6 +84,15 @@ public class RecipesFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         recipeTitle = getView().findViewById(R.id.tvRecipeTitle);
+        btnVeg = getView().findViewById(R.id.btnVeg);
+        btnVeg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), RecipeLevelsActivity.class);
+                startActivity(intent);
+                ((Activity) getActivity()).overridePendingTransition(0, 0);
+            }
+        });
         //Test out Spoonacular API
         getRecipes();
     }
