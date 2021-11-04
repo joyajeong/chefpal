@@ -135,4 +135,10 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
     public void sort(final int sortMethod) {
 
     }
+
+    public void updateRecipeList(List<RecipeInformationResult> recipes) {
+        mRecipes.removeAll(mRecipes);
+        mRecipes.addAll(recipes);
+        notifyDataSetChanged();
+    }
 }
