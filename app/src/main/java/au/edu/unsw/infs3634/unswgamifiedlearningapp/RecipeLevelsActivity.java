@@ -12,18 +12,23 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 public class RecipeLevelsActivity extends AppCompatActivity {
 
     private int recipeId;
     private static final String TAG = "RecipeLevelsActivity";
     TextView recipeTitle;
     RecipeSearchResult searchResult;
-    public static List<RecipeInformationResult> recipeResults = new ArrayList<>();
-    private RecyclerView recyclerView;
+    public static List<RecipeInformationResult> recipeEasy = new ArrayList<>();
+    public static List<RecipeInformationResult> recipeMed = new ArrayList<>();
+//maybe move these to recipes fragment
+    public static List<RecipeInformationResult> vegEasy = new ArrayList<>();
+    public static List<RecipeInformationResult> vegMed = new ArrayList<>();
+    public static List<RecipeInformationResult> vegHard = new ArrayList<>();
+    public static List<RecipeInformationResult> itEasy = new ArrayList<>();
+    public static List<RecipeInformationResult> itMed = new ArrayList<>();
+    public static List<RecipeInformationResult> itHard = new ArrayList<>();
+    private String recipeType;
+    private RecyclerView recyclerViewEasy, recyclerViewMed;
     private RecipeRecyclerViewAdapter adapter;
 
     @Override
@@ -31,6 +36,16 @@ public class RecipeLevelsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reciple_levels);
 //        getRecipes();
+        Bundle bundle = getIntent().getExtras();
+        recipeType = bundle.getString("RECIPE_TYPE");
+        Log.d(TAG, recipeType);
+
+        switch(recipeType) {
+            case "VEG":
+                recipeEasy = vegEasy;
+                recipeMed = vegMed;
+                break;
+        }
 
     }
 
@@ -38,7 +53,9 @@ public class RecipeLevelsActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         //Get the RecyclerView and implement ClickListener
-        recyclerView = findViewById(R.id.rvRecipes);
+        recyclerViewEasy = findViewById(R.id.rvRecipesEasy);
+        recyclerViewMed = findViewById(R.id.rvRecipesMed);
+
         RecipeRecyclerViewAdapter.ClickListener listener = new RecipeRecyclerViewAdapter.ClickListener() {
             @Override
             public void onRecipeClick(View view, String id) {
@@ -46,8 +63,26 @@ public class RecipeLevelsActivity extends AppCompatActivity {
             }
         };
 
+        setRecyclerView(recipeEasy, recyclerViewEasy);
+        setRecyclerView(recipeMed, recyclerViewMed);
+//        //Created an adapter and supply the song data to be displayed
+//        adapter = new RecipeRecyclerViewAdapter(recipeResults, listener);
+//        recyclerViewEasy.setAdapter(adapter);
+//
+//        //Set linear layout of RecyclerView
+//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+//        recyclerViewEasy.setLayoutManager(layoutManager);
+    }
+
+    private void setRecyclerView(List<RecipeInformationResult> recipe, RecyclerView recyclerView) {
+        RecipeRecyclerViewAdapter.ClickListener listener = new RecipeRecyclerViewAdapter.ClickListener() {
+            @Override
+            public void onRecipeClick(View view, String id) {
+                Log.d(TAG, "recipe " + id + "clicked");
+            }
+        };
         //Created an adapter and supply the song data to be displayed
-        adapter = new RecipeRecyclerViewAdapter(recipeResults, listener);
+        adapter = new RecipeRecyclerViewAdapter(recipe, listener);
         recyclerView.setAdapter(adapter);
 
         //Set linear layout of RecyclerView
@@ -68,11 +103,27 @@ public class RecipeLevelsActivity extends AppCompatActivity {
 //                int sizeOfResult = searchResult.getResults().size();
 //
 //                if (response.body() != null) {
-//                    for (int i = 0; i < sizeOfResult ; i++) {
-//                        if (recipeResults.size() < 10) {
-//                            getRecipeInfo(searchResult.getResults().get(i).getId());
-//                        }
+//                    for (int i = 0; i < 3 ; i++) {
+//                        Log.d(TAG, "Current index: " + i);
+//                        getRecipeInfo(searchResult.getResults().get(i).getId());
 //                    }
+//
+//                    recyclerView = findViewById(R.id.rvRecipes);
+//                    RecipeRecyclerViewAdapter.ClickListener listener = new RecipeRecyclerViewAdapter.ClickListener() {
+//                        @Override
+//                        public void onRecipeClick(View view, String id) {
+//                            Log.d(TAG, "recipe " + id + "clicked");
+//                        }
+//                    };
+//
+//                    //Created an adapter and supply the song data to be displayed
+//                    adapter = new RecipeRecyclerViewAdapter(recipeResults, listener);
+//                    recyclerView.setAdapter(adapter);
+//
+//                    //Set linear layout of RecyclerView
+//                    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+//                    recyclerView.setLayoutManager(layoutManager);
+//
 //                } else {
 //                    Log.d(TAG, "No results :(");
 //                }
@@ -109,7 +160,7 @@ public class RecipeLevelsActivity extends AppCompatActivity {
 //
 //    private void addRecipes(RecipeInformationResult result) {
 //        Log.d(TAG, "Recipes are being added...");
-//        if (result != null) {
+//        if (result != null && recipeResults.size() < 3) {
 //            recipeResults.add(new RecipeInformationResult(result.getId(), result.getTitle(), result.getImage(), result.getImageType(),
 //                    result.getServings(), result.getReadyInMinutes(), result.getLicense(), result.getSourceName(), result.getSourceUrl(),
 //                    result.getSpoonacularSourceUrl(), result.getAggregateLikes(), result.getSpoonacularScore(), result.getPricePerServing(),
@@ -118,6 +169,7 @@ public class RecipeLevelsActivity extends AppCompatActivity {
 //                    result.getLowFodmap(), result.getOccasions(), result.getSustainable(), result.getVegan(), result.getVegetarian(),
 //                    result.getVeryHealthy(), result.getVeryPopular(), result.getWhole30(), result.getWeightWatcherSmartPoints(),
 //                    result.getDishTypes(), result.getExtendedIngredients(), result.getSummary()));
+//            Log.d(TAG, "Number of recipes: " + String.valueOf(recipeResults.size()));
 //        } else {
 //            Log.e(TAG, "Result is null");
 //        }
