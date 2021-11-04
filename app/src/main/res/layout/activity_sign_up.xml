@@ -22,7 +22,7 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="179dp"
         android:background="@color/primary"
         android:gravity="center"
         android:orientation="vertical"
@@ -35,30 +35,20 @@
         app:layout_constraintVertical_bias="0.0">
 
         <ImageView
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:src="@drawable/img" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/app_name"
-            android:textColor="@color/white"
-            android:textSize="32sp" />
+            android:layout_width="168dp"
+            android:layout_height="153dp"
+            android:src="@drawable/logo_wtext_dark" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/edit_layout"
+        android:layout_width="match_parent"
+        android:layout_height="337dp"
         android:orientation="vertical"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintTop_toBottomOf="@id/linearLayout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        >
+        app:layout_constraintTop_toBottomOf="@id/linearLayout">
 
         <EditText
             android:id="@+id/userName"
@@ -83,7 +73,7 @@
             android:layout_marginEnd="32dp"
             android:backgroundTint="@color/primary"
             android:ems="10"
-            android:hint="E-Mail ID"
+            android:hint="E-Mail"
             android:inputType="text"
             android:minHeight="48dp"
             android:textColor="@color/black" />
@@ -128,8 +118,8 @@
         android:background="@drawable/round_corner"
         android:elevation="5dp"
         android:stateListAnimator="@null"
-        android:text="SINGUP"
-        android:textColor="@color/white"
+        android:text="SIGN UP"
+        android:textColor="@color/black"
         android:textSize="18sp"
         android:translationZ="3dp"
         app:layout_constraintEnd_toEndOf="parent"

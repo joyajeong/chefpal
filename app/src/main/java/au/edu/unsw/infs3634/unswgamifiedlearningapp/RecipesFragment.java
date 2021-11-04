@@ -159,7 +159,6 @@ public class RecipesFragment extends Fragment {
             @Override
             public void onResponse(Call<RecipeSearchResult> call, Response<RecipeSearchResult> response) {
                 searchResult = response.body();
-                int sizeOfResult = searchResult.getResults().size();
 
                 if (response.body() != null) {
                     for (int i = 0; i < 1 ; i++) {
