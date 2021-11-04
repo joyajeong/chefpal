@@ -20,12 +20,22 @@ public interface UserDao {
             "id LIKE :id LIMIT 1")
     User findById(String id);
 
+    @Query("SELECT points FROM user WHERE " +
+            "id LIKE :id LIMIT 1")
+    Integer findPointsById(String id);
+
+    @Query("UPDATE user " +
+            "SET points = :points " +
+            "WHERE id LIKE :id")
+    Integer updateUserPoints(String id, Integer points);
+
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     void insertAll(User... user);
 
     @Delete
     void delete(User user);
 
+    //Deletes all users
     @Query("DELETE FROM user")
     void delete();
 }

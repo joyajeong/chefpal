@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.room.Room;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -34,16 +37,20 @@ public class RecipesFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private int recipeId;
-    private static final String TAG = "RecipeFragment";
+    private static final String TAG = "RecipesFragment";
 //    private List<RecipeInformationResult> recipeList = RecipeLevelsActivity.recipeResults;
     private List<RecipeInformationResult> vegEasy = RecipeLevelsActivity.vegEasy;
     private List<RecipeInformationResult> vegMed = RecipeLevelsActivity.vegMed;
     private List<RecipeInformationResult> vegHard = RecipeLevelsActivity.vegHard;
-
+    private int userPoints;
+    public static int EASY_LIMIT = 1000;
+    public static int MED_LIMIT = 3000;
+    public static int HARD_LIMIT = 5000;
     RecipeSearchResult searchResult;
     TextView recipeTitle;
     RecipeSearchResult recipes;
     Button btnVeg;
+
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -91,6 +98,25 @@ public class RecipesFragment extends Fragment {
     //Do any logic here
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        //Getting current points TODO make a new method for this
+        AppDatabase db = Room.databaseBuilder(getActivity(),
+                AppDatabase.class, "user").build();
+        UserDao userDao = db.userDao();
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> {
+            userPoints = userDao.findPointsById(MainActivity.currUserID);
+            Log.d(TAG, "Current user points: " + userPoints);
+        });
+
+        //Depending on their level (points), get the recipes from Spoonacular API
+        if (userPoints < EASY_LIMIT) {
+            getEasyRecipes();
+        } else if (userPoints < MED_LIMIT) {
+            getMedRecipes();
+        } else {
+            getHardRecipes();
+        }
+
         recipeTitle = getView().findViewById(R.id.tvRecipeTitle);
         btnVeg = getView().findViewById(R.id.btnVeg);
         btnVeg.setOnClickListener(new View.OnClickListener() {
@@ -102,13 +128,25 @@ public class RecipesFragment extends Fragment {
                 ((Activity) getActivity()).overridePendingTransition(0, 0);
             }
         });
-        //Get recipes from Spoonacular API
+
+    }
+
+    private void getEasyRecipes() {
         //Vegetarian Easy
         getRecipes(null, null, "vegetarian", 15, vegEasy);
+    }
+
+    private void getMedRecipes() {
+        getEasyRecipes();
         //Vegetarian Med
         getRecipes(null, null, "vegetarian", 30, vegMed);
+    }
+
+    private void getHardRecipes() {
+        getEasyRecipes();
+        getMedRecipes();
         //Vegetarian Hard
-//        getRecipes(null, null, "vegetarian", 45, vegHard);
+        //getRecipes(null, null, "vegetarian", 45, vegHard);
     }
 
     //Gets recipes from API - Preparing the recipes for the RecyclerView
@@ -124,7 +162,7 @@ public class RecipesFragment extends Fragment {
                 int sizeOfResult = searchResult.getResults().size();
 
                 if (response.body() != null) {
-                    for (int i = 0; i < 3 ; i++) {
+                    for (int i = 0; i < 1 ; i++) {
                         Log.d(TAG, "Current index: " + i);
                         getRecipeInfo(searchResult.getResults().get(i).getId(), category);
                     }
@@ -166,7 +204,7 @@ public class RecipesFragment extends Fragment {
 
     private void addRecipes(RecipeInformationResult result, List<RecipeInformationResult> category) {
         Log.d(TAG, "Recipes are being added...");
-        if (result != null && category.size() < 3) {
+        if (result != null && noDuplicateRecipes(result, category)) {
             category.add(new RecipeInformationResult(result.getId(), result.getTitle(), result.getImage(), result.getImageType(),
                     result.getServings(), result.getReadyInMinutes(), result.getLicense(), result.getSourceName(), result.getSourceUrl(),
                     result.getSpoonacularSourceUrl(), result.getAggregateLikes(), result.getSpoonacularScore(), result.getPricePerServing(),
@@ -180,5 +218,15 @@ public class RecipesFragment extends Fragment {
             Log.e(TAG, "Result is null");
         }
 
+    }
+
+    private boolean noDuplicateRecipes(RecipeInformationResult recipe, List<RecipeInformationResult> list) {
+        for (RecipeInformationResult r : list) {
+            if (r.getId() == recipe.getId()) {
+                Log.d(TAG, "Trying to add an existing recipe!");
+                return false;
+            }
+        }
+        return true;
     }
 }

@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     AccountFragment favouritesFragment = new AccountFragment();
     private FirebaseAuth mAuth;
     private static String TAG = "MainActivity";
+    public static String currUserID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +35,8 @@ public class MainActivity extends AppCompatActivity {
         AppDatabase db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "user").build();
 
-
         mAuth = FirebaseAuth.getInstance();
+        currUserID = mAuth.getCurrentUser().getUid();
         UserDao userDao = db.userDao();
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {

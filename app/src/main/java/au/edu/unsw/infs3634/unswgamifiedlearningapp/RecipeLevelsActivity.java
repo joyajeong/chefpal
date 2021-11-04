@@ -24,7 +24,7 @@ public class RecipeLevelsActivity extends AppCompatActivity {
     RecipeSearchResult searchResult;
     public static List<RecipeInformationResult> recipeEasy = new ArrayList<>();
     public static List<RecipeInformationResult> recipeMed = new ArrayList<>();
-//maybe move these to recipes fragment
+    //maybe move these to recipes fragment
     public static List<RecipeInformationResult> vegEasy = new ArrayList<>();
     public static List<RecipeInformationResult> vegMed = new ArrayList<>();
     public static List<RecipeInformationResult> vegHard = new ArrayList<>();
@@ -34,6 +34,7 @@ public class RecipeLevelsActivity extends AppCompatActivity {
     private String recipeType;
     private RecyclerView recyclerViewEasy, recyclerViewMed;
     private RecipeRecyclerViewAdapter adapter;
+    private int points;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +68,13 @@ public class RecipeLevelsActivity extends AppCompatActivity {
             }
         };
 
-        setRecyclerView(recipeEasy, recyclerViewEasy);
-        setRecyclerView(recipeMed, recyclerViewMed);
+        if (recipeMed == null || recipeMed.size() == 0) {
+            setRecyclerView(recipeEasy, recyclerViewEasy);
+        }
+//        setRecyclerView(recipeEasy, recyclerViewEasy);
+//        setRecyclerView(recipeMed, recyclerViewMed);
+
+
 //        //Created an adapter and supply the song data to be displayed
 //        adapter = new RecipeRecyclerViewAdapter(recipeResults, listener);
 //        recyclerViewEasy.setAdapter(adapter);
