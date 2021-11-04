@@ -39,6 +39,8 @@ public class RecipesFragment extends Fragment {
     private int recipeId;
     private static final String TAG = "RecipesFragment";
 //    private List<RecipeInformationResult> recipeList = RecipeLevelsActivity.recipeResults;
+                                            //could just have easy, med & hard if i could call api when
+                                            //button is clicked
     private List<RecipeInformationResult> vegEasy = RecipeLevelsActivity.vegEasy;
     private List<RecipeInformationResult> vegMed = RecipeLevelsActivity.vegMed;
     private List<RecipeInformationResult> vegHard = RecipeLevelsActivity.vegHard;
@@ -86,18 +88,6 @@ public class RecipesFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_recipes, container, false);
-    }
-
-    //Do any logic here
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         //Getting current points TODO make a new method for this
         AppDatabase db = Room.databaseBuilder(getActivity(),
                 AppDatabase.class, "user").build();
@@ -116,7 +106,18 @@ public class RecipesFragment extends Fragment {
         } else {
             getHardRecipes();
         }
+    }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_recipes, container, false);
+    }
+
+    //Do any logic here
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         recipeTitle = getView().findViewById(R.id.tvRecipeTitle);
         btnVeg = getView().findViewById(R.id.btnVeg);
         btnVeg.setOnClickListener(new View.OnClickListener() {
@@ -128,7 +129,6 @@ public class RecipesFragment extends Fragment {
                 ((Activity) getActivity()).overridePendingTransition(0, 0);
             }
         });
-
     }
 
     private void getEasyRecipes() {
