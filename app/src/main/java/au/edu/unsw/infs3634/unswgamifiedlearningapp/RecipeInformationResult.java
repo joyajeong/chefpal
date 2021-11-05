@@ -1,10 +1,14 @@
 package au.edu.unsw.infs3634.unswgamifiedlearningapp;
 
+import android.util.Log;
+
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class RecipeInformationResult {
+
+    private static String TAG = "RecipeInformationResult";
 
     @SerializedName("id")
     @Expose
@@ -448,6 +452,22 @@ public class RecipeInformationResult {
 
     public void setSummary(String summary) {
         this.summary = summary;
+    }
+
+    public static RecipeInformationResult getRecipeById(Integer id) {
+        List<RecipeInformationResult> recipes = RecipeLevelsListActivity.recipes;
+        Log.d(TAG, "Number of recipes: " + recipes.size());
+
+        for (RecipeInformationResult r : recipes) {
+            Log.d(TAG, "Recipe id: " + r.getId());
+
+            if (r.getId().equals(id)) {
+                Log.d(TAG, "Match found");
+                return r;
+            }
+        }
+        Log.d(TAG, "end of getRecipeById() no match found :(");
+        return null;
     }
 
 }

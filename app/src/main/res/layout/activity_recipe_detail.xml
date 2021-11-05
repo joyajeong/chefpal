@@ -6,4 +6,57 @@
     android:layout_height="match_parent"
     tools:context=".RecipeDetailActivity">
 
+    <TextView
+        android:id="@+id/tvServings"
+        android:layout_width="242dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/tvRecipeName"
+        app:layout_constraintTop_toBottomOf="@+id/tvSourceURL" />
+
+    <TextView
+        android:id="@+id/tvRecipeTime"
+        android:layout_width="242dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/tvRecipeName"
+        app:layout_constraintTop_toBottomOf="@+id/tvRecipeName" />
+
+    <TextView
+        android:id="@+id/tvRecipeName"
+        android:layout_width="242dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="68dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvIngredients"
+        android:layout_width="242dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/tvRecipeName"
+        app:layout_constraintTop_toBottomOf="@+id/tvServings" />
+
+    <TextView
+        android:id="@+id/tvSourceURL"
+        android:layout_width="242dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/tvRecipeName"
+        app:layout_constraintTop_toBottomOf="@+id/tvRecipeTime" />
+
+    <LinearLayout
+        android:id="@+id/ingredient_checkboxes_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/tvIngredients"
+        tools:layout_editor_absoluteX="1dp"></LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

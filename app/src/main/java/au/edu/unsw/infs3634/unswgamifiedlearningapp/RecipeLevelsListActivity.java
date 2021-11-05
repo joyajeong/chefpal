@@ -24,16 +24,15 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
     private RecipeRecyclerViewAdapter adapter;
     private static final String TAG = "RecipeLevelsListActivity";
     //TODO figure out this variable thing
-    private List<RecipeInformationResult> recipes = new ArrayList<>();
+    public static List<RecipeInformationResult> recipes = new ArrayList<>();
     private List<RecipeInformationResult> initialRecipes = new ArrayList<>();
 
     private String difficultyLevel, recipeType;
-    public static int NUM_RESULTS = 5;
+    public static int NUM_RESULTS = 3;
     public static int EASY_LEVEL = 15;
     public static int MED_LEVEL = 30;
     public static int HARD_LEVEL = 45;
     RecipeSearchResult searchResult;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
