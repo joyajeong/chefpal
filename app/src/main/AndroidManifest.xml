@@ -13,6 +13,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UNSWGamifiedLearningApp">
         <activity
+            android:name=".RecipeDetailActivity"
+            android:exported="true" />
+        <activity
+            android:name=".RecipeLevelsListActivity"
+            android:exported="true" />
+        <activity
             android:name=".RecipeLevelsActivity"
             android:exported="true" />
         <activity

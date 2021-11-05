@@ -14,8 +14,10 @@ import retrofit2.http.QueryMap;
 public interface SpoonacularClient {
 
     String API_BASE_URL = "https://api.spoonacular.com";
-    String apiKey = "43d6739df5224359ac578587bf27a807";
+    String apiKey = "8099b1e129144cb686d2d3cb989cc486";
 
+    //Use this apiKey if the first free account has exceeded the number of API call limit
+    String secondaryApiKey = "bc8f9e5e0dd9465080a8de17b9bb0b96";
     @GET("/recipes/complexSearch")
     Call<RecipeSearchResult> recipeResults(
             @Query("query") String query,

@@ -25,11 +25,11 @@ public class SplashActivity extends AppCompatActivity {
         appName = findViewById(R.id.app_name);
 
         //change font
-        Typeface typeface = ResourcesCompat.getFont(this,R.font.blacklist);
+        Typeface typeface = ResourcesCompat.getFont(this, R.font.blacklist);
         appName.setTypeface(typeface);
 
         //animation
-        Animation anim = AnimationUtils.loadAnimation(this,R.anim.myanim);
+        Animation anim = AnimationUtils.loadAnimation(this, R.anim.myanim);
         appName.setAnimation(anim);
         mAuth = FirebaseAuth.getInstance();
         //load Main Activity

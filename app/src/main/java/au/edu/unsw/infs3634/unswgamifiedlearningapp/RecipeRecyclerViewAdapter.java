@@ -137,8 +137,9 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
     }
 
     public void updateRecipeList(List<RecipeInformationResult> recipes) {
-        mRecipes.removeAll(mRecipes);
-        mRecipes.addAll(recipes);
+        Log.d(TAG, "Updating recycler view");
+        mRecipesFiltered.removeAll(mRecipes);
+        mRecipesFiltered.addAll(recipes);
         notifyDataSetChanged();
     }
 }
