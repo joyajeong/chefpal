@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Testing out database
         AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "user").build();
+                AppDatabase.class, "user").fallbackToDestructiveMigration().build();
 
         mAuth = FirebaseAuth.getInstance();
         currUserID = mAuth.getCurrentUser().getUid();

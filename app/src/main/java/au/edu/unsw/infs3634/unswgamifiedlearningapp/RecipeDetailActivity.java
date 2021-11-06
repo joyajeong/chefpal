@@ -2,15 +2,23 @@ package au.edu.unsw.infs3634.unswgamifiedlearningapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.room.Room;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class RecipeDetailActivity extends AppCompatActivity {
 
@@ -19,6 +27,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private RecipeInformationResult selectedRecipe;
     private TextView tvRecipeName, tvRecipeTime, tvSourceURL, tvServings, tvIngredients;
     private LinearLayout layout;
+    private ImageButton btnFavourite;
+    private String currUserID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +52,42 @@ public class RecipeDetailActivity extends AppCompatActivity {
         tvSourceURL = findViewById(R.id.tvSourceURL);
         tvServings = findViewById(R.id.tvServings);
         tvIngredients = findViewById(R.id.tvIngredients);
+        btnFavourite = findViewById(R.id.btnFavourite);
 
         setRecipeInfo();
+
+        //UserFavouriteRecipe Database
+        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "userFavouriteRecipe").fallbackToDestructiveMigration().build();
+
+        currUserID = MainActivity.currUserID;
+        UserFavouriteRecipeDao userFavouriteRecipeDao = db.userFavouriteRecipeDao();
+
+        //Checking how many recipes they have liked
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> {
+            List<UserFavouriteRecipe> favRecipes = userFavouriteRecipeDao.findFavRecipesByUserId(currUserID);
+            Log.d(TAG, "Current favourite recipes: " + favRecipes.size());
+        });
+
+        btnFavourite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Executor myExecutor = Executors.newSingleThreadExecutor();
+                myExecutor.execute(() -> {
+                    String id = currUserID + selectedRecipeId;
+                    //If the user has not already liked the recipe, add it
+                    if (userFavouriteRecipeDao.findById(id) == null) {
+                        userFavouriteRecipeDao.insertAll(new UserFavouriteRecipe(id, currUserID, selectedRecipeId));
+                        Log.d(TAG, "Favourited a recipe: " +  id);
+                    } else {
+                        Log.d(TAG, "Already liked the recipe!");
+                    }
+                });
+
+            }
+        });
     }
 
     private void setRecipeInfo() {
@@ -68,8 +112,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
             layout.addView(cb);
             Log.d(TAG, "Ingredient: " + ingredientList.get(i).getOriginal());
         }
-
-
 
         String formattedIngredients = Arrays.toString(ingredients)
                 .replace("[", "")  //remove the right bracket
