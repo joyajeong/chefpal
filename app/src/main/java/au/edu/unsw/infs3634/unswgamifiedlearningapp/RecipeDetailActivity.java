@@ -63,13 +63,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
         currUserID = MainActivity.currUserID;
         UserFavouriteRecipeDao userFavouriteRecipeDao = db.userFavouriteRecipeDao();
 
-        //Checking how many recipes they have liked
-        Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> {
-            List<UserFavouriteRecipe> favRecipes = userFavouriteRecipeDao.findFavRecipesByUserId(currUserID);
-            Log.d(TAG, "Current favourite recipes: " + favRecipes.size());
-        });
-
         btnFavourite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

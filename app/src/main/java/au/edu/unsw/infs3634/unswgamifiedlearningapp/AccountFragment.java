@@ -1,12 +1,22 @@
 package au.edu.unsw.infs3634.unswgamifiedlearningapp;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.room.Room;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,6 +24,12 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class AccountFragment extends Fragment {
+    //Maybe change back to FavouriteFragment?
+
+    private static String TAG = "AccountFragment";
+    private String currUserID;
+    private TextView tvFavouriteRecipes;
+    private List<UserFavouriteRecipe> favRecipes;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -60,5 +76,36 @@ public class AccountFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_favourites, container, false);
+    }
+
+    //Do any logic here
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        tvFavouriteRecipes = getView().findViewById(R.id.tvFavouriteRecipes);
+
+        //UserFavouriteRecipe Database
+        AppDatabase db = Room.databaseBuilder(getActivity(),
+                AppDatabase.class, "userFavouriteRecipe").fallbackToDestructiveMigration().build();
+
+        currUserID = MainActivity.currUserID;
+        UserFavouriteRecipeDao userFavouriteRecipeDao = db.userFavouriteRecipeDao();
+
+        //Checking how many recipes they have liked
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> {
+            favRecipes = userFavouriteRecipeDao.findFavRecipesByUserId(currUserID);
+            Log.d(TAG, "Current favourite recipes: " + favRecipes.size());
+            setText(tvFavouriteRecipes, "Number of favourite recipes: " + favRecipes.size());
+        });
+
+    }
+
+    private void setText(final TextView text,final String value){
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                text.setText(value);
+            }
+        });
     }
 }

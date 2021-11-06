@@ -122,7 +122,7 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
             public void onResponse(Call<RecipeSearchResult> call, Response<RecipeSearchResult> response) {
                 searchResult = response.body();
 
-                if (response.body() != null) {
+                if (response.body() != null && recipes.size() < NUM_RESULTS) {
                     for (int i = 0; i < NUM_RESULTS ; i++) {
                         Log.d(TAG, "Current index: " + i);
                         getRecipeInfo(searchResult.getResults().get(i).getId());
@@ -165,8 +165,8 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
     }
 
     private void addRecipes(RecipeInformationResult result) {
-        Log.d(TAG, "Recipes are being added...");
         if (result != null && noDuplicateRecipes(result, recipes)) {
+            Log.d(TAG, "Recipes are being added...");
             recipes.add(new RecipeInformationResult(result.getId(), result.getTitle(), result.getImage(), result.getImageType(),
                     result.getServings(), result.getReadyInMinutes(), result.getLicense(), result.getSourceName(), result.getSourceUrl(),
                     result.getSpoonacularSourceUrl(), result.getAggregateLikes(), result.getSpoonacularScore(), result.getPricePerServing(),
@@ -189,7 +189,7 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
 
     private boolean noDuplicateRecipes(RecipeInformationResult recipe, List<RecipeInformationResult> list) {
         for (RecipeInformationResult r : list) {
-            if (r.getId() == recipe.getId()) {
+            if (r.getId().equals(recipe.getId())) {
                 Log.d(TAG, "Trying to add an existing recipe!");
                 return false;
             }
