@@ -21,7 +21,7 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private TextView tvDifficultyLevel;
-    private RecipeRecyclerViewAdapter adapter;
+    private static RecipeRecyclerViewAdapter adapter;
     private static final String TAG = "RecipeLevelsListActivity";
     //TODO figure out this variable thing
     public static List<RecipeInformationResult> recipes = new ArrayList<>();
@@ -95,7 +95,6 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
                 Intent intent = new Intent(RecipeLevelsListActivity.this, RecipeDetailActivity.class);
                 intent.putExtra("RECIPE_ID", id);
                 startActivity(intent);
-                //TODO create find recipe result info by id in the class so i can use it in detail
             }
         };
         //Created an adapter and supply the song data to be displayed
@@ -122,7 +121,7 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
             public void onResponse(Call<RecipeSearchResult> call, Response<RecipeSearchResult> response) {
                 searchResult = response.body();
 
-                if (response.body() != null && recipes.size() < NUM_RESULTS) {
+                if (response.body() != null && recipes.size() <= NUM_RESULTS) {
                     for (int i = 0; i < NUM_RESULTS ; i++) {
                         Log.d(TAG, "Current index: " + i);
                         getRecipeInfo(searchResult.getResults().get(i).getId());
@@ -141,6 +140,7 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
     }
 
     private void getRecipeInfo(int id) {
+        RecipeInformationResult recipeInfo;
         Call<RecipeInformationResult> call = RetrofitClient.getInstance().getMyApi()
                 .recipeInformationResults(id, false, SpoonacularClient.apiKey);
 
@@ -152,7 +152,6 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
                 Log.i(TAG, "Source URL: " + recipeInfo.getSourceUrl());
                 Log.d(TAG, "Recipe Title: " + recipeInfo.getTitle());
                 Log.d(TAG, "Recipe time: " + recipeInfo.getReadyInMinutes());
-
                 addRecipes(recipeInfo);
             }
 
@@ -164,7 +163,7 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
         });
     }
 
-    private void addRecipes(RecipeInformationResult result) {
+   private void addRecipes(RecipeInformationResult result) {
         if (result != null && noDuplicateRecipes(result, recipes)) {
             Log.d(TAG, "Recipes are being added...");
             recipes.add(new RecipeInformationResult(result.getId(), result.getTitle(), result.getImage(), result.getImageType(),
@@ -187,7 +186,7 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
 
     }
 
-    private boolean noDuplicateRecipes(RecipeInformationResult recipe, List<RecipeInformationResult> list) {
+    public static boolean noDuplicateRecipes(RecipeInformationResult recipe, List<RecipeInformationResult> list) {
         for (RecipeInformationResult r : list) {
             if (r.getId().equals(recipe.getId())) {
                 Log.d(TAG, "Trying to add an existing recipe!");

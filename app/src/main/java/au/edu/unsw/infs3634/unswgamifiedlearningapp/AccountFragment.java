@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import android.util.Log;
@@ -14,9 +16,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,7 +36,12 @@ public class AccountFragment extends Fragment {
     private static String TAG = "AccountFragment";
     private String currUserID;
     private TextView tvFavouriteRecipes;
-    private List<UserFavouriteRecipe> favRecipes;
+    private List<UserFavouriteRecipe> favUserRecipes;
+    private RecyclerView recyclerView;
+    private RecipeRecyclerViewAdapter adapter;
+    private List<RecipeInformationResult> favRecipes = new ArrayList<>();
+    private List<RecipeInformationResult> initalRecipes = new ArrayList<>();
+    private RecipeInformationResult recipeInfo;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -93,10 +105,19 @@ public class AccountFragment extends Fragment {
         //Checking how many recipes they have liked
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {
-            favRecipes = userFavouriteRecipeDao.findFavRecipesByUserId(currUserID);
-            Log.d(TAG, "Current favourite recipes: " + favRecipes.size());
-            setText(tvFavouriteRecipes, "Number of favourite recipes: " + favRecipes.size());
+            favUserRecipes = userFavouriteRecipeDao.findFavRecipesByUserId(currUserID);
+            Log.d(TAG, "Current favourite recipes: " + favUserRecipes.size());
+            setText(tvFavouriteRecipes, "Number of favourite recipes: " + favUserRecipes.size());
+            getRecipes(favUserRecipes);
         });
+
+        recyclerView = getView().findViewById(R.id.rvFavRecipes);
+
+        try {
+            setRecyclerView();
+        } catch (Exception e) {
+            Log.e(TAG, String.valueOf(e));
+        }
 
     }
 
@@ -108,4 +129,74 @@ public class AccountFragment extends Fragment {
             }
         });
     }
+
+    private void setRecyclerView() {
+        Log.d(TAG, "in setRecyclerView");
+        RecipeRecyclerViewAdapter.ClickListener listener = new RecipeRecyclerViewAdapter.ClickListener() {
+            @Override
+            public void onRecipeClick(View view, String id) {
+                Log.d(TAG, "recipe " + id + " clicked");
+                Intent intent = new Intent(getActivity(), FavouriteRecipeDetailActivity.class);
+                startActivity(intent);
+                ((Activity) getActivity()).overridePendingTransition(0, 0);
+            }
+        };
+        //Created an adapter and supply the song data to be displayed
+        adapter = new RecipeRecyclerViewAdapter(initalRecipes, listener);
+        recyclerView.setAdapter(adapter);
+
+        //Set linear layout of RecyclerView
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
+    }
+
+    private void getRecipes(List<UserFavouriteRecipe> favUserRecipes){
+        for (UserFavouriteRecipe recipe : favUserRecipes) {
+            getRecipeInfo(recipe.getRecipeId());
+        }
+    }
+
+    private RecipeInformationResult getRecipeInfo(int id) {
+        Call<RecipeInformationResult> call = RetrofitClient.getInstance().getMyApi()
+                .recipeInformationResults(id, false, SpoonacularClient.apiKey);
+
+        call.enqueue(new Callback<RecipeInformationResult>() {
+            @Override
+            public void onResponse(Call<RecipeInformationResult> call, Response<RecipeInformationResult> response) {
+                recipeInfo = response.body();
+                //check if response body is null
+                Log.d(TAG, "Source URL: " + recipeInfo.getSourceUrl());
+                Log.d(TAG, "Recipe Title: " + recipeInfo.getTitle());
+                Log.d(TAG, "Recipe time: " + recipeInfo.getReadyInMinutes());
+                addToFavRecipes(recipeInfo);
+            }
+
+            @Override
+            public void onFailure(Call<RecipeInformationResult> call, Throwable t) {
+                Log.i(TAG, "Failed API Call" + t.getCause());
+
+            }
+        });
+        return recipeInfo;
+    }
+
+    private void addToFavRecipes(RecipeInformationResult r) {
+        if (RecipeLevelsListActivity.noDuplicateRecipes(r, favRecipes) && r != null) {
+            Log.d(TAG, "Recipe from API: " + r.getTitle());
+            favRecipes.add(r);
+        }
+        updateRecyclerView(favRecipes);
+    }
+
+    private void updateRecyclerView(List<RecipeInformationResult> recipes) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.d(TAG, "Number of fav recipes: " + favRecipes.size());
+                adapter.updateRecipeList(recipes);
+            }
+        });
+
+    }
+
 }

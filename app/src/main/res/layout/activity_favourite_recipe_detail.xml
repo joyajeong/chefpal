@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FavouriteRecipeDetailActivity">
+
+    <TextView
+        android:id="@+id/tvServings"
+        android:layout_width="242dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/tvRecipeName"
+        app:layout_constraintTop_toBottomOf="@+id/tvSourceURL" />
+
+    <TextView
+        android:id="@+id/tvRecipeTime"
+        android:layout_width="242dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/tvRecipeName"
+        app:layout_constraintTop_toBottomOf="@+id/tvRecipeName" />
+
+    <TextView
+        android:id="@+id/tvRecipeName"
+        android:layout_width="242dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="68dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvIngredients"
+        android:layout_width="242dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/tvRecipeName"
+        app:layout_constraintTop_toBottomOf="@+id/tvServings" />
+
+    <TextView
+        android:id="@+id/tvSourceURL"
+        android:layout_width="242dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/tvRecipeName"
+        app:layout_constraintTop_toBottomOf="@+id/tvRecipeTime" />
+
+    <LinearLayout
+        android:id="@+id/ingredient_checkboxes_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/tvIngredients"
+        tools:layout_editor_absoluteX="1dp"></LinearLayout>
+
+    <ImageButton
+        android:id="@+id/btnFavourite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tvRecipeName"
+        app:layout_constraintTop_toTopOf="@+id/tvRecipeName"
+        app:srcCompat="@drawable/ic_baseline_favorite_border_24" />
+
+    <EditText
+        android:id="@+id/edit_text"
+        android:layout_width="362dp"
+        android:layout_height="146dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/notes_background"
+        android:gravity="top"
+        android:padding="15dp"
+        android:inputType="text|textMultiLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ingredient_checkboxes_layout" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

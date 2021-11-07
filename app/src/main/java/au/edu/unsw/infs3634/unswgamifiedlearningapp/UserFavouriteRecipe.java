@@ -37,5 +37,15 @@ public class UserFavouriteRecipe {
         return id;
     }
 
+    public void setRecipeId(Integer recipeId) {
+        this.recipeId = recipeId;
+    }
+
+    public Integer getRecipeId() {
+        return recipeId;
+    }
+
+
+
 
 }

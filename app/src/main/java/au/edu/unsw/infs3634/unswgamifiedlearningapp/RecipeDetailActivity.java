@@ -54,13 +54,13 @@ public class RecipeDetailActivity extends AppCompatActivity {
         tvIngredients = findViewById(R.id.tvIngredients);
         btnFavourite = findViewById(R.id.btnFavourite);
 
+        currUserID = MainActivity.currUserID;
+
         setRecipeInfo();
 
         //UserFavouriteRecipe Database
         AppDatabase db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "userFavouriteRecipe").fallbackToDestructiveMigration().build();
-
-        currUserID = MainActivity.currUserID;
         UserFavouriteRecipeDao userFavouriteRecipeDao = db.userFavouriteRecipeDao();
 
         btnFavourite.setOnClickListener(new View.OnClickListener() {
