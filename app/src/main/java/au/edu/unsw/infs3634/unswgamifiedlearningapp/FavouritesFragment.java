@@ -25,11 +25,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AccountFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class FavouritesFragment extends Fragment {
 
     private static String TAG = "FavouritesFragment";
@@ -136,6 +132,7 @@ public class FavouritesFragment extends Fragment {
             public void onRecipeClick(View view, String id) {
                 Log.d(TAG, "recipe " + id + " clicked");
                 Intent intent = new Intent(getActivity(), FavouriteRecipeDetailActivity.class);
+                intent.putExtra("RECIPE_ID", id);
                 startActivity(intent);
                 ((Activity) getActivity()).overridePendingTransition(0, 0);
             }
