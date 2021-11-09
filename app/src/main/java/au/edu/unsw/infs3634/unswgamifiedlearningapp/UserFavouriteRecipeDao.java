@@ -5,6 +5,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -24,6 +25,10 @@ public interface UserFavouriteRecipeDao {
     @Query("SELECT * FROM userFavouriteRecipe WHERE " +
             "recipeId LIKE :recipeId")
     List<UserFavouriteRecipe> findFavRecipeByRecipeId(String recipeId);
+
+    @Query("UPDATE userFavouriteRecipe SET notes = :notes WHERE " +
+            "id LIKE :id")
+    void updateNotes(String notes, String id);
 
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     void insertAll(UserFavouriteRecipe... favouriteRecipe);

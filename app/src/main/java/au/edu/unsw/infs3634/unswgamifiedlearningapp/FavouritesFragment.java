@@ -30,10 +30,9 @@ import retrofit2.Response;
  * Use the {@link AccountFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AccountFragment extends Fragment {
-    //Maybe change back to FavouriteFragment?
+public class FavouritesFragment extends Fragment {
 
-    private static String TAG = "AccountFragment";
+    private static String TAG = "FavouritesFragment";
     private String currUserID;
     private TextView tvFavouriteRecipes;
     private List<UserFavouriteRecipe> favUserRecipes;
@@ -52,7 +51,7 @@ public class AccountFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public AccountFragment() {
+    public FavouritesFragment() {
         // Required empty public constructor
     }
 
@@ -87,7 +86,7 @@ public class AccountFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_account, container, false);
+        return inflater.inflate(R.layout.fragment_favourites3, container, false);
     }
 
     //Do any logic here

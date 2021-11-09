@@ -72,7 +72,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
                     String id = currUserID + selectedRecipeId;
                     //If the user has not already liked the recipe, add it
                     if (userFavouriteRecipeDao.findById(id) == null) {
-                        userFavouriteRecipeDao.insertAll(new UserFavouriteRecipe(id, currUserID, selectedRecipeId));
+                        userFavouriteRecipeDao.insertAll(new UserFavouriteRecipe(id, currUserID, selectedRecipeId, ""));
                         Log.d(TAG, "Favourited a recipe: " +  id);
                     } else {
                         Log.d(TAG, "Already liked the recipe!");
