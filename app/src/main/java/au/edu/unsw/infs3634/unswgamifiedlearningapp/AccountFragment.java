@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -37,7 +38,11 @@ public class AccountFragment extends Fragment {
     //Maybe change back to FavouriteFragment?
 
     private static String TAG = "AccountFragment";
-    private LinearLayout logoutB;
+    private LinearLayout logoutB, learderBoard, profileButton, bookmark;
+    private TextView profile_img_text, name, score, rank;
+    private BottomNavigationView bottomNav;
+
+
 
 
     public AccountFragment() {
@@ -52,7 +57,9 @@ public class AccountFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_favourites, container, false);
 
-        logoutB = view.findViewById(R.id.logout);
+        initViews(view);
+        //String userName = DbQuery.myProfile.getName();
+        //profile_img_text.setText();
 
         logoutB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,11 +80,46 @@ public class AccountFragment extends Fragment {
                     getActivity().finish();
 
                 });
+            }
+        });
+
+        bookmark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //favorites
+                Intent intent = new Intent(getContext(),Favorite.class);
+                startActivity(intent);
 
             }
         });
 
+        profileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // profile activity
+            }
+        });
+
+        learderBoard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // leaderBoard!!!!!, 28-9:30
+            }
+        });
+
         return view;
+    }
+
+    private void initViews(View view){
+        logoutB = view.findViewById(R.id.logout);
+        profile_img_text = view.findViewById(R.id.profile_img_text);
+        bookmark = view.findViewById(R.id.bookMark);
+        learderBoard = view.findViewById(R.id.leaderButton);
+        name = view.findViewById(R.id.profileName);
+        profileButton = view.findViewById(R.id.profileButton);
+        score = view.findViewById(R.id.totalScore);
+        rank = view.findViewById(R.id.rank);
+        bottomNav = getActivity().findViewById(R.id.bottomNavigationView);
     }
 }
 
