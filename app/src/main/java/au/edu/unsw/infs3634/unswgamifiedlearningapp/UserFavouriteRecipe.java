@@ -20,11 +20,15 @@ public class UserFavouriteRecipe {
     @ColumnInfo(name = "recipeId")
     public Integer recipeId;
 
+    @ColumnInfo(name = "notes")
+    public String notes;
+
     //Constructor
-    public UserFavouriteRecipe(String id, String userId, Integer recipeId) {
+    public UserFavouriteRecipe(String id, String userId, Integer recipeId, String notes) {
         this.id = id;
         this.userId = userId;
         this.recipeId = recipeId;
+        this.notes = notes;
     }
 
 
@@ -43,6 +47,14 @@ public class UserFavouriteRecipe {
 
     public Integer getRecipeId() {
         return recipeId;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getNotes() {
+        return notes;
     }
 
 
