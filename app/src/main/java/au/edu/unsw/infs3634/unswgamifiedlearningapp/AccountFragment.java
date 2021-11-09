@@ -86,7 +86,7 @@ public class AccountFragment extends Fragment {
         bookmark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //favorites//////
+                //favorites/////////
                 Intent intent = new Intent(getContext(),Favorite.class);
                 startActivity(intent);
 
