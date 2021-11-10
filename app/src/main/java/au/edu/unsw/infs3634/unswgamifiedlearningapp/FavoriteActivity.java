@@ -34,7 +34,7 @@ public class FavoriteActivity extends AppCompatActivity {
     private List<RecipeInformationResult> favRecipes = new ArrayList<>();
     private List<RecipeInformationResult> initalRecipes = new ArrayList<>();
     private RecipeInformationResult recipeInfo;
-    //
+    ////
 
 //    // TODO: Rename parameter arguments, choose names that match
 //    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
