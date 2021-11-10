@@ -1,19 +1,15 @@
 package au.edu.unsw.infs3634.unswgamifiedlearningapp;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -25,15 +21,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-///**
-// * A simple {@link Fragment} subclass.
-// * Use the {@link AccountFragment#newInstance} factory method to
-// * create an instance of this fragment.
-// */
-public class Favorite extends AppCompatActivity {
+
+public class FavoriteActivity extends AppCompatActivity {
     //Maybe change back to FavouriteFragment?
 
-    private static String TAG = "AccountFragment";
+    private static String TAG = "Favorite Activity";
     private String currUserID;
     private TextView tvFavouriteRecipes;
     private List<UserFavouriteRecipe> favUserRecipes;
@@ -95,7 +87,7 @@ public class Favorite extends AppCompatActivity {
         tvFavouriteRecipes = findViewById(R.id.tvFavouriteRecipes);
 
         //UserFavouriteRecipe Database
-        AppDatabase db = Room.databaseBuilder(Favorite.this,
+        AppDatabase db = Room.databaseBuilder(FavoriteActivity.this,
                 AppDatabase.class, "userFavouriteRecipe").fallbackToDestructiveMigration().build();
 
         currUserID = MainActivity.currUserID;
@@ -136,9 +128,9 @@ public class Favorite extends AppCompatActivity {
             @Override
             public void onRecipeClick(View view, String id) {
                 Log.d(TAG, "recipe " + id + " clicked");
-                Intent intent = new Intent(Favorite.this, FavouriteRecipeDetailActivity.class);
+                Intent intent = new Intent(FavoriteActivity.this, FavouriteRecipeDetailActivity.class);
                 startActivity(intent);
-                Favorite.this.overridePendingTransition(0, 0);
+                //Favorite.this.overridePendingTransition(0, 0);
             }
         };
         //Created an adapter and supply the song data to be displayed
