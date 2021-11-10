@@ -2,6 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="?android:attr/selectableItemBackground"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
@@ -9,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         app:cardUseCompatPadding="true"
-        android:cardElevation="5dp"
+        app:cardElevation="5dp"
         android:translationZ="3dp"
         app:cardCornerRadius="8dp">
 
@@ -35,8 +37,6 @@
                 android:textColor="@color/primary_dark"
                 android:layout_marginTop="8dp"
                 android:textAlignment="center" />
-
-
 
         </LinearLayout>
 
