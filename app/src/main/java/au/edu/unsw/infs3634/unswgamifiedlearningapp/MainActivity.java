@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
             if (userDao.findById(mAuth.getCurrentUser().getUid()) == null) {
                 userDao.insertAll(new User(mAuth.getCurrentUser().getUid(), 0));
                 Log.d(TAG, "Added new user!");
-                //
+
             }
             Log.d(TAG, "Current user id: " +  mAuth.getCurrentUser().getUid());
         });
