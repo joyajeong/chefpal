@@ -44,6 +44,7 @@ public class FavoriteActivity extends AppCompatActivity {
 //    // TODO: Rename and change types of parameters
 //    private String mParam1;
 //    private String mParam2;
+    //
 //
 //
 //    /**
