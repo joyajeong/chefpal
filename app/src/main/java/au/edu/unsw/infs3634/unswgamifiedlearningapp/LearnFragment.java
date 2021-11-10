@@ -68,9 +68,20 @@ public class LearnFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_learn, container, false);
         catView = view.findViewById(R.id.cat_Grid);
-
+        loadCategories();
         //Adapter
+        CategoryAdapter adapter = new CategoryAdapter(categoryList);
+        catView.setAdapter(adapter);
+
 
         return view;
+    }
+
+    private void loadCategories(){
+        categoryList.clear();
+        //will fetch this data from firebase
+        categoryList.add(new CategoryQuiz("1","Kitchen Safety",5));
+        categoryList.add(new CategoryQuiz("2","Food Safety",5));
+        categoryList.add(new CategoryQuiz("3","Nutrition",3));
     }
 }
