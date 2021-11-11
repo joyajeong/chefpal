@@ -13,6 +13,7 @@ public class RetrofitClient {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         myApi = retrofit.create(SpoonacularClient.class);
+        //delete this after
 
     }
 
