@@ -12,7 +12,7 @@ public class RetrofitClient {
         Retrofit retrofit = new Retrofit.Builder().baseUrl(SpoonacularClient.API_BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        myApi = retrofit.create(SpoonacularClient.class);/////
+        myApi = retrofit.create(SpoonacularClient.class);
 
     }
 
