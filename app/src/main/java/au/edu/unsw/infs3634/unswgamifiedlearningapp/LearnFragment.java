@@ -50,7 +50,7 @@ public class LearnFragment extends Fragment {
     }
 
     private GridView catView;
-    private List<CategoryQuiz> categoryList = new ArrayList<>();
+    public static List<CategoryQuiz> categoryList = new ArrayList<>();
 
 
     @Override
