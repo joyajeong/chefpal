@@ -22,4 +22,16 @@ public class TestQuestion {
     public int getTime() {
         return time;
     }
+
+    public void setTestID(String testID) {
+        this.testID = testID;
+    }
+
+    public void setTopScore(int topScore) {
+        this.topScore = topScore;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
 }

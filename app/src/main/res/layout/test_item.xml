@@ -26,8 +26,7 @@
         android:textColor="@color/black"
         android:textAlignment="center"
         android:textSize="20sp"
-        android:layout_marginTop="16dp"
-         />
+        android:layout_marginTop="16dp" />
 
     <ProgressBar
         android:id="@+id/testProgress"
@@ -37,8 +36,7 @@
         android:layout_marginLeft="80dp"
         android:layout_marginTop="16dp"
         android:layout_marginRight="80dp"
-        android:progressTint="@color/primary"
-         />
+        android:progressTint="@color/primary" />
 
     <TextView
         android:id="@+id/scoreText"
@@ -46,8 +44,7 @@
         android:layout_height="wrap_content"
         android:text="80%"
         android:textAlignment="center"
-        android:textColor="@color/primary"
-         />
+        android:textColor="@color/primary" />
 
     </LinearLayout>
 
