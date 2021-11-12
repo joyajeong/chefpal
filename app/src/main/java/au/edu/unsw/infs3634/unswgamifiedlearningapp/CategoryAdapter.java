@@ -1,5 +1,6 @@
 package au.edu.unsw.infs3634.unswgamifiedlearningapp;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,7 @@ public class CategoryAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
+    public View getView(final int i, View view, ViewGroup viewGroup) {
         View mView;
         if(view == null){
             mView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cat_item_layout,viewGroup,false);
@@ -42,6 +43,16 @@ public class CategoryAdapter extends BaseAdapter {
         else{
             mView = view;
         }
+        mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(),TestActivity.class);
+                //pass position
+                intent.putExtra("CAT_INDEX",i);
+                view.getContext().startActivity(intent);
+
+            }
+        });
 
         TextView catName = mView.findViewById(R.id.catName);
         TextView testNo = mView.findViewById(R.id.testNo);

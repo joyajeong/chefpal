@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TestActivity extends AppCompatActivity {
@@ -32,7 +33,21 @@ public class TestActivity extends AppCompatActivity {
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         testView.setLayoutManager(layoutManager);
 
+        //testDATA
+        loadTestData();
+        //setAdapter
+        TestAdapter adapter = new TestAdapter(testList);
+        testView.setAdapter(adapter);
+    }
+
+    private void loadTestData(){
+        testList = new ArrayList<>();
+        testList.add(new TestQuestion("1",50,20));
+        testList.add(new TestQuestion("2",80,40));
+        testList.add(new TestQuestion("3",10,10));
+        testList.add(new TestQuestion("4",20,10));
 
     }
+
 
 }
