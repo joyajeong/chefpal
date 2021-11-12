@@ -4,8 +4,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingBottom="16dp"
+    android:background="?android:attr/selectableItemBackground"
     android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_margin="8dp"
+        android:elevation="5dp"
+        android:gravity="center"
+        android:padding="16dp"
+        android:background="@color/white">
 
 
     <TextView
@@ -28,7 +38,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginRight="80dp"
         android:progressTint="@color/primary"
-        android:visibility="visible" />
+         />
 
     <TextView
         android:id="@+id/scoreText"
@@ -37,6 +47,8 @@
         android:text="80%"
         android:textAlignment="center"
         android:textColor="@color/primary"
-        android:visibility="visible" />
+         />
+
+    </LinearLayout>
 
 </LinearLayout>

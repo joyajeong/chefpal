@@ -50,7 +50,6 @@ public class CategoryAdapter extends BaseAdapter {
                 //pass position
                 intent.putExtra("CAT_INDEX",i);
                 view.getContext().startActivity(intent);
-
             }
         });
 

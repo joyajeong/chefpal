@@ -47,7 +47,6 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
             testNo = itemView.findViewById(R.id.testNo);
             topScore = itemView.findViewById(R.id.scoreText);
             testProgress = itemView.findViewById(R.id.testProgress);
-
         }
 
         private void setData(int pos, int progress){

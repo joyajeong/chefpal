@@ -1,11 +1,13 @@
 package au.edu.unsw.infs3634.unswgamifiedlearningapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,12 +44,18 @@ public class TestActivity extends AppCompatActivity {
 
     private void loadTestData(){
         testList = new ArrayList<>();
+
         testList.add(new TestQuestion("1",50,20));
         testList.add(new TestQuestion("2",80,40));
         testList.add(new TestQuestion("3",10,10));
         testList.add(new TestQuestion("4",20,10));
-
     }
 
-
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId()== android.R.id.home){
+            TestActivity.this.finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
