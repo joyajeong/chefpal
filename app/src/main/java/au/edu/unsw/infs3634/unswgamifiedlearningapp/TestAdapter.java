@@ -22,7 +22,7 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
     @Override
     public TestAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.test_item,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.test_item_layout,parent,false);
         return new ViewHolder(view);
     }
 
@@ -34,6 +34,7 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
+
         return testList.size();
     }
 
@@ -51,7 +52,7 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
 
         private void setData(int pos, int progress){
             //assign value to variables
-            testNo.setText("Test No: "+String.valueOf(pos+1));
+            testNo.setText("Test No: "+ String.valueOf(pos + 1));
             topScore.setText(String.valueOf(progress)+" %");
             testProgress.setProgress(progress);
 

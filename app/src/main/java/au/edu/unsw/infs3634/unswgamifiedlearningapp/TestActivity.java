@@ -34,7 +34,6 @@ public class TestActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         testView.setLayoutManager(layoutManager);
-
         //testDATA
         loadTestData();
         //setAdapter
