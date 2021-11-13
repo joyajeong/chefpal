@@ -122,12 +122,28 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            progressDialog.dismiss();
+
                             Toast.makeText(LoginActivity.this,"Login Success",Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                            Log.d(TAG, "signInWithEmail:success");
+                            DbQuery.loadCategories(new MyCompleteListener() {
+                                @Override
+                                public void onSuccess() {
+                                    progressDialog.dismiss();
+                                    Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                    Log.d(TAG, "signInWithEmail:success");
+                                }
+
+                                @Override
+                                public void onFailure() {
+                                    progressDialog.dismiss();
+                                    Toast.makeText(LoginActivity.this, "Something went wrong! Please try again!",
+                                            Toast.LENGTH_SHORT).show();
+
+                                }
+                            });
+
+
                         } else {
                             // If sign in fails, display error message to the user.
                             progressDialog.dismiss();
@@ -188,12 +204,27 @@ public class LoginActivity extends AppCompatActivity {
                                 DbQuery.createUserData(user.getEmail(), user.getDisplayName(), new MyCompleteListener() {
                                     @Override
                                     public void onSuccess() {
-                                        progressDialog.dismiss();
-                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                        startActivity(intent);
-                                        LoginActivity.this.finish();
-                                    }
+                                        DbQuery.loadCategories(new MyCompleteListener() {
+                                            @Override
+                                            public void onSuccess() {
+                                                progressDialog.dismiss();
+                                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                                startActivity(intent);
+                                                LoginActivity.this.finish();
+                                            }
 
+                                            @Override
+                                            public void onFailure() {
+                                                progressDialog.dismiss();
+                                                // If sign in fails, display a message to the user.
+                                                Log.w(TAG, "signInWithCredential:failure", task.getException());
+                                                Toast.makeText(LoginActivity.this, "Something went wrong! Please try again!",
+                                                        Toast.LENGTH_SHORT).show();
+
+                                            }
+                                        });
+
+                                    }
                                     @Override
                                     public void onFailure() {
                                         progressDialog.dismiss();
@@ -204,7 +235,25 @@ public class LoginActivity extends AppCompatActivity {
                                     }
                                 });
                             }
-                            
+                            else{
+                                DbQuery.loadCategories(new MyCompleteListener() {
+                                    @Override
+                                    public void onSuccess() {
+                                        progressDialog.dismiss();
+                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                        startActivity(intent);
+                                        LoginActivity.this.finish();
+                                    }
+
+                                    @Override
+                                    public void onFailure() {
+                                        progressDialog.dismiss();
+                                        Toast.makeText(LoginActivity.this, task.getException().getMessage(),
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+
 
                         } else {
                             progressDialog.dismiss();

@@ -58,7 +58,7 @@ public class DbQuery {
 
     }
 
-    public static void loadCategories(){
+    public static void loadCategories(MyCompleteListener completeListener){
         //fetch data from DB
         g_categoryList.clear();
         g_firestore.collection("QUIZ").get()
@@ -68,12 +68,14 @@ public class DbQuery {
                         //get all docs
                         Map<String, QueryDocumentSnapshot> docList = new ArrayMap<>();
                         for(QueryDocumentSnapshot doc: queryDocumentSnapshots){
+                            //store docs one by one to map
                             docList.put(doc.getId(),doc);
                         }
                         QueryDocumentSnapshot catListDoc = docList.get("CATEGORIES");
                         long catCount = catListDoc.getLong("COUNT");
-                        for(int i =1; i <catCount; i++){
+                        for(int i = 1; i <=catCount; i++){
                             String catID = catListDoc.getString("CAT"+ String.valueOf(i)+"_ID");
+
                             QueryDocumentSnapshot catDoc = docList.get(catID);
 
                             int testNo = catDoc.getLong("TEST_NO").intValue();
@@ -81,18 +83,17 @@ public class DbQuery {
                             String catName = catDoc.getString("NAME");
 
                             g_categoryList.add(new CategoryQuiz(catID, catName,testNo));
-
                         }
-
+                        completeListener.onSuccess();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        completeListener.onFailure();
 
                     }
-                })
-
+                });
 
     }
 

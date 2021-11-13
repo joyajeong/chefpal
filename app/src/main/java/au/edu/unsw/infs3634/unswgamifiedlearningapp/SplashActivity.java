@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -48,9 +49,21 @@ public class SplashActivity extends AppCompatActivity {
                 //check already log in?
                 if(mAuth.getCurrentUser() != null){
                     //already Logged in, go to MainActivity directly
-                    Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    SplashActivity.this.finish();
+                    DbQuery.loadCategories(new MyCompleteListener() {
+                        @Override
+                        public void onSuccess() {
+                            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            SplashActivity.this.finish();
+                        }
+
+                        @Override
+                        public void onFailure() {
+                            Toast.makeText(SplashActivity.this, "Something went wrong! Please Try again!"
+                                    ,Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
                 } else {
                     //to Log in
                     Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
