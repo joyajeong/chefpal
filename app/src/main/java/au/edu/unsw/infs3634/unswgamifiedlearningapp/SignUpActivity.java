@@ -120,7 +120,6 @@ public class SignUpActivity extends AppCompatActivity {
                             Toast.makeText(SignUpActivity.this, "Sign Up Successful",Toast.LENGTH_SHORT).show();
 
                             DbQuery.createUserData(emailStr,nameStr,new MyCompleteListener(){
-
                                 @Override
                                 public void onSuccess() {
                                     progressDialog.dismiss();
@@ -129,16 +128,13 @@ public class SignUpActivity extends AppCompatActivity {
                                     SignUpActivity.this.finish();
                                     //Log.d(TAG, "createUserWithEmail:success");
                                 }
-
                                 @Override
                                 public void onFailure() {
                                     Toast.makeText(SignUpActivity.this, "Something went wrong! Please Try again!"
                                             ,Toast.LENGTH_SHORT).show();
                                     progressDialog.dismiss();
-
                                 }
                             });
-
 
                         } else {
                             // If sign in fails, display a message to the user.

@@ -26,7 +26,7 @@ public class DbQuery {
         Map<String, Object> userData = new ArrayMap<>();
         userData.put("EMAIL",email);
         userData.put("NAME",name);
-        userData.put("TOTAL_SOCRE",0);
+        userData.put("TOTAL_SCORE",0);
 
         DocumentReference userDoc = g_firestore.collection("USERS")
                 .document(FirebaseAuth.getInstance().getCurrentUser().getUid());
