@@ -105,11 +105,23 @@ public class DbQuery {
         g_testList.clear();
 
         g_firestore.collection("QUIZ").document(g_categoryList.get(g_selected_cat_index).getDocID())
-                .collection("TESTS_LIST").document("TESTS_INFO")
+                .collection("TEST_LIST").document("TESTS_INFO")
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        int testNo = g_categoryList.get(g_selected_cat_index).getNumberOfTests();
+                        for(int i =1; i<=testNo; i++){
+                            g_testList.add(new TestQuestion(
+                                    documentSnapshot.getString("TEST"+String.valueOf(i)+"_ID"),
+                                            0,
+                                            documentSnapshot.getLong("TEST"+String.valueOf(i)+"_TIME").intValue()
+
+                            ));
+                        }
+
+
+                        completeListener.onSuccess();
 
                     }
                 })
@@ -117,7 +129,6 @@ public class DbQuery {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         completeListener.onFailure();
-
                     }
                 });
     }

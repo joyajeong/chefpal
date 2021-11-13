@@ -6,8 +6,15 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +22,9 @@ import java.util.List;
 public class TestActivity extends AppCompatActivity {
     private RecyclerView testView;
     private Toolbar toolbar;
+    private TestAdapter adapter;
+    private Dialog progressDialog;
+    private TextView dialogueText;
 
 
     @Override
@@ -27,18 +37,43 @@ public class TestActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         //category name
-        int cat_index = getIntent().getIntExtra("CAT_INDEX",0);
-        getSupportActionBar().setTitle(DbQuery.g_categoryList.get(cat_index).getName());
+
+        getSupportActionBar().setTitle(DbQuery.g_categoryList.get(DbQuery.g_selected_cat_index).getName());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        progressDialog = new Dialog(TestActivity.this);
+        progressDialog.setContentView(R.layout.dialogue);
+        progressDialog.setCancelable(false);
+        progressDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        dialogueText = progressDialog.findViewById(R.id.dialogue_text);
+        dialogueText.setText("Loading...");
+        progressDialog.show();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
         testView.setLayoutManager(layoutManager);
+
         //testDATA
-        loadTestData();
-        //setAdapter
-        TestAdapter adapter = new TestAdapter(testList);
-        testView.setAdapter(adapter);
+        DbQuery.loadTestData(new MyCompleteListener() {
+            @Override
+            public void onSuccess() {
+                progressDialog.dismiss();
+                //setAdapter
+                adapter = new TestAdapter(DbQuery.g_testList);
+                testView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onFailure() {
+                progressDialog.dismiss();
+                Toast.makeText(TestActivity.this, "Something went wrong! Please try again!",
+                        Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
     }
 
 //    private void loadTestData(){
