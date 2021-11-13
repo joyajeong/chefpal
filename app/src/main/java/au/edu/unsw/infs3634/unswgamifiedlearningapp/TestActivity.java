@@ -15,7 +15,7 @@ import java.util.List;
 public class TestActivity extends AppCompatActivity {
     private RecyclerView testView;
     private Toolbar toolbar;
-    private List<TestQuestion> testList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,14 +41,14 @@ public class TestActivity extends AppCompatActivity {
         testView.setAdapter(adapter);
     }
 
-    private void loadTestData(){
-        testList = new ArrayList<>();
-
-        testList.add(new TestQuestion("1",50,20));
-        testList.add(new TestQuestion("2",80,40));
-        testList.add(new TestQuestion("3",10,10));
-        testList.add(new TestQuestion("4",20,10));
-    }
+//    private void loadTestData(){
+//        testList = new ArrayList<>();
+//
+//        testList.add(new TestQuestion("1",50,20));
+//        testList.add(new TestQuestion("2",80,40));
+//        testList.add(new TestQuestion("3",10,10));
+//        testList.add(new TestQuestion("4",20,10));
+//    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

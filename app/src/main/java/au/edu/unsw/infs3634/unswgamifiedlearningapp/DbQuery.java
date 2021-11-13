@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -25,6 +26,9 @@ public class DbQuery {
     public static FirebaseFirestore g_firestore;
     //FirebaseFirestore.getInstance();
     public static List<CategoryQuiz> g_categoryList = new ArrayList<>();
+    public static int g_selected_cat_index = 0;
+    public static List<TestQuestion> g_testList = new ArrayList<>();
+
 
     public static void createUserData(String email,String name,MyCompleteListener comepleteListener){
 
@@ -95,6 +99,27 @@ public class DbQuery {
                     }
                 });
 
+    }
+
+    public static void loadTestData(MyCompleteListener completeListener){
+        g_testList.clear();
+
+        g_firestore.collection("QUIZ").document(g_categoryList.get(g_selected_cat_index).getDocID())
+                .collection("TESTS_LIST").document("TESTS_INFO")
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        completeListener.onFailure();
+
+                    }
+                });
     }
 
 

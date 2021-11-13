@@ -46,9 +46,10 @@ public class CategoryAdapter extends BaseAdapter {
         mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DbQuery.g_selected_cat_index = i;
                 Intent intent = new Intent(view.getContext(),TestActivity.class);
                 //pass position
-                intent.putExtra("CAT_INDEX",i);
+                //intent.putExtra("CAT_INDEX",i);
                 view.getContext().startActivity(intent);
             }
         });
