@@ -12,6 +12,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.TypeAdapterFactory;
 
 public class SplashActivity extends AppCompatActivity {
@@ -32,6 +33,9 @@ public class SplashActivity extends AppCompatActivity {
         Animation anim = AnimationUtils.loadAnimation(this, R.anim.myanim);
         appName.setAnimation(anim);
         mAuth = FirebaseAuth.getInstance();
+
+        DbQuery.g_firestore= FirebaseFirestore.getInstance();
+
         //load Main Activity
         new Thread(){
             @Override
