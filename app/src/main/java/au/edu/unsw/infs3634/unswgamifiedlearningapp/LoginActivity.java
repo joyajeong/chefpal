@@ -181,9 +181,30 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "signInWithCredential:success");
                             Toast.makeText(LoginActivity.this,"Google Sign In Success",Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
-                            progressDialog.dismiss();
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            LoginActivity.this.finish();
+
+                            //check if its first time login
+                            if(task.getResult().getAdditionalUserInfo().isNewUser()){
+                                //create user doc
+                                DbQuery.createUserData(user.getEmail(), user.getDisplayName(), new MyCompleteListener() {
+                                    @Override
+                                    public void onSuccess() {
+                                        progressDialog.dismiss();
+                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                        startActivity(intent);
+                                        LoginActivity.this.finish();
+                                    }
+
+                                    @Override
+                                    public void onFailure() {
+                                        progressDialog.dismiss();
+                                        // If sign in fails, display a message to the user.
+                                        Log.w(TAG, "signInWithCredential:failure", task.getException());
+                                        Toast.makeText(LoginActivity.this, "Something went wrong! Please try again!",
+                                                Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                            
 
                         } else {
                             progressDialog.dismiss();

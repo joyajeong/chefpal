@@ -12,14 +12,19 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class DbQuery {
     public static FirebaseFirestore g_firestore;
     //FirebaseFirestore.getInstance();
+    public static List<CategoryQuiz> g_categoryList = new ArrayList<>();
 
     public static void createUserData(String email,String name,MyCompleteListener comepleteListener){
 
@@ -51,13 +56,46 @@ public class DbQuery {
                     }
                 });
 
+    }
 
+    public static void loadCategories(){
+        //fetch data from DB
+        g_categoryList.clear();
+        g_firestore.collection("QUIZ").get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        //get all docs
+                        Map<String, QueryDocumentSnapshot> docList = new ArrayMap<>();
+                        for(QueryDocumentSnapshot doc: queryDocumentSnapshots){
+                            docList.put(doc.getId(),doc);
+                        }
+                        QueryDocumentSnapshot catListDoc = docList.get("CATEGORIES");
+                        long catCount = catListDoc.getLong("COUNT");
+                        for(int i =1; i <catCount; i++){
+                            String catID = catListDoc.getString("CAT"+ String.valueOf(i)+"_ID");
+                            QueryDocumentSnapshot catDoc = docList.get(catID);
 
+                            int testNo = catDoc.getLong("TEST_NO").intValue();
 
+                            String catName = catDoc.getString("NAME");
 
+                            g_categoryList.add(new CategoryQuiz(catID, catName,testNo));
+
+                        }
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                })
 
 
     }
+
 
 
 }

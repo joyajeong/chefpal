@@ -28,7 +28,7 @@ public class TestActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         //category name
         int cat_index = getIntent().getIntExtra("CAT_INDEX",0);
-        getSupportActionBar().setTitle(LearnFragment.categoryList.get(cat_index).getName());
+        getSupportActionBar().setTitle(DbQuery.g_categoryList.get(cat_index).getName());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);

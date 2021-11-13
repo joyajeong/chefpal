@@ -50,7 +50,7 @@ public class LearnFragment extends Fragment {
     }
 
     private GridView catView;
-    public static List<CategoryQuiz> categoryList = new ArrayList<>();
+
 
 
     @Override
@@ -68,21 +68,21 @@ public class LearnFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_learn, container, false);
         catView = view.findViewById(R.id.cat_Grid);
-        loadCategories();
+        //loadCategories();
         //Adapter
-        CategoryAdapter adapter = new CategoryAdapter(categoryList);
+        CategoryAdapter adapter = new CategoryAdapter(DbQuery.g_categoryList);
         catView.setAdapter(adapter);
 
 
         return view;
     }
 
-    private void loadCategories(){
-        categoryList.clear();
-        //will fetch this data from firebase
-        // 3 category for now
-        categoryList.add(new CategoryQuiz("1","Kitchen Safety",4));
-        categoryList.add(new CategoryQuiz("2","Food Safety",4));
-        categoryList.add(new CategoryQuiz("3","Nutrition",4));
-    }
+//    private void loadCategories(){
+//        categoryList.clear();
+//        //will fetch this data from firebase
+//        // 3 category for now
+//        categoryList.add(new CategoryQuiz("1","Kitchen Safety",4));
+//        categoryList.add(new CategoryQuiz("2","Food Safety",4));
+//        categoryList.add(new CategoryQuiz("3","Nutrition",4));
+//    }
 }
