@@ -90,6 +90,7 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
                         Executors.newSingleThreadExecutor().execute(new Runnable() {
                             @Override
                             public void run() {
+                                recipes.removeAll(recipes);
                                 //Gets the relevant recipe IDs (by recipe type and difficulty level)
                                 List<Integer> recipeIds = recipeTypeDao.getAllRecipeIdByTypeLevel("VEG", "EASY");
                                 Log.d(TAG, "number of relevant recipes: " + recipeIds.size());
@@ -128,6 +129,7 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
                             public void run() {
                                 //Gets the relevant recipe IDs (by recipe type and difficulty level)
                                 List<Integer> recipeIds = recipeTypeDao.getAllRecipeIdByTypeLevel("PESC", "EASY");
+                                recipes.removeAll(recipes);
                                 //If there are no relevant recipes in the database currently, then get the recipes
                                 //using the SpoonacularApi
                                 if (recipeIds.size() == 0 || recipeIds == null) {

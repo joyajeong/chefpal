@@ -22,6 +22,10 @@ public interface RecipeTypeDao {
             "recipeId LIKE :id")
     List<RecipeType> getRecipeTypeById(String id);
 
+    @Query("SELECT level FROM recipeType WHERE " +
+            "recipeId = :id")
+    String getRecipeLevel(Integer id);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(RecipeType... recipeTypes);
 

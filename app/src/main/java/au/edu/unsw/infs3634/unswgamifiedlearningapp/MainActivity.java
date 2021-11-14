@@ -33,12 +33,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Testing out database
-        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "user").fallbackToDestructiveMigration().build();
-
         mAuth = FirebaseAuth.getInstance();
         currUserID = mAuth.getCurrentUser().getUid();
+        Log.d(TAG, "Current user id: " +  currUserID);
+
+        //User database
+        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "user").fallbackToDestructiveMigration().build();
         UserDao userDao = db.userDao();
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {
@@ -46,9 +47,8 @@ public class MainActivity extends AppCompatActivity {
             if (userDao.findById(mAuth.getCurrentUser().getUid()) == null) {
                 userDao.insertAll(new User(mAuth.getCurrentUser().getUid(), 0));
                 Log.d(TAG, "Added new user!");
-
             }
-            Log.d(TAG, "Current user id: " +  mAuth.getCurrentUser().getUid());
+            Log.d(TAG, "Current user points: " +  userDao.findPointsById(currUserID));
         });
 
         //Setting up bottom navigation

@@ -16,31 +16,12 @@ public class User {
 
     @ColumnInfo(name = "points")
     public int points;
-//    @ColumnInfo(name = "first_name")
-//    public String firstName;
-//
-//    @ColumnInfo(name = "last_name")
-//    public String lastName;
-//
-//    @ColumnInfo(name = "password")
-//    public String password;
 
     //Constructor
     public User(String id, int points) {
         this.id = id;
         this.points = points;
-//        this.firstName = firstName;
-//        this.lastName = lastName;
-//        this.password = password;
     }
-
-//    // Insert Dummy Data into the Database
-//    public static User[] userData(){
-//        return new User[]{
-//                new User("testUser", "First Name", "Last Name", "password"),
-//                new User("joyaj", "Joya", "Jeong", "jj")
-//        };
-//    }
 
     //Create getter & setter methods
     public void setId(String id) {
