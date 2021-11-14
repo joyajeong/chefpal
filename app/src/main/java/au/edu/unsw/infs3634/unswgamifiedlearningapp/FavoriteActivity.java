@@ -175,7 +175,7 @@ public class FavoriteActivity extends AppCompatActivity {
     }
 
     private void addToFavRecipes(RecipeInformationResult r) {
-        if (RecipeLevelsListActivity.noDuplicateRecipes(r, favRecipes) && r != null) {
+        if (RecipeLevelsListActivity.noDuplicateRecipes(r.getId(), favRecipes) && r != null) {
             Log.d(TAG, "Recipe from API: " + r.getTitle());
             favRecipes.add(r);
         }

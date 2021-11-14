@@ -100,7 +100,7 @@ public class RecipesFragment extends Fragment {
         btnPesc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                launchRecipeLevels("GLUTENF");
+                launchRecipeLevels("PESC");
             }
         });
     }

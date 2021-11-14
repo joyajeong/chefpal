@@ -498,20 +498,20 @@ public class RecipeInformationResult {
         this.summary = summary;
     }
 
-    public static RecipeInformationResult getRecipeById(Integer id) {
-        List<RecipeInformationResult> recipes = RecipeLevelsListActivity.recipes;
-        Log.d(TAG, "Number of recipes: " + recipes.size());
-
-        for (RecipeInformationResult r : recipes) {
-            Log.d(TAG, "Recipe id: " + r.getId());
-
-            if (r.getId().equals(id)) {
-                Log.d(TAG, "Match found");
-                return r;
-            }
-        }
-        Log.d(TAG, "end of getRecipeById() no match found :(");
-        return null;
-    }
+//    public static RecipeInformationResult getRecipeById(Integer id) {
+//        List<RecipeInformationResult> recipes = RecipeLevelsListActivity.recipes;
+//        Log.d(TAG, "Number of recipes: " + recipes.size());
+//
+//        for (RecipeInformationResult r : recipes) {
+//            Log.d(TAG, "Recipe id: " + r.getId());
+//
+//            if (r.getId().equals(id)) {
+//                Log.d(TAG, "Match found");
+//                return r;
+//            }
+//        }
+//        Log.d(TAG, "end of getRecipeById() no match found :(");
+//        return null;
+//    }
 
 }

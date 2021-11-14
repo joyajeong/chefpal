@@ -29,7 +29,7 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
     private static RecipeRecyclerViewAdapter adapter;
     private static final String TAG = "RecipeLevelsListActivity";
     //TODO figure out this variable thing
-    public static List<RecipeInformationResult> recipes = new ArrayList<>();
+    private List<RecipeInformationResult> recipes = new ArrayList<>();
     private List<RecipeInformationResult> initialRecipes = new ArrayList<>();
     private RecipesDao recipesDao;
     private RecipeTypeDao recipeTypeDao;
@@ -82,6 +82,7 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
                 AppDatabase.class, "recipeType").fallbackToDestructiveMigration().build();
         recipeTypeDao = dbRT.recipeTypeDao();
 
+        //TODO: make a general method for inside the run()
         switch(recipeType) {
             case "VEG":
                 switch(difficultyLevel) {
@@ -89,14 +90,22 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
                         Executors.newSingleThreadExecutor().execute(new Runnable() {
                             @Override
                             public void run() {
+                                //Gets the relevant recipe IDs (by recipe type and difficulty level)
                                 List<Integer> recipeIds = recipeTypeDao.getAllRecipeIdByTypeLevel("VEG", "EASY");
+                                Log.d(TAG, "number of relevant recipes: " + recipeIds.size());
+                                //If there are no relevant recipes in the database currently, then get the recipes
+                                //using the SpoonacularApi
                                 if (recipeIds.size() == 0 || recipeIds == null) {
                                     Log.d(TAG, "no relevant recipes in the database");
                                     getVegRecipes(EASY_LEVEL);
                                 } else {
+                                    //If there are relevant recipes, then fetch them from the database and
+                                    //update the adapters for the recycler view
                                     Log.d(TAG, "found some relevant recipes in the database");
                                     for (Integer id : recipeIds) {
-                                        recipes.add(recipesDao.findById(id));
+                                        if (noDuplicateRecipes(id, recipes)) {
+                                            recipes.add(recipesDao.findById(id));
+                                        }
                                     }
                                     setAdapters();
                                 }
@@ -111,16 +120,36 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
                         break;
                 }
                 break;
-            case "GLUTENF":
+            case "PESC":
                 switch(difficultyLevel) {
                     case "EASY":
-                        getGlutenFRecipes(EASY_LEVEL);
+                        Executors.newSingleThreadExecutor().execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                //Gets the relevant recipe IDs (by recipe type and difficulty level)
+                                List<Integer> recipeIds = recipeTypeDao.getAllRecipeIdByTypeLevel("PESC", "EASY");
+                                //If there are no relevant recipes in the database currently, then get the recipes
+                                //using the SpoonacularApi
+                                if (recipeIds.size() == 0 || recipeIds == null) {
+                                    Log.d(TAG, "no relevant recipes in the database");
+                                    getPescRecipes(EASY_LEVEL);
+                                } else {
+                                    //If there are relevant recipes, then fetch them from the database and
+                                    //update the adapters for the recycler view
+                                    Log.d(TAG, "found some relevant recipes in the database");
+                                    for (Integer id : recipeIds) {
+                                        if (noDuplicateRecipes(id, recipes)) {
+                                            recipes.add(recipesDao.findById(id));
+                                        }
+                                    }
+                                    setAdapters();
+                                }
+                            }
+                        });
                         break;
                     case "MED":
-                        getGlutenFRecipes(MED_LEVEL);
                         break;
                     case "HARD":
-                        getGlutenFRecipes(HARD_LEVEL);
                         break;
                 }
 
@@ -177,8 +206,8 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
     private void getVegRecipes(int level) {
         getRecipes(null, null, "vegetarian", null, level);
     }
-    private void getGlutenFRecipes(int level) {
-        getRecipes(null, null, null, "gluten", level);
+    private void getPescRecipes(int level) {
+        getRecipes(null, null, "pescetarian", null, level);
     }
 
 
@@ -246,9 +275,10 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
             recipeTypeDao.insertAll(new RecipeType(recipeTypeId, recipeType, result.getId(), difficultyLevel));
 
             Log.d(TAG, "Added to database: " + result.getTitle());
+            recipes.removeAll(recipes);
             recipes = recipesDao.getAll();
             //dont htink i need this??
-//            setAdapters();
+            setAdapters();
         });
     }
 
@@ -262,9 +292,9 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
         });
     }
 
-    public static boolean noDuplicateRecipes(RecipeInformationResult recipe, List<RecipeInformationResult> list) {
+    public static boolean noDuplicateRecipes(Integer id, List<RecipeInformationResult> list) {
         for (RecipeInformationResult r : list) {
-            if (r.getId().equals(recipe.getId())) {
+            if (r.getId().equals(id)) {
                 Log.d(TAG, "Trying to add an existing recipe!");
                 return false;
             }
