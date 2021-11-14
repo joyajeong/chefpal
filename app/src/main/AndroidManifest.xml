@@ -13,9 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UNSWGamifiedLearningApp">
         <activity
-            android:name=".LeaderboardHome"
-            android:exported="true" />
-        <activity
             android:name=".TestActivity"
             android:exported="true" />
         <activity
