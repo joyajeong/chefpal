@@ -3,6 +3,7 @@ package au.edu.unsw.infs3634.unswgamifiedlearningapp;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,8 +11,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -26,12 +31,14 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
     //TODO figure out this variable thing
     public static List<RecipeInformationResult> recipes = new ArrayList<>();
     private List<RecipeInformationResult> initialRecipes = new ArrayList<>();
-
+    private RecipesDao recipesDao;
+    private RecipeTypeDao recipeTypeDao;
     private String difficultyLevel, recipeType;
-    public static int NUM_RESULTS = 3;
+    public static int NUM_RESULTS = 5;
     public static int EASY_LEVEL = 15;
     public static int MED_LEVEL = 30;
     public static int HARD_LEVEL = 45;
+    private int level;
     RecipeSearchResult searchResult;
 
     @Override
@@ -47,26 +54,54 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
         recipeType = bundle.getString("RECIPE_TYPE");
         Log.d(TAG, difficultyLevel);
         Log.d(TAG, recipeType);
-
+        setRecyclerView();
 
         //TODO figure out a better way to do the switch statements
         switch(difficultyLevel) {
             case "EASY":
+                level = 15;
                 tvDifficultyLevel.setText("Easy");
                 break;
             case "MED":
+                level = 30;
                 tvDifficultyLevel.setText("Medium");
                 break;
             case "HARD":
+                level = 45;
                 tvDifficultyLevel.setText("Hard");
                 break;
         }
+
+        //Recipes database
+        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "recipes").fallbackToDestructiveMigration().build();
+        recipesDao = db.recipesDao();
+
+        //RecipeType database
+        AppDatabase dbRT = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "recipeType").fallbackToDestructiveMigration().build();
+        recipeTypeDao = dbRT.recipeTypeDao();
 
         switch(recipeType) {
             case "VEG":
                 switch(difficultyLevel) {
                     case "EASY":
-                        getVegRecipes(EASY_LEVEL);
+                        Executors.newSingleThreadExecutor().execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                List<Integer> recipeIds = recipeTypeDao.getAllRecipeIdByTypeLevel("VEG", "EASY");
+                                if (recipeIds.size() == 0 || recipeIds == null) {
+                                    Log.d(TAG, "no relevant recipes in the database");
+                                    getVegRecipes(EASY_LEVEL);
+                                } else {
+                                    Log.d(TAG, "found some relevant recipes in the database");
+                                    for (Integer id : recipeIds) {
+                                        recipes.add(recipesDao.findById(id));
+                                    }
+                                    setAdapters();
+                                }
+                            }
+                        });
                         break;
                     case "MED":
                         getVegRecipes(MED_LEVEL);
@@ -76,7 +111,40 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
                         break;
                 }
                 break;
+            case "GLUTENF":
+                switch(difficultyLevel) {
+                    case "EASY":
+                        getGlutenFRecipes(EASY_LEVEL);
+                        break;
+                    case "MED":
+                        getGlutenFRecipes(MED_LEVEL);
+                        break;
+                    case "HARD":
+                        getGlutenFRecipes(HARD_LEVEL);
+                        break;
+                }
+
         }
+
+
+        //Get recipes from database to display in recycler view
+//        Executors.newSingleThreadExecutor().execute(new Runnable() {
+//            @Override
+//            public void run() {
+//                Log.d(TAG, "Number of recipes in database: " + recipesDao.getAll().size());
+//                if (recipesDao.getAll().size() > 0) {
+//                    switch(recipeType) {
+//                        case "VEG":
+//                            recipes = recipesDao.findVegRecipes(EASY_LEVEL);
+//                            break;
+//                        case "GLUTENF":
+//                            recipes = recipesDao.findGlutenFRecipes(EASY_LEVEL);
+//                            break;
+//                    }
+//                    setAdapters();
+//                }
+//            }
+//        });
     }
 
     @Override
@@ -107,14 +175,19 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
     }
 
     private void getVegRecipes(int level) {
-        getRecipes(null, null, "vegetarian", level);
+        getRecipes(null, null, "vegetarian", null, level);
+    }
+    private void getGlutenFRecipes(int level) {
+        getRecipes(null, null, null, "gluten", level);
     }
 
+
+
     //Gets recipes from API - Preparing the recipes for the RecyclerView
-    private void getRecipes(String query, String cuisine, String diet, int maxReadyTime) {
+    private void getRecipes(String query, String cuisine, String diet, String intolerances, int maxReadyTime) {
         Call<RecipeSearchResult> call = RetrofitClient.getInstance().getMyApi()
                 //change maxReadyTime to adjust difficulty level
-                .recipeResults(query, cuisine, diet, true, maxReadyTime, "time", SpoonacularClient.apiKey);
+                .recipeResults(query, cuisine, diet, intolerances, true, maxReadyTime, "time", SpoonacularClient.apiKey);
 
         call.enqueue(new Callback<RecipeSearchResult>() {
             @Override
@@ -152,7 +225,7 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
                 Log.i(TAG, "Source URL: " + recipeInfo.getSourceUrl());
                 Log.d(TAG, "Recipe Title: " + recipeInfo.getTitle());
                 Log.d(TAG, "Recipe time: " + recipeInfo.getReadyInMinutes());
-                addRecipes(recipeInfo);
+                addRecipeToDb(recipeInfo);
             }
 
             @Override
@@ -163,27 +236,30 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
         });
     }
 
-   private void addRecipes(RecipeInformationResult result) {
-        if (result != null && noDuplicateRecipes(result, recipes)) {
-            Log.d(TAG, "Recipes are being added...");
-            recipes.add(new RecipeInformationResult(result.getId(), result.getTitle(), result.getImage(), result.getImageType(),
-                    result.getServings(), result.getReadyInMinutes(), result.getLicense(), result.getSourceName(), result.getSourceUrl(),
-                    result.getSpoonacularSourceUrl(), result.getAggregateLikes(), result.getSpoonacularScore(), result.getPricePerServing(),
-                    result.getAnalyzedInstructions(), result.getCheap(), result.getCreditsText(), result.getCuisines(), result.getDairyFree(),
-                    result.getDiets(), result.getGaps(), result.getGlutenFree(), result.getInstructions(), result.getKetogenic(),
-                    result.getLowFodmap(), result.getOccasions(), result.getSustainable(), result.getVegan(), result.getVegetarian(),
-                    result.getVeryHealthy(), result.getVeryPopular(), result.getWhole30(), result.getWeightWatcherSmartPoints(),
-                    result.getDishTypes(), result.getExtendedIngredients(), result.getSummary()));
-            Log.d(TAG, "Number of recipes: " + recipes.size());
-        } else {
-            Log.e(TAG, "Result is null");
-        }
+    private void addRecipeToDb(RecipeInformationResult result) {
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> {
+            //Add recipe to the recipes database
+            recipesDao.insertAll(result);
+            //Add recipeId, type and level in the recipeType table
+            String recipeTypeId = recipeType + result.getId() + difficultyLevel;
+            recipeTypeDao.insertAll(new RecipeType(recipeTypeId, recipeType, result.getId(), difficultyLevel));
 
-        if (recipes.size() == NUM_RESULTS) {
-            Log.d(TAG, "Added all the recipes to the RecyclerView");
-            adapter.updateRecipeList(recipes);
-        }
+            Log.d(TAG, "Added to database: " + result.getTitle());
+            recipes = recipesDao.getAll();
+            //dont htink i need this??
+//            setAdapters();
+        });
+    }
 
+    private void setAdapters() {
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.d(TAG, "setting adapter");
+                adapter.updateRecipeList(recipes);
+            }
+        });
     }
 
     public static boolean noDuplicateRecipes(RecipeInformationResult recipe, List<RecipeInformationResult> list) {

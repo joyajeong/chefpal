@@ -2,119 +2,163 @@ package au.edu.unsw.infs3634.unswgamifiedlearningapp;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+@Entity(tableName = "recipes")
 public class RecipeInformationResult {
 
     private static String TAG = "RecipeInformationResult";
 
+    @NonNull
+    @PrimaryKey
     @SerializedName("id")
     @Expose
     private Integer id;
+
     @SerializedName("title")
     @Expose
     private String title;
+
     @SerializedName("image")
     @Expose
     private String image;
+
     @SerializedName("imageType")
     @Expose
     private String imageType;
+
     @SerializedName("servings")
     @Expose
     private Integer servings;
+
     @SerializedName("readyInMinutes")
     @Expose
     private Integer readyInMinutes;
+
     @SerializedName("license")
     @Expose
     private String license;
+
     @SerializedName("sourceName")
     @Expose
     private String sourceName;
+
     @SerializedName("sourceUrl")
     @Expose
     private String sourceUrl;
+
     @SerializedName("spoonacularSourceUrl")
     @Expose
     private String spoonacularSourceUrl;
+
     @SerializedName("aggregateLikes")
     @Expose
     private Integer aggregateLikes;
+
     @SerializedName("healthScore")
     @Expose
     private Double healthScore;
+
     @SerializedName("spoonacularScore")
     @Expose
     private Double spoonacularScore;
+
     @SerializedName("pricePerServing")
     @Expose
     private Double pricePerServing;
+
     @SerializedName("analyzedInstructions")
     @Expose
     private List<Object> analyzedInstructions = null;
+
     @SerializedName("cheap")
     @Expose
     private Boolean cheap;
+
     @SerializedName("creditsText")
     @Expose
     private String creditsText;
+
     @SerializedName("cuisines")
     @Expose
     private List<Object> cuisines = null;
+
     @SerializedName("dairyFree")
     @Expose
     private Boolean dairyFree;
+
     @SerializedName("diets")
     @Expose
     private List<Object> diets = null;
+
     @SerializedName("gaps")
     @Expose
     private String gaps;
+
     @SerializedName("glutenFree")
     @Expose
     private Boolean glutenFree;
+
     @SerializedName("instructions")
     @Expose
     private String instructions;
+
     @SerializedName("ketogenic")
     @Expose
     private Boolean ketogenic;
+
     @SerializedName("lowFodmap")
     @Expose
     private Boolean lowFodmap;
+
     @SerializedName("occasions")
     @Expose
     private List<Object> occasions = null;
+
     @SerializedName("sustainable")
     @Expose
     private Boolean sustainable;
+
     @SerializedName("vegan")
     @Expose
     private Boolean vegan;
+
     @SerializedName("vegetarian")
     @Expose
     private Boolean vegetarian;
+
     @SerializedName("veryHealthy")
     @Expose
     private Boolean veryHealthy;
+
     @SerializedName("veryPopular")
     @Expose
     private Boolean veryPopular;
+
     @SerializedName("whole30")
     @Expose
     private Boolean whole30;
+
     @SerializedName("weightWatcherSmartPoints")
     @Expose
     private Integer weightWatcherSmartPoints;
+
     @SerializedName("dishTypes")
     @Expose
     private List<String> dishTypes = null;
+
     @SerializedName("extendedIngredients")
     @Expose
     private List<ExtendedIngredient> extendedIngredients = null;
+
     @SerializedName("summary")
     @Expose
     private String summary;

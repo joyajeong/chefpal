@@ -26,6 +26,10 @@ public interface UserFavouriteRecipeDao {
             "recipeId LIKE :recipeId")
     List<UserFavouriteRecipe> findFavRecipeByRecipeId(String recipeId);
 
+    @Query("SELECT recipeId FROM userFavouriteRecipe WHERE " +
+            "userId LIKE :userId")
+    List<Integer> findFavRecipeIdByUserId(String userId);
+
     @Query("UPDATE userFavouriteRecipe SET notes = :notes WHERE " +
             "id LIKE :id")
     void updateNotes(String notes, String id);

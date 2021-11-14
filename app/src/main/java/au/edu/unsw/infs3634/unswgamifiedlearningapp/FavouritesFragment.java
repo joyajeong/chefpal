@@ -32,11 +32,13 @@ public class FavouritesFragment extends Fragment {
     private String currUserID;
     private TextView tvFavouriteRecipes;
     private List<UserFavouriteRecipe> favUserRecipes;
+    private List<Integer> favRecipeIds;
     private RecyclerView recyclerView;
     private RecipeRecyclerViewAdapter adapter;
     private List<RecipeInformationResult> favRecipes = new ArrayList<>();
     private List<RecipeInformationResult> initalRecipes = new ArrayList<>();
     private RecipeInformationResult recipeInfo;
+    private RecipesDao recipesDao;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -89,21 +91,27 @@ public class FavouritesFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         tvFavouriteRecipes = getView().findViewById(R.id.tvFavouriteRecipes);
+        currUserID = MainActivity.currUserID;
+
+        //Recipes database
+        AppDatabase db = Room.databaseBuilder(getActivity(),
+                AppDatabase.class, "recipes").fallbackToDestructiveMigration().build();
+        recipesDao = db.recipesDao();
 
         //UserFavouriteRecipe Database
-        AppDatabase db = Room.databaseBuilder(getActivity(),
+        AppDatabase db1 = Room.databaseBuilder(getActivity(),
                 AppDatabase.class, "userFavouriteRecipe").fallbackToDestructiveMigration().build();
 
-        currUserID = MainActivity.currUserID;
-        UserFavouriteRecipeDao userFavouriteRecipeDao = db.userFavouriteRecipeDao();
+        UserFavouriteRecipeDao userFavouriteRecipeDao = db1.userFavouriteRecipeDao();
 
         //Checking how many recipes they have liked
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {
-            favUserRecipes = userFavouriteRecipeDao.findFavRecipesByUserId(currUserID);
-            Log.d(TAG, "Current favourite recipes: " + favUserRecipes.size());
-            setText(tvFavouriteRecipes, "Number of favourite recipes: " + favUserRecipes.size());
-            getRecipes(favUserRecipes);
+            favRecipeIds = userFavouriteRecipeDao.findFavRecipeIdByUserId(currUserID);
+//            favUserRecipes = userFavouriteRecipeDao.findFavRecipesByUserId(currUserID);
+//            Log.d(TAG, "Current favourite recipes: " + favUserRecipes.size());
+//            setText(tvFavouriteRecipes, "Number of favourite recipes: " + favUserRecipes.size());
+            getRecipes(favRecipeIds);
         });
 
         recyclerView = getView().findViewById(R.id.rvFavRecipes);
@@ -146,34 +154,13 @@ public class FavouritesFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
     }
 
-    private void getRecipes(List<UserFavouriteRecipe> favUserRecipes){
-        for (UserFavouriteRecipe recipe : favUserRecipes) {
-            getRecipeInfo(recipe.getRecipeId());
+    private void getRecipes(List<Integer> recipeIds){
+        for (Integer id : recipeIds) {
+            Executor myExecutor = Executors.newSingleThreadExecutor();
+            myExecutor.execute(() -> {
+                addToFavRecipes(recipesDao.findById(id));
+            });
         }
-    }
-
-    private RecipeInformationResult getRecipeInfo(int id) {
-        Call<RecipeInformationResult> call = RetrofitClient.getInstance().getMyApi()
-                .recipeInformationResults(id, false, SpoonacularClient.apiKey);
-
-        call.enqueue(new Callback<RecipeInformationResult>() {
-            @Override
-            public void onResponse(Call<RecipeInformationResult> call, Response<RecipeInformationResult> response) {
-                recipeInfo = response.body();
-                //check if response body is null
-                Log.d(TAG, "Source URL: " + recipeInfo.getSourceUrl());
-                Log.d(TAG, "Recipe Title: " + recipeInfo.getTitle());
-                Log.d(TAG, "Recipe time: " + recipeInfo.getReadyInMinutes());
-                addToFavRecipes(recipeInfo);
-            }
-
-            @Override
-            public void onFailure(Call<RecipeInformationResult> call, Throwable t) {
-                Log.i(TAG, "Failed API Call" + t.getCause());
-
-            }
-        });
-        return recipeInfo;
     }
 
     private void addToFavRecipes(RecipeInformationResult r) {

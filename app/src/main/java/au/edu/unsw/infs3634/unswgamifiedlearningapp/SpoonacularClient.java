@@ -23,6 +23,7 @@ public interface SpoonacularClient {
             @Query("query") String query,
             @Query("cuisine") String cuisine,
             @Query("diet") String diet,
+            @Query("intolerances") String intolerances,
             @Query("instructionsRequired") boolean instructionsRequired,
             @Query("maxReadyTime") int maxReadyTime,
             @Query("sort") String sort,

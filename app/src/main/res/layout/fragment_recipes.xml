@@ -40,12 +40,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btnVeg2"
+        android:id="@+id/btnPesc"
         android:layout_width="90dp"
         android:layout_height="90dp"
         android:layout_marginStart="48dp"
         android:background="@drawable/circular_button"
-        android:text="Pescetarian"
+        android:text="Pescatarian"
         app:layout_constraintStart_toEndOf="@+id/btnVeg"
         app:layout_constraintTop_toTopOf="@+id/btnVeg" />
 

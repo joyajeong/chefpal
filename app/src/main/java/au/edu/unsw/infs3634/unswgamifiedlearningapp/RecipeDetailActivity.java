@@ -39,14 +39,20 @@ public class RecipeDetailActivity extends AppCompatActivity {
         selectedRecipeId = Integer.parseInt(bundle.getString("RECIPE_ID"));
         Log.d(TAG, "Selected recipe id: " + selectedRecipeId);
 
-        try {
-            selectedRecipe = RecipeInformationResult.getRecipeById(selectedRecipeId);
-        } catch (Exception e) {
-            Log.e(TAG, String.valueOf(e));
-        }
+        //Recipes database
+        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "recipes").fallbackToDestructiveMigration().build();
+        RecipesDao recipesDao = db.recipesDao();
+
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                selectedRecipe = recipesDao.findById(selectedRecipeId);
+                setRecipeInfo();
+            }
+        });
 
         layout = findViewById(R.id.ingredient_checkboxes_layout);
-
         tvRecipeName  = findViewById(R.id.tvRecipeName);
         tvRecipeTime = findViewById(R.id.tvRecipeTime);
         tvSourceURL = findViewById(R.id.tvSourceURL);
@@ -56,12 +62,10 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
         currUserID = MainActivity.currUserID;
 
-        setRecipeInfo();
-
         //UserFavouriteRecipe Database
-        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+        AppDatabase db1 = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "userFavouriteRecipe").fallbackToDestructiveMigration().build();
-        UserFavouriteRecipeDao userFavouriteRecipeDao = db.userFavouriteRecipeDao();
+        UserFavouriteRecipeDao userFavouriteRecipeDao = db1.userFavouriteRecipeDao();
 
         btnFavourite.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,11 +88,15 @@ public class RecipeDetailActivity extends AppCompatActivity {
     }
 
     private void setRecipeInfo() {
-        tvRecipeName.setText(selectedRecipe.getTitle());
-        tvRecipeTime.setText("Ready in: " + selectedRecipe.getReadyInMinutes());
-        tvSourceURL.setText(selectedRecipe.getSourceUrl());
-        tvServings.setText(String.valueOf(selectedRecipe.getServings()));
-        tvIngredients.setText(formatIngredients());
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                tvRecipeName.setText(selectedRecipe.getTitle());
+                tvRecipeTime.setText("Ready in: " + selectedRecipe.getReadyInMinutes());
+                tvSourceURL.setText(selectedRecipe.getSourceUrl());
+                tvServings.setText(String.valueOf(selectedRecipe.getServings()));
+                tvIngredients.setText(formatIngredients());            }
+        });
     }
 
     //TODO find a better way to format ingredients/move it to recipeinformationresult??
@@ -103,7 +111,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
             CheckBox cb = new CheckBox(this);
             cb.setText(ingredients[i]);
             layout.addView(cb);
-            Log.d(TAG, "Ingredient: " + ingredientList.get(i).getOriginal());
         }
 
         String formattedIngredients = Arrays.toString(ingredients)

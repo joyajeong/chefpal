@@ -4,26 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.room.Room;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-
-import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,7 +39,7 @@ public class RecipesFragment extends Fragment {
     RecipeSearchResult searchResult;
     TextView recipeTitle;
     RecipeSearchResult recipes;
-    Button btnVeg;
+    Button btnVeg, btnPesc;
 
 
     // TODO: Rename and change types of parameters
@@ -104,12 +92,24 @@ public class RecipesFragment extends Fragment {
         btnVeg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), RecipeLevelsActivity.class);
-                intent.putExtra("RECIPE_TYPE", "VEG");
-                startActivity(intent);
-                ((Activity) getActivity()).overridePendingTransition(0, 0);
+                launchRecipeLevels("VEG");
             }
         });
+
+        btnPesc = getView().findViewById(R.id.btnPesc);
+        btnPesc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                launchRecipeLevels("GLUTENF");
+            }
+        });
+    }
+
+    private void launchRecipeLevels(String recipeType) {
+        Intent intent = new Intent(getActivity(), RecipeLevelsActivity.class);
+        intent.putExtra("RECIPE_TYPE", recipeType);
+        startActivity(intent);
+        ((Activity) getActivity()).overridePendingTransition(0, 0);
     }
 
 }

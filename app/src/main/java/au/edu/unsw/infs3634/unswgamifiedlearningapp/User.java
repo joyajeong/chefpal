@@ -10,7 +10,6 @@ import java.util.List;
 @Entity(tableName = "user")
 public class User {
     @ColumnInfo(name = "id")
-
     @NonNull
     @PrimaryKey
     public String id;
