@@ -4,15 +4,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.room.Room;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Arrays;
@@ -29,11 +37,14 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private LinearLayout layout;
     private ImageButton btnFavourite;
     private String currUserID;
+    private ImageView ivDetailPic;
+    private Button btnMethod;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
+        getSupportActionBar().hide();
 
         Bundle bundle = getIntent().getExtras();
         selectedRecipeId = Integer.parseInt(bundle.getString("RECIPE_ID"));
@@ -55,10 +66,10 @@ public class RecipeDetailActivity extends AppCompatActivity {
         layout = findViewById(R.id.ingredient_checkboxes_layout);
         tvRecipeName  = findViewById(R.id.tvRecipeName);
         tvRecipeTime = findViewById(R.id.tvRecipeTime);
-        tvSourceURL = findViewById(R.id.tvSourceURL);
         tvServings = findViewById(R.id.tvServings);
-        tvIngredients = findViewById(R.id.tvIngredients);
         btnFavourite = findViewById(R.id.btnFavourite);
+        ivDetailPic = findViewById(R.id.ivDetailPic);
+        btnMethod = findViewById(R.id.btnMethod);
 
         currUserID = MainActivity.currUserID;
 
@@ -70,13 +81,13 @@ public class RecipeDetailActivity extends AppCompatActivity {
         btnFavourite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Executor myExecutor = Executors.newSingleThreadExecutor();
                 myExecutor.execute(() -> {
                     String id = currUserID + selectedRecipeId;
                     //If the user has not already liked the recipe, add it
                     if (userFavouriteRecipeDao.findById(id) == null) {
                         userFavouriteRecipeDao.insertAll(new UserFavouriteRecipe(id, currUserID, selectedRecipeId, ""));
+                        showToast("Favourited the recipe");
                         Log.d(TAG, "Favourited a recipe: " +  id);
                     } else {
                         Log.d(TAG, "Already liked the recipe!");
@@ -85,22 +96,37 @@ public class RecipeDetailActivity extends AppCompatActivity {
 
             }
         });
+
+        btnMethod.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uri = Uri.parse(selectedRecipe.getSourceUrl());
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
+        });
     }
 
     private void setRecipeInfo() {
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                RequestOptions requestOptions = new RequestOptions();
+                requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(8));
+                Glide.with(RecipeDetailActivity.this)
+                        .load(selectedRecipe.getImage())
+                        .apply(requestOptions)
+                        .into(ivDetailPic);
                 tvRecipeName.setText(selectedRecipe.getTitle());
-                tvRecipeTime.setText("Ready in: " + selectedRecipe.getReadyInMinutes());
-                tvSourceURL.setText(selectedRecipe.getSourceUrl());
+                tvRecipeTime.setText(selectedRecipe.getReadyInMinutes() + " minutes");
                 tvServings.setText(String.valueOf(selectedRecipe.getServings()));
-                tvIngredients.setText(formatIngredients());            }
+                formatIngredients();
+            }
         });
     }
 
     //TODO find a better way to format ingredients/move it to recipeinformationresult??
-    private String formatIngredients() {
+    private void formatIngredients() {
         int lengthOfIngredients = selectedRecipe.getExtendedIngredients().size();
         List<ExtendedIngredient> ingredientList = selectedRecipe.getExtendedIngredients();
 
@@ -113,12 +139,21 @@ public class RecipeDetailActivity extends AppCompatActivity {
             layout.addView(cb);
         }
 
-        String formattedIngredients = Arrays.toString(ingredients)
-                .replace("[", "")  //remove the right bracket
-                .replace("]", "")  //remove the left bracket
-                .replace(",", "\n") //separate each line
-                .trim(); //remove trailing spaces from partially initialized arrays
-        return formattedIngredients;
+//        String formattedIngredients = Arrays.toString(ingredients)
+//                .replace("[", "")  //remove the right bracket
+//                .replace("]", "")  //remove the left bracket
+//                .replace(",", "\n") //separate each line
+//                .trim(); //remove trailing spaces from partially initialized arrays
+//        return formattedIngredients;
     }
 
+    private void showToast(String message) {
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast toast= Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
+                toast.show();            }
+        });
+
+    }
 }
