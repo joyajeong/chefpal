@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UNSWGamifiedLearningApp">
         <activity
+            android:name=".QuestionsActivity"
+            android:exported="false" />
+        <activity
             android:name=".TestActivity"
             android:exported="true" />
         <activity
