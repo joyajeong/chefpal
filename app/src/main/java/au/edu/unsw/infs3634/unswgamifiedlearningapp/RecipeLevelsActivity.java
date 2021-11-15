@@ -58,18 +58,46 @@ public class RecipeLevelsActivity extends AppCompatActivity {
         recipeType = bundle.getString("RECIPE_TYPE");
         Log.d(TAG, recipeType);
 
+        //Initializing the level buttons
         Button btnEasy = findViewById(R.id.btnEasy);
+        Button btnMed = findViewById(R.id.btnMed);
+        Button btnHard = findViewById(R.id.btnHard);
+
+        //TODO CHECK THIS LOGIC
+        if (userPoints <= 1000) {
+            btnMed.setEnabled(false);
+            btnHard.setEnabled(false);
+        } else if (userPoints <=5000) {
+            btnHard.setEnabled(false);
+        }
+
         btnEasy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(RecipeLevelsActivity.this, RecipeLevelsListActivity.class);
-                intent.putExtra("DIFFICULTY_LEVEL", "EASY");
-                intent.putExtra("RECIPE_TYPE", recipeType);
-                startActivity(intent);
+                launchRecipeLevelsListAcitivty("EASY");
             }
         });
-        //TODO DISABLE buttons if the user is not upto the level (just change the color to grey)
 
+        btnMed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                launchRecipeLevelsListAcitivty("MED");
+            }
+        });
+
+        btnHard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                launchRecipeLevelsListAcitivty("HARD");
+            }
+        });
+    }
+
+    private void launchRecipeLevelsListAcitivty(String level) {
+        Intent intent = new Intent(RecipeLevelsActivity.this, RecipeLevelsListActivity.class);
+        intent.putExtra("DIFFICULTY_LEVEL", level);
+        intent.putExtra("RECIPE_TYPE", recipeType);
+        startActivity(intent);
     }
 
 }

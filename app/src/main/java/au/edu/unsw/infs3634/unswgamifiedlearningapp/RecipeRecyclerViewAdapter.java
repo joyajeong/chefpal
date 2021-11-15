@@ -26,9 +26,8 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
     private List<RecipeInformationResult> mRecipesFiltered;
     private ClickListener mClickListener;
     private static final String TAG = "RecipeRecyclerViewAdapter";
-//    public static final int SORT_SONG_NAME = 1;
-//    public static final int SORT_ARTIST_NAME = 2;
-//    public static final int SORT_RATING = 3;
+    public static final int SORT_RECIPE_NAME = 1;
+    public static final int SORT_POPULARITY = 2;
 
     //Constructor for adapter
     public RecipeRecyclerViewAdapter(List<RecipeInformationResult> recipes, ClickListener listener) {
@@ -48,22 +47,15 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
                     mRecipesFiltered = mRecipes;
                 } else {
                     List<RecipeInformationResult> filteredList = new ArrayList<>();
-//                    Log.d(TAG, "Search query: " + charString);
-//
-//                    for (LikedSong s : mLikedSongs) {
-//                        //Filters through the artists names
-//                        for (int i = 0; i < s.getArtists().size(); i++) {
-//                            if (!filteredList.contains(s) &&
-//                                    s.getArtists().get(i).getName().toLowerCase().contains(charString.toLowerCase())) {
-//                                filteredList.add(s);
-//                            }
-//                        }
-//                        //Filters through the song names
-//                        if (!filteredList.contains(s) && s.getName().toLowerCase().contains(charString.toLowerCase())) {
-//                            Log.d(TAG, "matches " + s.getName());
-//                            filteredList.add(s);
-//                        }
-//                    }
+                    Log.d(TAG, "Search query: " + charString);
+
+                    for (RecipeInformationResult s : mRecipes) {
+                        //Filters through the recipe names
+                        if (!filteredList.contains(s) &&
+                                s.getTitle().toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(s);
+                        }
+                    }
                     mRecipesFiltered = filteredList;
                 }
                 FilterResults filterResult = new FilterResults();
@@ -131,9 +123,27 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
         }
     }
 
-    //Sorts the list by either song, artist or ratings
+    //Sorts the list by either recipe name or popularity
     public void sort(final int sortMethod) {
-
+        if(mRecipesFiltered.size() > 0) {
+            Collections.sort(mRecipesFiltered, new Comparator<RecipeInformationResult>() {
+                @Override
+                public int compare(RecipeInformationResult r1, RecipeInformationResult r2) {
+                    if (sortMethod == SORT_RECIPE_NAME) {
+                        //Sort by recipe name
+                        Log.d(TAG, "Sorting by Recipe name");
+                        return r1.getTitle().toLowerCase().compareTo(r2.getTitle().toLowerCase());
+                    } else if (sortMethod == SORT_POPULARITY) {
+                        //Sort by popularity
+                        Log.d(TAG, "Sorting by ratings");
+                        return -(String.valueOf(r1.getAggregateLikes())).compareTo(String.valueOf((r2.getAggregateLikes())));
+                    }
+                    //Default sort by recipe name
+                    return r1.getTitle().toLowerCase().compareTo(r2.getTitle().toLowerCase());
+                }
+            });
+        }
+        notifyDataSetChanged();
     }
 
     public void updateRecipeList(List<RecipeInformationResult> recipes) {

@@ -7,7 +7,7 @@
     tools:context=".RecipeLevelsActivity">
 
     <Button
-        android:id="@+id/buttonHard"
+        android:id="@+id/btnHard"
         android:layout_width="90dp"
         android:layout_height="90dp"
         android:background="@drawable/circular_button"

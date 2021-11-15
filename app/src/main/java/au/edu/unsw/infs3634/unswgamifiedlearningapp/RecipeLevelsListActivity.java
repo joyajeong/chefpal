@@ -8,7 +8,11 @@ import androidx.room.Room;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -55,19 +59,23 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
         Log.d(TAG, difficultyLevel);
         Log.d(TAG, recipeType);
         setRecyclerView();
+        recipes.removeAll(recipes);
 
         //TODO figure out a better way to do the switch statements
         switch(difficultyLevel) {
             case "EASY":
                 level = 15;
+                setActionBarTitle("Easy");
                 tvDifficultyLevel.setText("Easy");
                 break;
             case "MED":
                 level = 30;
+                setActionBarTitle("Medium");
                 tvDifficultyLevel.setText("Medium");
                 break;
             case "HARD":
                 level = 45;
+                setActionBarTitle("Hard");
                 tvDifficultyLevel.setText("Hard");
                 break;
         }
@@ -82,78 +90,132 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
                 AppDatabase.class, "recipeType").fallbackToDestructiveMigration().build();
         recipeTypeDao = dbRT.recipeTypeDao();
 
+
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                //Gets the relevant recipe IDs (by recipe type and difficulty level)
+                List<Integer> recipeIds = recipeTypeDao.getAllRecipeIdByTypeLevel(recipeType, difficultyLevel);
+                Log.d(TAG, "number of relevant recipes: " + recipeIds.size());
+                //If there are no relevant recipes in the database currently, then get the recipes
+                //using the SpoonacularApi
+                if (recipeIds.size() == 0 || recipeIds == null) {
+                    Log.d(TAG, "no relevant recipes in the database");
+                    getRecipesFromApi(recipeType);
+                } else {
+                    //If there are relevant recipes, then fetch them from the database and
+                    //update the adapters for the recycler view
+                    Log.d(TAG, "found some relevant recipes in the database");
+                    for (Integer id : recipeIds) {
+                        if (noDuplicateRecipes(id, recipes)) {
+                            recipes.add(recipesDao.findById(id));
+                            Log.d(TAG, "Name " + recipesDao.findById(id).getTitle() +"likes" + recipesDao.findById(id).getAggregateLikes());
+                        }
+                    }
+                    setAdapters();
+                }
+            }
+        });
+
         //TODO: make a general method for inside the run()
-        switch(recipeType) {
-            case "VEG":
-                switch(difficultyLevel) {
-                    case "EASY":
-                        Executors.newSingleThreadExecutor().execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                recipes.removeAll(recipes);
-                                //Gets the relevant recipe IDs (by recipe type and difficulty level)
-                                List<Integer> recipeIds = recipeTypeDao.getAllRecipeIdByTypeLevel("VEG", "EASY");
-                                Log.d(TAG, "number of relevant recipes: " + recipeIds.size());
-                                //If there are no relevant recipes in the database currently, then get the recipes
-                                //using the SpoonacularApi
-                                if (recipeIds.size() == 0 || recipeIds == null) {
-                                    Log.d(TAG, "no relevant recipes in the database");
-                                    getVegRecipes(EASY_LEVEL);
-                                } else {
-                                    //If there are relevant recipes, then fetch them from the database and
-                                    //update the adapters for the recycler view
-                                    Log.d(TAG, "found some relevant recipes in the database");
-                                    for (Integer id : recipeIds) {
-                                        if (noDuplicateRecipes(id, recipes)) {
-                                            recipes.add(recipesDao.findById(id));
-                                        }
-                                    }
-                                    setAdapters();
-                                }
-                            }
-                        });
-                        break;
-                    case "MED":
-                        getVegRecipes(MED_LEVEL);
-                        break;
-                    case "HARD":
-                        getVegRecipes(HARD_LEVEL);
-                        break;
-                }
-                break;
-            case "PESC":
-                switch(difficultyLevel) {
-                    case "EASY":
-                        Executors.newSingleThreadExecutor().execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                //Gets the relevant recipe IDs (by recipe type and difficulty level)
-                                List<Integer> recipeIds = recipeTypeDao.getAllRecipeIdByTypeLevel("PESC", "EASY");
-                                recipes.removeAll(recipes);
-                                //If there are no relevant recipes in the database currently, then get the recipes
-                                //using the SpoonacularApi
-                                if (recipeIds.size() == 0 || recipeIds == null) {
-                                    Log.d(TAG, "no relevant recipes in the database");
-                                    getPescRecipes(EASY_LEVEL);
-                                } else {
-                                    //If there are relevant recipes, then fetch them from the database and
-                                    //update the adapters for the recycler view
-                                    Log.d(TAG, "found some relevant recipes in the database");
-                                    for (Integer id : recipeIds) {
-                                        if (noDuplicateRecipes(id, recipes)) {
-                                            recipes.add(recipesDao.findById(id));
-                                        }
-                                    }
-                                    setAdapters();
-                                }
-                            }
-                        });
-                        break;
-                    case "MED":
-                        break;
-                    case "HARD":
-                        break;
-                }
+//        switch(recipeType) {
+//            case "VEG":
+//                switch(difficultyLevel) {
+//                    case "EASY":
+//                        Executors.newSingleThreadExecutor().execute(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                recipes.removeAll(recipes);
+//                                //Gets the relevant recipe IDs (by recipe type and difficulty level)
+//                                List<Integer> recipeIds = recipeTypeDao.getAllRecipeIdByTypeLevel("VEG", "EASY");
+//                                Log.d(TAG, "number of relevant recipes: " + recipeIds.size());
+//                                //If there are no relevant recipes in the database currently, then get the recipes
+//                                //using the SpoonacularApi
+//                                if (recipeIds.size() == 0 || recipeIds == null) {
+//                                    Log.d(TAG, "no relevant recipes in the database");
+//                                    getVegRecipes(EASY_LEVEL);
+//                                } else {
+//                                    //If there are relevant recipes, then fetch them from the database and
+//                                    //update the adapters for the recycler view
+//                                    Log.d(TAG, "found some relevant recipes in the database");
+//                                    for (Integer id : recipeIds) {
+//                                        if (noDuplicateRecipes(id, recipes)) {
+//                                            recipes.add(recipesDao.findById(id));
+//                                            Log.d(TAG, "Name " + recipesDao.findById(id).getTitle() +"likes" + recipesDao.findById(id).getAggregateLikes());
+//                                        }
+//                                    }
+//                                    setAdapters();
+//                                }
+//                            }
+//                        });
+//                        break;
+//                    case "MED":
+//                        Executors.newSingleThreadExecutor().execute(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                recipes.removeAll(recipes);
+//                                //Gets the relevant recipe IDs (by recipe type and difficulty level)
+//                                List<Integer> recipeIds = recipeTypeDao.getAllRecipeIdByTypeLevel("VEG", "MED");
+//                                Log.d(TAG, "number of relevant recipes: " + recipeIds.size());
+//                                //If there are no relevant recipes in the database currently, then get the recipes
+//                                //using the SpoonacularApi
+//                                if (recipeIds.size() == 0 || recipeIds == null) {
+//                                    Log.d(TAG, "no relevant recipes in the database");
+//                                    getVegRecipes(MED_LEVEL);
+//                                } else {
+//                                    //If there are relevant recipes, then fetch them from the database and
+//                                    //update the adapters for the recycler view
+//                                    Log.d(TAG, "found some relevant recipes in the database");
+//                                    for (Integer id : recipeIds) {
+//                                        if (noDuplicateRecipes(id, recipes)) {
+//                                            recipes.add(recipesDao.findById(id));
+//                                            Log.d(TAG, "Name " + recipesDao.findById(id).getTitle() +"likes" + recipesDao.findById(id).getAggregateLikes());
+//                                        }
+//                                    }
+//                                    setAdapters();
+//                                }
+//                            }
+//                        });
+//                        break;
+//                    case "HARD":
+//                        getVegRecipes(HARD_LEVEL);
+//                        break;
+//                }
+//                break;
+//            case "PESC":
+//                switch(difficultyLevel) {
+//                    case "EASY":
+//                        Executors.newSingleThreadExecutor().execute(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                //Gets the relevant recipe IDs (by recipe type and difficulty level)
+//                                List<Integer> recipeIds = recipeTypeDao.getAllRecipeIdByTypeLevel("PESC", "EASY");
+//                                recipes.removeAll(recipes);
+//                                //If there are no relevant recipes in the database currently, then get the recipes
+//                                //using the SpoonacularApi
+//                                if (recipeIds.size() == 0 || recipeIds == null) {
+//                                    Log.d(TAG, "no relevant recipes in the database");
+//                                    getPescRecipes(EASY_LEVEL);
+//                                } else {
+//                                    //If there are relevant recipes, then fetch them from the database and
+//                                    //update the adapters for the recycler view
+//                                    Log.d(TAG, "found some relevant recipes in the database");
+//                                    for (Integer id : recipeIds) {
+//                                        if (noDuplicateRecipes(id, recipes)) {
+//                                            recipes.add(recipesDao.findById(id));
+//                                            Log.d(TAG, "Name " + recipesDao.findById(id).getTitle() +"likes" + recipesDao.findById(id).getAggregateLikes());
+//                                        }
+//                                    }
+//                                    setAdapters();
+//                                }
+//                            }
+//                        });
+//                        break;
+//                    case "MED":
+//                        break;
+//                    case "HARD":
+//                        break;
+//                }
 
         }
 
@@ -176,7 +238,7 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
 //                }
 //            }
 //        });
-    }
+
 
     @Override
     protected void onStart() {
@@ -185,6 +247,10 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
         setRecyclerView();
     }
 
+    private void setActionBarTitle(String title) {
+        getSupportActionBar().setTitle(title);
+        getSupportActionBar().setElevation(0);
+    }
     private void setRecyclerView() {
         Log.d(TAG, "in setRecyclerView");
         RecipeRecyclerViewAdapter.ClickListener listener = new RecipeRecyclerViewAdapter.ClickListener() {
@@ -205,13 +271,23 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
     }
 
+    private void getRecipesFromApi(String type) {
+        switch(type) {
+            case "VEG":
+                getVegRecipes(level);
+                break;
+            case "PESC":
+                getPescRecipes(level);
+                break;
+        }
+    }
+
     private void getVegRecipes(int level) {
         getRecipes(null, null, "vegetarian", null, level);
     }
     private void getPescRecipes(int level) {
         getRecipes(null, null, "pescetarian", null, level);
     }
-
 
 
     //Gets recipes from API - Preparing the recipes for the RecyclerView
@@ -275,16 +351,18 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
             //Add recipeId, type and level in the recipeType table
             String recipeTypeId = recipeType + result.getId() + difficultyLevel;
             recipeTypeDao.insertAll(new RecipeType(recipeTypeId, recipeType, result.getId(), difficultyLevel));
+            Log.d(TAG, "Recipe Type: " + recipeType);
 
             Log.d(TAG, "Added to database: " + result.getTitle());
-            recipes.removeAll(recipes);
-            recipes = recipesDao.getAll();
-            //dont htink i need this??
+//            recipes.removeAll(recipes);
+            recipes.add(result);
+//            recipes = recipesDao.getAll();
             setAdapters();
         });
     }
 
     private void setAdapters() {
+        Log.d(TAG, "number of recipes: " + recipes.size());
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -302,6 +380,45 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
             }
         }
         return true;
+    }
+
+    //Instantiate menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_recipes_list, menu);
+        SearchView searchView = (SearchView) menu.findItem(R.id.app_bar_search).getActionView();
+        searchView.setQueryHint("Search for recipes");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                adapter.getFilter().filter(s);
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String s) {
+                adapter.getFilter().filter(s);
+                return false;
+            }
+        });
+        return true;
+    }
+
+    //Reacts to when user interacts with the sort menu items
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.sortRecipeName:
+                //Sort by recipe name
+                adapter.sort(1);
+                return true;
+            case R.id.sortPopularity:
+                //Sort by recipe popularity
+                adapter.sort(2);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 }

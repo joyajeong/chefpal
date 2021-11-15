@@ -36,7 +36,6 @@
         <entry key="app/src/main/res/layout/activity_reciple_levels.xml" value="0.3473322001303087" />
         <entry key="app/src/main/res/layout/activity_sign_up.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.3098958333333333" />
-        <entry key="app/src/main/res/layout/fragment_account.xml" value="0.25104166666666666" />
         <entry key="app/src/main/res/layout/fragment_favourites.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/fragment_favourites2.xml" value="0.17135416666666667" />
         <entry key="app/src/main/res/layout/fragment_favourites3.xml" value="0.17135416666666667" />
@@ -49,6 +48,7 @@
         <entry key="app/src/main/res/layout/test_favo.xml" value="0.17916666666666667" />
         <entry key="app/src/main/res/layout/test_item_layout.xml" value="0.25104166666666666" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.3098958333333333" />
+        <entry key="app/src/main/res/menu/menu_recipes_list.xml" value="0.16666666666666666" />
       </map>
     </option>
   </component>

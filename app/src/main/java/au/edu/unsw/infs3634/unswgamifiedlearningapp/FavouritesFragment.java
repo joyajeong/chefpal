@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,8 +13,12 @@ import androidx.room.Room;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -74,6 +79,7 @@ public class FavouritesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -90,6 +96,10 @@ public class FavouritesFragment extends Fragment {
     //Do any logic here
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        //Set title of Action Bar and remove shadow
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Your Favourite Recipes");
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setElevation(0);
+
         tvFavouriteRecipes = getView().findViewById(R.id.tvFavouriteRecipes);
         currUserID = MainActivity.currUserID;
 
@@ -180,6 +190,44 @@ public class FavouritesFragment extends Fragment {
             }
         });
 
+    }
+
+    //Instantiate menu
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_recipes_list, menu);
+        SearchView searchView = (SearchView) menu.findItem(R.id.app_bar_search).getActionView();
+        searchView.setQueryHint("Search for recipes");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                adapter.getFilter().filter(s);
+                return false;
+            }
+            @Override
+            public boolean onQueryTextChange(String s) {
+                adapter.getFilter().filter(s);
+                return false;
+            }
+        });
+    }
+
+    //Reacts to when user interacts with the sort menu items
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.sortRecipeName:
+                //Sort by recipe name
+                adapter.sort(1);
+                return true;
+            case R.id.sortPopularity:
+                //Sort by recipe popularity
+                adapter.sort(2);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 }
