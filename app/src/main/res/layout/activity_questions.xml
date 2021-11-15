@@ -114,11 +114,7 @@
             android:layout_marginLeft="24dp"
             android:layout_marginRight="8dp"
             app:srcCompat="@drawable/ic_right"
-            android:background="@color/orange"
-            />
-
-
-
+            android:background="@color/orange" />
     </LinearLayout>
 
 

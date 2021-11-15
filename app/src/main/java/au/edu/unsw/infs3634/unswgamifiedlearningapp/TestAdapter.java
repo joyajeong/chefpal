@@ -1,5 +1,6 @@
 package au.edu.unsw.infs3634.unswgamifiedlearningapp;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,6 +49,13 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
             testNo = itemView.findViewById(R.id.testNo);
             topScore = itemView.findViewById(R.id.scoreText);
             testProgress = itemView.findViewById(R.id.testProgress);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(itemView.getContext(),QuestionsActivity.class);
+                    itemView.getContext().startActivity(intent);
+                }
+            });
         }
 
         private void setData(int pos, int progress){
