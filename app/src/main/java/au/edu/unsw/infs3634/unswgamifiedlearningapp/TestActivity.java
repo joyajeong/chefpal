@@ -34,8 +34,8 @@ public class TestActivity extends AppCompatActivity {
         testView = findViewById(R.id.test_Recycler);
         toolbar = findViewById(R.id.toolbar);
 
-//        setSupportActionBar(toolbar);
-//        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
         //category name
 
         getSupportActionBar().setTitle(DbQuery.g_categoryList.get(DbQuery.g_selected_cat_index).getName());
