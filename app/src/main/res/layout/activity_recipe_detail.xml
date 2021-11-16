@@ -13,19 +13,6 @@
     android:layout_height="match_parent"
     tools:context=".RecipeDetailActivity">
 
-
-        <!-- Here you put the rest of your current view-->
-
-        <!--        <TextView-->
-<!--            android:id="@+id/tvIngredients"-->
-<!--            android:layout_width="242dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="28dp"-->
-<!--            android:text="TextView"-->
-<!--            android:textColor="@color/black"-->
-<!--            app:layout_constraintStart_toStartOf="@+id/tvRecipeName"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/tvServings" />-->
-
         <TextView
             android:id="@+id/tvRecipeName"
             android:layout_width="263dp"

@@ -78,19 +78,48 @@ public class RecipeDetailActivity extends AppCompatActivity {
                 AppDatabase.class, "userFavouriteRecipe").fallbackToDestructiveMigration().build();
         UserFavouriteRecipeDao userFavouriteRecipeDao = db1.userFavouriteRecipeDao();
 
+        //Checking if they have already favourited this recipe
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> {
+            //The selected recipeid is in the array of their favourited recipe ids
+            if (userFavouriteRecipeDao.findFavRecipeIdByUserId(currUserID).contains(selectedRecipeId)) {
+                this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        btnFavourite.setBackgroundResource(R.drawable.ic_baseline_favorite_24);
+                    }
+                });
+            }
+        });
+
         btnFavourite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String id = currUserID + selectedRecipeId;
                 Executor myExecutor = Executors.newSingleThreadExecutor();
                 myExecutor.execute(() -> {
-                    String id = currUserID + selectedRecipeId;
                     //If the user has not already liked the recipe, add it
                     if (userFavouriteRecipeDao.findById(id) == null) {
                         userFavouriteRecipeDao.insertAll(new UserFavouriteRecipe(id, currUserID, selectedRecipeId, ""));
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                btnFavourite.setBackgroundResource(R.drawable.ic_baseline_favorite_24);
+                            }
+                        });
                         showToast("Favourited the recipe");
                         Log.d(TAG, "Favourited a recipe: " +  id);
                     } else {
-                        Log.d(TAG, "Already liked the recipe!");
+                        //TODO: delete the recipe from fav if they have already liked it
+                        UserFavouriteRecipe toDelete = userFavouriteRecipeDao.findById(id);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                btnFavourite.setBackgroundResource(R.drawable.ic_baseline_favorite_border_24);
+                            }
+                        });
+                        userFavouriteRecipeDao.delete(toDelete);
+                        showToast("Removed recipe from favourites");
                     }
                 });
 
@@ -138,13 +167,6 @@ public class RecipeDetailActivity extends AppCompatActivity {
             cb.setText(ingredients[i]);
             layout.addView(cb);
         }
-
-//        String formattedIngredients = Arrays.toString(ingredients)
-//                .replace("[", "")  //remove the right bracket
-//                .replace("]", "")  //remove the left bracket
-//                .replace(",", "\n") //separate each line
-//                .trim(); //remove trailing spaces from partially initialized arrays
-//        return formattedIngredients;
     }
 
     private void showToast(String message) {

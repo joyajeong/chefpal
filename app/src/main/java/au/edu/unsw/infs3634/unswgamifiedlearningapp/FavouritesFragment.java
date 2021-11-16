@@ -93,6 +93,29 @@ public class FavouritesFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_favourites3, container, false);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "in on start");
+        //UserFavouriteRecipe Database
+        AppDatabase db1 = Room.databaseBuilder(getActivity(),
+                AppDatabase.class, "userFavouriteRecipe").fallbackToDestructiveMigration().build();
+
+        UserFavouriteRecipeDao userFavouriteRecipeDao = db1.userFavouriteRecipeDao();
+
+        //Checking how many recipes they have liked
+        Executor myExecutor = Executors.newSingleThreadExecutor();
+        myExecutor.execute(() -> {
+            favRecipeIds = userFavouriteRecipeDao.findFavRecipeIdByUserId(currUserID);
+            Log.d(TAG, "Current favourite recipes: " + favRecipeIds.size());
+            if (favRecipeIds.size() == 0) {
+                updateRecyclerView(initalRecipes);
+            }
+            favRecipes.removeAll(favRecipes);
+            getRecipes(favRecipeIds);
+        });
+    }
+
     //Do any logic here
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -107,22 +130,6 @@ public class FavouritesFragment extends Fragment {
         AppDatabase db = Room.databaseBuilder(getActivity(),
                 AppDatabase.class, "recipes").fallbackToDestructiveMigration().build();
         recipesDao = db.recipesDao();
-
-        //UserFavouriteRecipe Database
-        AppDatabase db1 = Room.databaseBuilder(getActivity(),
-                AppDatabase.class, "userFavouriteRecipe").fallbackToDestructiveMigration().build();
-
-        UserFavouriteRecipeDao userFavouriteRecipeDao = db1.userFavouriteRecipeDao();
-
-        //Checking how many recipes they have liked
-        Executor myExecutor = Executors.newSingleThreadExecutor();
-        myExecutor.execute(() -> {
-            favRecipeIds = userFavouriteRecipeDao.findFavRecipeIdByUserId(currUserID);
-//            favUserRecipes = userFavouriteRecipeDao.findFavRecipesByUserId(currUserID);
-//            Log.d(TAG, "Current favourite recipes: " + favUserRecipes.size());
-//            setText(tvFavouriteRecipes, "Number of favourite recipes: " + favUserRecipes.size());
-            getRecipes(favRecipeIds);
-        });
 
         recyclerView = getView().findViewById(R.id.rvFavRecipes);
 
@@ -185,7 +192,7 @@ public class FavouritesFragment extends Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Log.d(TAG, "Number of fav recipes: " + favRecipes.size());
+                Log.d(TAG, "Number of fav recipes: " + recipes.size());
                 adapter.updateRecipeList(recipes);
             }
         });

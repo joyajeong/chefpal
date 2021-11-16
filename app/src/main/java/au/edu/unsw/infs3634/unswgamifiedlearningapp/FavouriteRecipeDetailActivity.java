@@ -3,15 +3,25 @@ package au.edu.unsw.infs3634.unswgamifiedlearningapp;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
@@ -29,20 +39,51 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
     private String notes;
     private String id;
     private boolean completed = false;
+    private TextView tvRecipeName, tvRecipeTime, tvSourceURL, tvServings, tvIngredients;
+    private LinearLayout layout;
+    private ImageButton btnFavourite;
+    private String currUserID;
+    private ImageView ivDetailPic;
+    private Button btnMethod;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favourite_recipe_detail);
+        getSupportActionBar().hide();
 
         Bundle bundle = getIntent().getExtras();
         selectedRecipeId = Integer.parseInt(bundle.getString("RECIPE_ID"));
         Log.d(TAG, "Selected recipe id: " + selectedRecipeId);
         id = MainActivity.currUserID + selectedRecipeId;
 
+
+        layout = findViewById(R.id.ingredient_checkboxes_layout);
+        tvRecipeName  = findViewById(R.id.tvRecipeName);
+        tvRecipeTime = findViewById(R.id.tvRecipeTime);
+        tvServings = findViewById(R.id.tvServings);
+        btnFavourite = findViewById(R.id.btnFavourite);
+        ivDetailPic = findViewById(R.id.ivDetailPic);
+        btnMethod = findViewById(R.id.btnMethod);
+
+        btnFavourite.setBackgroundResource(R.drawable.ic_baseline_favorite_24);
+
         etNotes = findViewById(R.id.etNotes);
         Editable newNotes = etNotes.getText();
         Log.d(TAG, "new note: " + newNotes);
+
+        //Recipes database
+        AppDatabase dbR = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "recipes").fallbackToDestructiveMigration().build();
+        RecipesDao recipesDao = dbR.recipesDao();
+
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                selectedRecipe = recipesDao.findById(selectedRecipeId);
+                setRecipeInfo();
+            }
+        });
 
         //User database
         AppDatabase dbU = Room.databaseBuilder(getApplicationContext(),
@@ -62,6 +103,33 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
             notes = userFavouriteRecipeDao.findById(id).getNotes();
             Log.d(TAG, "notes: " + notes);
             setNotes(String.valueOf(notes));
+        });
+        btnFavourite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Executor myExecutor = Executors.newSingleThreadExecutor();
+                myExecutor.execute(() -> {
+                    //TODO: delete the recipe from fav if they have already liked it
+                    UserFavouriteRecipe toDelete = userFavouriteRecipeDao.findById(id);
+                    userFavouriteRecipeDao.delete(toDelete);
+                    showToast("Removed recipe from Favourites");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            btnFavourite.setBackgroundResource(R.drawable.ic_baseline_favorite_border_24);
+                        }
+                    });
+                });
+            }
+        });
+
+        btnMethod.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uri = Uri.parse(selectedRecipe.getSourceUrl());
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                startActivity(intent);
+            }
         });
 
         btnNotes = findViewById(R.id.btnNotes);
@@ -142,6 +210,38 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    private void setRecipeInfo() {
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                RequestOptions requestOptions = new RequestOptions();
+                requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(8));
+                Glide.with(FavouriteRecipeDetailActivity.this)
+                        .load(selectedRecipe.getImage())
+                        .apply(requestOptions)
+                        .into(ivDetailPic);
+                tvRecipeName.setText(selectedRecipe.getTitle());
+                tvRecipeTime.setText(selectedRecipe.getReadyInMinutes() + " minutes");
+                tvServings.setText(String.valueOf(selectedRecipe.getServings()));
+                formatIngredients();
+            }
+        });
+    }
+
+    private void formatIngredients() {
+        int lengthOfIngredients = selectedRecipe.getExtendedIngredients().size();
+        List<ExtendedIngredient> ingredientList = selectedRecipe.getExtendedIngredients();
+
+        String ingredients[] = new String[lengthOfIngredients];
+
+        for (int i = 0; i < lengthOfIngredients; i++) {
+            ingredients[i] = ingredientList.get(i).getOriginal();
+            CheckBox cb = new CheckBox(this);
+            cb.setText(ingredients[i]);
+            layout.addView(cb);
+        }
     }
 
     private void setNotes(final String value){
