@@ -39,6 +39,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private String currUserID;
     private ImageView ivDetailPic;
     private Button btnMethod;
+    private ImageButton btnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +71,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
         btnFavourite = findViewById(R.id.btnFavourite);
         ivDetailPic = findViewById(R.id.ivDetailPic);
         btnMethod = findViewById(R.id.btnMethod);
-
+        btnBack = findViewById(R.id.btnBack2);
         currUserID = MainActivity.currUserID;
 
         //UserFavouriteRecipe Database
@@ -132,6 +133,13 @@ public class RecipeDetailActivity extends AppCompatActivity {
                 Uri uri = Uri.parse(selectedRecipe.getSourceUrl());
                 Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                 startActivity(intent);
+            }
+        });
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
             }
         });
     }

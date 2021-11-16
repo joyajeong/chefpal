@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class RecipeLevelsActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecipeRecyclerViewAdapter adapter;
     private int userPoints;
+    private ImageButton btnBack;
     public static int EASY_LIMIT = 1000;
     public static int MED_LIMIT = 3000;
     public static int HARD_LIMIT = 5000;
@@ -90,6 +92,14 @@ public class RecipeLevelsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 launchRecipeLevelsListAcitivty("HARD");
+            }
+        });
+
+        btnBack = findViewById(R.id.btnBack3);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
             }
         });
     }

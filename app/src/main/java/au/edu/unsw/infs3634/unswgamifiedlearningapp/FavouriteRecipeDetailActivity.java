@@ -33,6 +33,7 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
     private static String TAG = "FavouriteRecipeDetailActivity";
     private EditText etNotes;
     private Button btnNotes, btnComplete;
+    private ImageButton btnBack;
     private RecipeInformationResult selectedRecipe;
     private Integer selectedRecipeId;
     private UserFavouriteRecipe userFavRecipe;
@@ -65,12 +66,19 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
         btnFavourite = findViewById(R.id.btnFavourite);
         ivDetailPic = findViewById(R.id.ivDetailPic);
         btnMethod = findViewById(R.id.btnMethod);
-
+        btnBack = findViewById(R.id.btnBack);
         btnFavourite.setBackgroundResource(R.drawable.ic_baseline_favorite_24);
 
         etNotes = findViewById(R.id.etNotes);
         Editable newNotes = etNotes.getText();
         Log.d(TAG, "new note: " + newNotes);
+
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         //Recipes database
         AppDatabase dbR = Room.databaseBuilder(getApplicationContext(),
@@ -104,12 +112,12 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
             Log.d(TAG, "notes: " + notes);
             setNotes(String.valueOf(notes));
         });
+
         btnFavourite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Executor myExecutor = Executors.newSingleThreadExecutor();
                 myExecutor.execute(() -> {
-                    //TODO: delete the recipe from fav if they have already liked it
                     UserFavouriteRecipe toDelete = userFavouriteRecipeDao.findById(id);
                     userFavouriteRecipeDao.delete(toDelete);
                     showToast("Removed recipe from Favourites");
@@ -120,6 +128,7 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
                         }
                     });
                 });
+                onBackPressed();
             }
         });
 

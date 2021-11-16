@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".RecipeLevelsActivity">
 
+    <ImageButton
+        android:id="@+id/btnBack3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@android:color/transparent"
+        android:tint="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_back" />
+
     <Button
         android:id="@+id/btnHard"
         android:layout_width="171dp"
@@ -43,7 +55,7 @@
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="64dp"
         android:text="Choose a difficulty level"
         android:textAlignment="center"
         android:textColor="@color/black"
