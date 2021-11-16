@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.room.Room;
 
+import android.app.SearchManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -39,7 +40,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private String currUserID;
     private ImageView ivDetailPic;
     private Button btnMethod;
-    private ImageButton btnBack;
+    private ImageButton btnBack, btnExtraSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +74,8 @@ public class RecipeDetailActivity extends AppCompatActivity {
         btnMethod = findViewById(R.id.btnMethod);
         btnBack = findViewById(R.id.btnBack2);
         tvScore = findViewById(R.id.tvScoreDetail);
+        btnExtraSearch = findViewById(R.id.btnExtraSearch);
+
         currUserID = MainActivity.currUserID;
 
         //UserFavouriteRecipe Database
@@ -141,6 +144,15 @@ public class RecipeDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 onBackPressed();
+            }
+        });
+
+        btnExtraSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+                intent.putExtra(SearchManager.QUERY, "How to cook " + selectedRecipe.getTitle());
+                startActivity(intent);
             }
         });
     }

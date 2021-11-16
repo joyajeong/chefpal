@@ -3,6 +3,7 @@ package au.edu.unsw.infs3634.unswgamifiedlearningapp;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+import android.app.SearchManager;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,20 +33,17 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
 
     private static String TAG = "FavouriteRecipeDetailActivity";
     private EditText etNotes;
-    private Button btnNotes, btnComplete;
-    private ImageButton btnBack;
+    private Button btnNotes, btnComplete, btnMethod;
+    private ImageButton btnBack, btnFavourite, btnExtraSearch;
     private RecipeInformationResult selectedRecipe;
     private Integer selectedRecipeId;
     private UserFavouriteRecipe userFavRecipe;
-    private String notes;
-    private String id;
+    private String notes, id;
     private boolean completed = false;
     private TextView tvRecipeName, tvRecipeTime, tvServings, tvScore;
     private LinearLayout layout;
-    private ImageButton btnFavourite;
     private String currUserID;
     private ImageView ivDetailPic;
-    private Button btnMethod;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +66,7 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
         btnMethod = findViewById(R.id.btnMethod);
         btnBack = findViewById(R.id.btnBack);
         tvScore = findViewById(R.id.tvScoreDetail);
+        btnExtraSearch = findViewById(R.id.btnExtraSearch);
         btnFavourite.setBackgroundResource(R.drawable.ic_baseline_favorite_24);
 
         etNotes = findViewById(R.id.etNotes);
@@ -154,6 +153,15 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
                     userFavouriteRecipeDao.updateNotes(String.valueOf(newNotes), id);
                     showToast("Note saved");
                 });
+            }
+        });
+
+        btnExtraSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+                intent.putExtra(SearchManager.QUERY, "How to cook " + selectedRecipe.getTitle());
+                startActivity(intent);
             }
         });
 
