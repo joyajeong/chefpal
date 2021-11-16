@@ -43,6 +43,7 @@ public class RecipeLevelsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reciple_levels);
+        getSupportActionBar().hide();
 
         //Getting current points TODO make a new method for this
         AppDatabase db = Room.databaseBuilder(getApplicationContext(),
