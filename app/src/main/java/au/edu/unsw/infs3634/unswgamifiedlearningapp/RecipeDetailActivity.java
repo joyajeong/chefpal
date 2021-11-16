@@ -33,7 +33,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     private static String TAG = "RecipeDetailActivity";
     private Integer selectedRecipeId;
     private RecipeInformationResult selectedRecipe;
-    private TextView tvRecipeName, tvRecipeTime, tvSourceURL, tvServings, tvIngredients;
+    private TextView tvRecipeName, tvRecipeTime, tvServings, tvScore;
     private LinearLayout layout;
     private ImageButton btnFavourite;
     private String currUserID;
@@ -72,6 +72,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
         ivDetailPic = findViewById(R.id.ivDetailPic);
         btnMethod = findViewById(R.id.btnMethod);
         btnBack = findViewById(R.id.btnBack2);
+        tvScore = findViewById(R.id.tvScoreDetail);
         currUserID = MainActivity.currUserID;
 
         //UserFavouriteRecipe Database
@@ -157,6 +158,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
                 tvRecipeName.setText(selectedRecipe.getTitle());
                 tvRecipeTime.setText(selectedRecipe.getReadyInMinutes() + " minutes");
                 tvServings.setText(String.valueOf(selectedRecipe.getServings()));
+                tvScore.setText(String.valueOf(selectedRecipe.getSpoonacularScore()));
                 formatIngredients();
             }
         });

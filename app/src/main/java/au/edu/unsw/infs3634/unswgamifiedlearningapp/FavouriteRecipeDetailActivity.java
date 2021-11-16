@@ -40,7 +40,7 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
     private String notes;
     private String id;
     private boolean completed = false;
-    private TextView tvRecipeName, tvRecipeTime, tvSourceURL, tvServings, tvIngredients;
+    private TextView tvRecipeName, tvRecipeTime, tvServings, tvScore;
     private LinearLayout layout;
     private ImageButton btnFavourite;
     private String currUserID;
@@ -67,6 +67,7 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
         ivDetailPic = findViewById(R.id.ivDetailPic);
         btnMethod = findViewById(R.id.btnMethod);
         btnBack = findViewById(R.id.btnBack);
+        tvScore = findViewById(R.id.tvScoreDetail);
         btnFavourite.setBackgroundResource(R.drawable.ic_baseline_favorite_24);
 
         etNotes = findViewById(R.id.etNotes);
@@ -234,6 +235,7 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
                 tvRecipeName.setText(selectedRecipe.getTitle());
                 tvRecipeTime.setText(selectedRecipe.getReadyInMinutes() + " minutes");
                 tvServings.setText(String.valueOf(selectedRecipe.getServings()));
+                tvScore.setText(String.valueOf(selectedRecipe.getSpoonacularScore()));
                 formatIngredients();
             }
         });

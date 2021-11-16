@@ -153,6 +153,9 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
             case "PESC":
                 getPescRecipes(level);
                 break;
+            case "ITA":
+                getItalianRecipes(level);
+                break;
         }
     }
 
@@ -161,6 +164,9 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
     }
     private void getPescRecipes(int level) {
         getRecipes(null, null, "pescetarian", null, level);
+    }
+    private void getItalianRecipes(int level) {
+        getRecipes(null, "italian", null, null, level);
     }
 
 

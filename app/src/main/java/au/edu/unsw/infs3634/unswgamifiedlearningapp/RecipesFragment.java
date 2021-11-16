@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -27,12 +28,6 @@ public class RecipesFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private int recipeId;
     private static final String TAG = "RecipesFragment";
-//    private List<RecipeInformationResult> recipeList = RecipeLevelsActivity.recipeResults;
-                                            //could just have easy, med & hard if i could call api when
-                                            //button is clicked
-//    private List<RecipeInformationResult> vegEasy = RecipeLevelsActivity.vegEasy;
-//    private List<RecipeInformationResult> vegMed = RecipeLevelsActivity.vegMed;
-//    private List<RecipeInformationResult> vegHard = RecipeLevelsActivity.vegHard;
     private int userPoints;
     public static int EASY_LIMIT = 1000;
     public static int MED_LIMIT = 3000;
@@ -81,7 +76,7 @@ public class RecipesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-//        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Recipes");
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_recipes, container, false);
     }
@@ -90,19 +85,28 @@ public class RecipesFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         recipeTitle = getView().findViewById(R.id.tvRecipeTitle);
-        btnVeg = getView().findViewById(R.id.btnVeg);
-        btnVeg.setOnClickListener(new View.OnClickListener() {
+
+        CardView cvPesc = (CardView) getView().findViewById(R.id.cardViewPesc);
+        cvPesc.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
+                launchRecipeLevels("PESC");
+            }
+        });
+
+        CardView cvVeg = (CardView) getView().findViewById(R.id.cardViewVeg);
+        cvVeg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 launchRecipeLevels("VEG");
             }
         });
 
-        btnPesc = getView().findViewById(R.id.btnPesc);
-        btnPesc.setOnClickListener(new View.OnClickListener() {
+        CardView cvItaly = (CardView) getView().findViewById(R.id.cardViewIta);
+        cvItaly.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                launchRecipeLevels("PESC");
+            public void onClick(View v) {
+                launchRecipeLevels("ITA");
             }
         });
     }
