@@ -28,6 +28,8 @@ public class DbQuery {
     public static List<CategoryQuiz> g_categoryList = new ArrayList<>();
     public static int g_selected_cat_index = 0;
     public static List<TestQuestion> g_testList = new ArrayList<>();
+    public static int g_selected_test_index = 0;
+
 
 
     public static void createUserData(String email,String name,MyCompleteListener comepleteListener){
@@ -61,6 +63,16 @@ public class DbQuery {
                 });
 
     }
+
+//    public static void loadQuestions(MyCompleteListener completeListener){
+//        //fetch questions
+//        g_firestore.collection("Questions")
+//
+//    }
+
+
+
+
 
     public static void loadCategories(MyCompleteListener completeListener){
         //fetch data from DB
