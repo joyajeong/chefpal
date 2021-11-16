@@ -13,6 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -89,10 +92,14 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
         final RecipeInformationResult recipe = mRecipesFiltered.get(position);
         holder.recipeTitle.setText(recipe.getTitle());
         holder.recipeTitle.setSelected(true);
-        holder.recipeTime.setText(String.valueOf(recipe.getReadyInMinutes()));
+        holder.recipeTime.setText(recipe.getReadyInMinutes() + " minutes");
         holder.itemView.setTag(recipe.getId());
+        holder.score.setText(String.valueOf(recipe.getSpoonacularScore()));
+        RequestOptions requestOptions = new RequestOptions();
+        requestOptions = requestOptions.transforms(new CenterCrop(), new RoundedCorners(8));
         Glide.with(holder.image.getContext())
                 .load(recipe.getImage())
+                .apply(requestOptions)
                 .into(holder.image);
     }
 
@@ -104,7 +111,7 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
     //Extend the ViewHolder to implement ClickListener
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         ImageView image;
-        TextView recipeTitle, recipeTime;
+        TextView recipeTitle, recipeTime, score;
         ClickListener listener;
 
         public ViewHolder(View itemView, ClickListener listener) {
@@ -114,6 +121,7 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
             image = itemView.findViewById(R.id.ivImage);
             recipeTitle = itemView.findViewById(R.id.tvRecipeTitle);
             recipeTime = itemView.findViewById(R.id.tcRecipeTime);
+            score = itemView.findViewById(R.id.tvScore);
             itemView.setOnClickListener(this);
         }
 
@@ -136,7 +144,7 @@ public class RecipeRecyclerViewAdapter extends RecyclerView.Adapter<RecipeRecycl
                     } else if (sortMethod == SORT_POPULARITY) {
                         //Sort by popularity
                         Log.d(TAG, "Sorting by ratings");
-                        return -(String.valueOf(r1.getAggregateLikes())).compareTo(String.valueOf((r2.getAggregateLikes())));
+                        return -(String.valueOf(r1.getSpoonacularScore())).compareTo(String.valueOf((r2.getSpoonacularScore())));
                     }
                     //Default sort by recipe name
                     return r1.getTitle().toLowerCase().compareTo(r2.getTitle().toLowerCase());

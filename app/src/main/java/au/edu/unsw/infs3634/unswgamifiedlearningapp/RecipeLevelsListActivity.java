@@ -104,7 +104,7 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
                     for (Integer id : recipeIds) {
                         if (noDuplicateRecipes(id, recipes)) {
                             recipes.add(recipesDao.findById(id));
-                            Log.d(TAG, "Name " + recipesDao.findById(id).getTitle() +"likes" + recipesDao.findById(id).getAggregateLikes());
+                            Log.d(TAG, "Name " + recipesDao.findById(id).getTitle() +" spoonacular score" + recipesDao.findById(id).getSpoonacularScore());
                         }
                     }
                     setAdapters();
