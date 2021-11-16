@@ -67,6 +67,7 @@ public class DbQuery {
     }
 
     public static void loadQuestions(final MyCompleteListener completeListener){
+        g_quesList.clear();
         //fetch questions
         g_firestore.collection("Questions")
                 .whereEqualTo("CATEGORY",g_categoryList.get(g_selected_cat_index).getDocID())
@@ -103,7 +104,7 @@ public class DbQuery {
 
 
 
-    public static void loadCategories(MyCompleteListener completeListener){
+    public static void loadCategories(final MyCompleteListener completeListener){
         //fetch data from DB
         g_categoryList.clear();
         g_firestore.collection("QUIZ").get()
@@ -142,7 +143,7 @@ public class DbQuery {
 
     }
 
-    public static void loadTestData(MyCompleteListener completeListener){
+    public static void loadTestData(final MyCompleteListener completeListener){
         g_testList.clear();
 
         g_firestore.collection("QUIZ").document(g_categoryList.get(g_selected_cat_index).getDocID())
