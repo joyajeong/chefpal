@@ -1,6 +1,7 @@
 package au.edu.unsw.infs3634.unswgamifiedlearningapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
@@ -23,6 +24,12 @@ public class QuestionsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_questions);
 
         init();
+        QuestionAdapter questionAdapter = new QuestionAdapter(DbQuery.g_quesList);
+        questionView.setAdapter(questionAdapter);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        questionView.setLayoutManager(layoutManager);
 
     }
 
@@ -38,5 +45,6 @@ public class QuestionsActivity extends AppCompatActivity {
         previousQ = findViewById(R.id.previousQ);
         nextQ = findViewById(R.id.nextQ);
         questionListB = findViewById(R.id.questionsList_gridB);
+
     }
 }
