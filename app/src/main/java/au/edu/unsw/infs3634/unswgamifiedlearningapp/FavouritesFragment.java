@@ -35,7 +35,6 @@ public class FavouritesFragment extends Fragment {
 
     private static String TAG = "FavouritesFragment";
     private String currUserID;
-    private TextView tvFavouriteRecipes;
     private List<UserFavouriteRecipe> favUserRecipes;
     private List<Integer> favRecipeIds;
     private RecyclerView recyclerView;
@@ -45,45 +44,14 @@ public class FavouritesFragment extends Fragment {
     private RecipeInformationResult recipeInfo;
     private RecipesDao recipesDao;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     public FavouritesFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FavouritesFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AccountFragment newInstance(String param1, String param2) {
-        AccountFragment fragment = new AccountFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -103,27 +71,29 @@ public class FavouritesFragment extends Fragment {
 
         UserFavouriteRecipeDao userFavouriteRecipeDao = db1.userFavouriteRecipeDao();
 
-        //Checking how many recipes they have liked
+        //Checking how many recipes they have favourited
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {
+            //Gets a list of favourite recipe IDs
             favRecipeIds = userFavouriteRecipeDao.findFavRecipeIdByUserId(currUserID);
             Log.d(TAG, "Current favourite recipes: " + favRecipeIds.size());
+            //If user has 0 favourited recipes, update recycler view with empty list
             if (favRecipeIds.size() == 0) {
                 updateRecyclerView(initalRecipes);
             }
+            //If user has favourited recipes, remove the current list and get recipes
             favRecipes.removeAll(favRecipes);
             getRecipes(favRecipeIds);
         });
     }
 
-    //Do any logic here
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         //Set title of Action Bar and remove shadow
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Your Favourite Recipes");
         ((AppCompatActivity)getActivity()).getSupportActionBar().setElevation(0);
 
-        tvFavouriteRecipes = getView().findViewById(R.id.tvFavouriteRecipes);
+        //Get current user ID
         currUserID = MainActivity.currUserID;
 
         //Recipes database
@@ -131,6 +101,7 @@ public class FavouritesFragment extends Fragment {
                 AppDatabase.class, "recipes").fallbackToDestructiveMigration().build();
         recipesDao = db.recipesDao();
 
+        //Initialise recycler view
         recyclerView = getView().findViewById(R.id.rvFavRecipes);
 
         try {
@@ -141,20 +112,12 @@ public class FavouritesFragment extends Fragment {
 
     }
 
-    private void setText(final TextView text,final String value){
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                text.setText(value);
-            }
-        });
-    }
-
     private void setRecyclerView() {
         Log.d(TAG, "in setRecyclerView");
         RecipeRecyclerViewAdapter.ClickListener listener = new RecipeRecyclerViewAdapter.ClickListener() {
             @Override
             public void onRecipeClick(View view, String id) {
+                //When recipe is clicked, go to a detailed view of the recipe
                 Log.d(TAG, "recipe " + id + " clicked");
                 Intent intent = new Intent(getActivity(), FavouriteRecipeDetailActivity.class);
                 intent.putExtra("RECIPE_ID", id);
@@ -162,7 +125,7 @@ public class FavouritesFragment extends Fragment {
                 ((Activity) getActivity()).overridePendingTransition(0, 0);
             }
         };
-        //Created an adapter and supply the song data to be displayed
+        //Created an adapter and supply the recipes to be displayed
         adapter = new RecipeRecyclerViewAdapter(initalRecipes, listener);
         recyclerView.setAdapter(adapter);
 
@@ -172,6 +135,7 @@ public class FavouritesFragment extends Fragment {
     }
 
     private void getRecipes(List<Integer> recipeIds){
+        //For every recipe ID, get the recipe from the Recipe database
         for (Integer id : recipeIds) {
             Executor myExecutor = Executors.newSingleThreadExecutor();
             myExecutor.execute(() -> {
@@ -181,6 +145,8 @@ public class FavouritesFragment extends Fragment {
     }
 
     private void addToFavRecipes(RecipeInformationResult r) {
+        //Check if there are duplicates and if there's no duplicates, add it to the list to be used
+        //by the recycler view
         if (RecipeLevelsListActivity.noDuplicateRecipes(r.getId(), favRecipes) && r != null) {
             Log.d(TAG, "Recipe from API: " + r.getTitle());
             favRecipes.add(r);

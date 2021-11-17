@@ -16,8 +16,7 @@ public interface SpoonacularClient {
     String API_BASE_URL = "https://api.spoonacular.com";
     String apiKey = "8099b1e129144cb686d2d3cb989cc486";
 
-    //Use this apiKey if the first free account has exceeded the number of API call limit
-    String secondaryApiKey = "bc8f9e5e0dd9465080a8de17b9bb0b96";
+    //GET request to search recipes based on certain queries
     @GET("/recipes/complexSearch")
     Call<RecipeSearchResult> recipeResults(
             @Query("query") String query,
@@ -30,7 +29,7 @@ public interface SpoonacularClient {
             @Query("apiKey") String apiKey
             );
 
-
+    //GET request to get information using recipe ID
     @GET("/recipes/{id}/information")
     Call<RecipeInformationResult> recipeInformationResults(
             @Path("id") int recipeId,

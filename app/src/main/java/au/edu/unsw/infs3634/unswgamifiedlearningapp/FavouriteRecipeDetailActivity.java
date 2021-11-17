@@ -38,6 +38,8 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
     private RecipeInformationResult selectedRecipe;
     private Integer selectedRecipeId;
     private UserFavouriteRecipe userFavRecipe;
+    private UserRecipeCompletedDao userRecipeCompletedDao;
+    private UserDao userDao;
     private String notes, id;
     private boolean completed = false;
     private TextView tvRecipeName, tvRecipeTime, tvServings, tvScore;
@@ -49,14 +51,17 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favourite_recipe_detail);
+        //Hides action bar
         getSupportActionBar().hide();
 
+        //Gets the selected recipe ID from the recycler view
         Bundle bundle = getIntent().getExtras();
         selectedRecipeId = Integer.parseInt(bundle.getString("RECIPE_ID"));
         Log.d(TAG, "Selected recipe id: " + selectedRecipeId);
+        //The id for UserFavouriteRecipe class
         id = MainActivity.currUserID + selectedRecipeId;
 
-
+        //Initalising the UI elements
         layout = findViewById(R.id.ingredient_checkboxes_layout);
         tvRecipeName  = findViewById(R.id.tvRecipeName);
         tvRecipeTime = findViewById(R.id.tvRecipeTime);
@@ -68,11 +73,13 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
         tvScore = findViewById(R.id.tvScoreDetail);
         btnExtraSearch = findViewById(R.id.btnExtraSearch);
         btnFavourite.setBackgroundResource(R.drawable.ic_baseline_favorite_24);
-
         etNotes = findViewById(R.id.etNotes);
+
+        //Get the text from the notes textbox
         Editable newNotes = etNotes.getText();
         Log.d(TAG, "new note: " + newNotes);
 
+        //When user clicks on the back button
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,11 +91,12 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
         AppDatabase dbR = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "recipes").fallbackToDestructiveMigration().build();
         RecipesDao recipesDao = dbR.recipesDao();
-
+        //Find recipe using ID
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
                 selectedRecipe = recipesDao.findById(selectedRecipeId);
+                //Set the UI elements to the recipe information
                 setRecipeInfo();
             }
         });
@@ -96,14 +104,14 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
         //User database
         AppDatabase dbU = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "user").fallbackToDestructiveMigration().build();
-        UserDao userDao = dbU.userDao();
+        userDao = dbU.userDao();
 
         //UserFavouriteRecipe Database
         AppDatabase db = Room.databaseBuilder(this,
                 AppDatabase.class, "userFavouriteRecipe").fallbackToDestructiveMigration().build();
         UserFavouriteRecipeDao userFavouriteRecipeDao = db.userFavouriteRecipeDao();
 
-        //Getting the selected recipe & its notes
+        //Getting the notes of the selected recipe
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {
             userFavRecipe = userFavouriteRecipeDao.findById(id);
@@ -113,14 +121,19 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
             setNotes(String.valueOf(notes));
         });
 
+        //When the favourite button is clicked - this is in the favourites page and therefore clicking
+        //it will remove the recipe from the favourites list
         btnFavourite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Executor myExecutor = Executors.newSingleThreadExecutor();
                 myExecutor.execute(() -> {
+                    //Delete recipe from favourites
                     UserFavouriteRecipe toDelete = userFavouriteRecipeDao.findById(id);
                     userFavouriteRecipeDao.delete(toDelete);
                     showToast("Removed recipe from Favourites");
+
+                    //Change the favourite button to hollow
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -128,10 +141,12 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
                         }
                     });
                 });
+                //Go back to the Favourites list
                 onBackPressed();
             }
         });
 
+        //When the methods button is clicked, it links the user to the recipe source with the steps
         btnMethod.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -141,6 +156,7 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
             }
         });
 
+        //When the save notes button is clicked, it saves the updated notes in the database
         btnNotes = findViewById(R.id.btnNotes);
         btnNotes.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,6 +172,7 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
             }
         });
 
+        //When the search button is clicked, it triggers a Google search to find more information on the recipe
         btnExtraSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -168,20 +185,23 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
         //UserCompletedRecipe Database
         AppDatabase dbURC = Room.databaseBuilder(this,
                 AppDatabase.class, "userRecipeCompleted").fallbackToDestructiveMigration().build();
-        UserRecipeCompletedDao userRecipeCompletedDao = dbURC.userRecipeCompletedDao();
+        userRecipeCompletedDao = dbURC.userRecipeCompletedDao();
 
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
+                //Checking whether the user has completed the recipe
                 List<UserRecipeCompleted> completedRecipes = userRecipeCompletedDao.completedRecipesByUser(MainActivity.currUserID, selectedRecipeId);
+                //If the user has not completed it
                 if (completedRecipes.size() == 0) {
-                    //The user has not completed the recipe
-                    Log.d(TAG, "user has not completed the recipe already");
+                    Log.d(TAG, "User has not completed the recipe already");
                 } else {
+                    //If the user has completed the recipe
                     completed = true;
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            //Disable the "Recipe Completed" button
                             btnComplete.setEnabled(false);
                             btnComplete.setText("You have already completed this recipe");
                         }
@@ -196,6 +216,7 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
                 AppDatabase.class, "recipeType").fallbackToDestructiveMigration().build();
         RecipeTypeDao recipeTypeDao = dbRT.recipeTypeDao();
 
+        //When the "Recipe Completed" button is clicked
         btnComplete = findViewById(R.id.btnComplete);
         btnComplete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -210,18 +231,13 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
                         //Depending on the difficulty level, give the user points
                         switch (difficultyLevel) {
                             case "EASY":
-                                //TODO: make a method for this
-                                Integer currPoints = userDao.findPointsById(MainActivity.currUserID);
-                                Integer newPoints = currPoints + 50;
-                                userDao.updateUserPoints(MainActivity.currUserID, newPoints);
-
-                                String id = selectedRecipeId + MainActivity.currUserID;
-                                userRecipeCompletedDao.insertAll(new UserRecipeCompleted(id, selectedRecipeId, MainActivity.currUserID));
-                                showToast("Congrats! You just earned 50 points!");
+                                giveUserPoints(50);
                                 break;
                             case "MED":
+                                giveUserPoints(75);
                                 break;
                             case "HARD":
+                                giveUserPoints(100);
                                 break;
                         }
                     }
@@ -230,6 +246,7 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
         });
     }
 
+    //Sets the UI elements
     private void setRecipeInfo() {
         this.runOnUiThread(new Runnable() {
             @Override
@@ -249,6 +266,7 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
         });
     }
 
+    //Creates the checkbox of ingredients
     private void formatIngredients() {
         int lengthOfIngredients = selectedRecipe.getExtendedIngredients().size();
         List<ExtendedIngredient> ingredientList = selectedRecipe.getExtendedIngredients();
@@ -270,6 +288,18 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
                 etNotes.setText(value);
             }
         });
+    }
+
+    private void giveUserPoints(int points) {
+        //Get user's current points
+        Integer currPoints = userDao.findPointsById(MainActivity.currUserID);
+        //Add points & update the user database
+        Integer newPoints = currPoints + points;
+        userDao.updateUserPoints(MainActivity.currUserID, newPoints);
+        //Add to the database that the user has completed the recipe
+        String id = selectedRecipeId + MainActivity.currUserID;
+        userRecipeCompletedDao.insertAll(new UserRecipeCompleted(id, selectedRecipeId, MainActivity.currUserID));
+        showToast("Congrats! You just earned 50 points!");
     }
 
     private void showToast(String message) {

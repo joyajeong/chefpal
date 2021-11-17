@@ -10,6 +10,7 @@ import java.util.List;
 
 @Dao
 public interface UserRecipeCompletedDao {
+    //Gets all userRecipeCompleted
     @Query("SELECT * FROM userRecipeCompleted")
     List<UserRecipeCompleted> getAll();
 
@@ -19,12 +20,15 @@ public interface UserRecipeCompletedDao {
             "AND userid LIKE :userId")
     List<UserRecipeCompleted> completedRecipesByUser (String userId, Integer recipeId);
 
+    //Inserts recipes user has completed
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(UserRecipeCompleted... userRecipeCompleted);
 
+    //Delete user completed recipes
     @Delete
     void delete(UserRecipeCompleted userRecipeCompleted);
 
+    //Delete all rows from userRecipeCompleted
     @Query("DELETE FROM userRecipeCompleted")
     void deleteAll();
 }

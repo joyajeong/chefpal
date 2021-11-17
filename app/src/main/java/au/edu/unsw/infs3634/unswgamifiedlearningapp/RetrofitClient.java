@@ -3,6 +3,7 @@ package au.edu.unsw.infs3634.unswgamifiedlearningapp;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+//Client to handle API calls
 public class RetrofitClient {
 
     private static RetrofitClient instance = null;
@@ -13,9 +14,6 @@ public class RetrofitClient {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         myApi = retrofit.create(SpoonacularClient.class);
-
-
-
     }
 
     public static synchronized RetrofitClient getInstance() {

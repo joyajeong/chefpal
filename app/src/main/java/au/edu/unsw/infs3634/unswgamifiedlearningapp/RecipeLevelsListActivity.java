@@ -31,26 +31,24 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private static RecipeRecyclerViewAdapter adapter;
     private static final String TAG = "RecipeLevelsListActivity";
-    //TODO figure out this variable thing
     private List<RecipeInformationResult> recipes = new ArrayList<>();
     private List<RecipeInformationResult> initialRecipes = new ArrayList<>();
     private RecipesDao recipesDao;
     private RecipeTypeDao recipeTypeDao;
     private String difficultyLevel, recipeType;
     public static int NUM_RESULTS = 5;
-    public static int EASY_LEVEL = 15;
-    public static int MED_LEVEL = 30;
-    public static int HARD_LEVEL = 45;
     private int level;
-    RecipeSearchResult searchResult;
+    private RecipeSearchResult searchResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_levels_list);
 
+        //Initalise the recycler view
         recyclerView = findViewById(R.id.rvRecipes);
 
+        //Receive the recipe type and difficulty level chosen by the user
         Bundle bundle = getIntent().getExtras();
         difficultyLevel = bundle.getString("DIFFICULTY_LEVEL");
         recipeType = bundle.getString("RECIPE_TYPE");
@@ -59,7 +57,7 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
         setRecyclerView();
         recipes.removeAll(recipes);
 
-        //TODO figure out a better way to do the switch statements
+        //Check which level the user clicked on and set the Heading and level (recipe time limit)
         switch(difficultyLevel) {
             case "EASY":
                 level = 15;
@@ -84,7 +82,6 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
         AppDatabase dbRT = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "recipeType").fallbackToDestructiveMigration().build();
         recipeTypeDao = dbRT.recipeTypeDao();
-
 
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
@@ -125,18 +122,20 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(title);
         getSupportActionBar().setElevation(0);
     }
+
     private void setRecyclerView() {
         Log.d(TAG, "in setRecyclerView");
         RecipeRecyclerViewAdapter.ClickListener listener = new RecipeRecyclerViewAdapter.ClickListener() {
             @Override
             public void onRecipeClick(View view, String id) {
+                //When item in recycler view is clicked, go to a detailed view of the recipe
                 Log.d(TAG, "recipe " + id + " clicked");
                 Intent intent = new Intent(RecipeLevelsListActivity.this, RecipeDetailActivity.class);
                 intent.putExtra("RECIPE_ID", id);
                 startActivity(intent);
             }
         };
-        //Created an adapter and supply the song data to be displayed
+        //Created an adapter and supply the recipe data to be displayed
         adapter = new RecipeRecyclerViewAdapter(initialRecipes, listener);
         recyclerView.setAdapter(adapter);
 
@@ -145,6 +144,7 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
     }
 
+    //Check the type of recipe chosen
     private void getRecipesFromApi(String type) {
         switch(type) {
             case "VEG":
@@ -180,7 +180,7 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<RecipeSearchResult> call, Response<RecipeSearchResult> response) {
                 searchResult = response.body();
-
+                //If API response is successful, get details of the recipe
                 if (response.body() != null && recipes.size() <= NUM_RESULTS) {
                     for (int i = 0; i < NUM_RESULTS ; i++) {
                         Log.d(TAG, "Current index: " + i);
@@ -199,6 +199,7 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
         });
     }
 
+    //Gets more details on the recipe
     private void getRecipeInfo(int id) {
         RecipeInformationResult recipeInfo;
         Call<RecipeInformationResult> call = RetrofitClient.getInstance().getMyApi()
@@ -208,7 +209,6 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<RecipeInformationResult> call, Response<RecipeInformationResult> response) {
                 RecipeInformationResult recipeInfo = response.body();
-                //check if response body is null
                 Log.i(TAG, "Source URL: " + recipeInfo.getSourceUrl());
                 Log.d(TAG, "Recipe Title: " + recipeInfo.getTitle());
                 Log.d(TAG, "Recipe time: " + recipeInfo.getReadyInMinutes());
@@ -234,9 +234,8 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
             Log.d(TAG, "Recipe Type: " + recipeType);
 
             Log.d(TAG, "Added to database: " + result.getTitle());
-//            recipes.removeAll(recipes);
             recipes.add(result);
-//            recipes = recipesDao.getAll();
+            //Update the recycler view
             setAdapters();
         });
     }
@@ -252,6 +251,7 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
         });
     }
 
+    //Check if recipe already exists in the list to be used by the recycler view
     public static boolean noDuplicateRecipes(Integer id, List<RecipeInformationResult> list) {
         for (RecipeInformationResult r : list) {
             if (r.getId().equals(id)) {

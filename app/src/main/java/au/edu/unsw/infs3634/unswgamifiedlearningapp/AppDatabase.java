@@ -5,9 +5,12 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
+//All the database entities used in the app
 @Database(entities = {User.class, UserFavouriteRecipe.class, RecipeInformationResult.class,
             RecipeType.class, UserRecipeCompleted.class}, version = 4)
+//Converts custom types in the database/classes
 @TypeConverters({ObjectConverter.class, StringConverter.class, IngredientsConverter.class})
+
 public abstract class AppDatabase extends RoomDatabase {
     public abstract UserDao userDao();
     public abstract UserFavouriteRecipeDao userFavouriteRecipeDao();

@@ -24,22 +24,12 @@ import retrofit2.Response;
 
 public class RecipeLevelsActivity extends AppCompatActivity {
 
-    private int recipeId;
     private static final String TAG = "RecipeLevelsActivity";
-    private TextView recipeTitle;
-    private RecipeSearchResult searchResult;
     private String recipeType;
-    private RecyclerView recyclerView;
-    private RecipeRecyclerViewAdapter adapter;
     private int userPoints;
     private ImageButton btnBack;
     public static int EASY_LIMIT = 1000;
-    public static int MED_LIMIT = 3000;
-    public static int HARD_LIMIT = 5000;
-//    public static int EASY_LEVEL = 15;
-//    public static int MED_LEVEL = 30;
-//    public static int HARD_LEVEL = 45;
-//    public static int NUM_RESULTS = 3;
+    public static int MED_LIMIT = 5000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +37,7 @@ public class RecipeLevelsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_reciple_levels);
         getSupportActionBar().hide();
 
-        //Getting current points TODO make a new method for this
+        //Getting current user points
         AppDatabase db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "user").build();
         UserDao userDao = db.userDao();
@@ -57,6 +47,7 @@ public class RecipeLevelsActivity extends AppCompatActivity {
             Log.d(TAG, "Current user points: " + userPoints);
         });
 
+        //Receive the recipe type
         Bundle bundle = getIntent().getExtras();
         recipeType = bundle.getString("RECIPE_TYPE");
         Log.d(TAG, recipeType);
@@ -66,14 +57,15 @@ public class RecipeLevelsActivity extends AppCompatActivity {
         Button btnMed = findViewById(R.id.btnMed);
         Button btnHard = findViewById(R.id.btnHard);
 
-        //TODO CHECK THIS LOGIC
-        if (userPoints <= 1000) {
+        //Disable difficulty level buttons based on how many points the user has
+        if (userPoints <= EASY_LIMIT) {
             btnMed.setEnabled(false);
             btnHard.setEnabled(false);
-        } else if (userPoints <=5000) {
+        } else if (userPoints <= MED_LIMIT) {
             btnHard.setEnabled(false);
         }
 
+        //When Easy button is clicked
         btnEasy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,6 +73,7 @@ public class RecipeLevelsActivity extends AppCompatActivity {
             }
         });
 
+        //When Medium button is clicked
         btnMed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,6 +81,7 @@ public class RecipeLevelsActivity extends AppCompatActivity {
             }
         });
 
+        //When Hard button is clicked
         btnHard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,6 +89,7 @@ public class RecipeLevelsActivity extends AppCompatActivity {
             }
         });
 
+        //When back button is clicked
         btnBack = findViewById(R.id.btnBack3);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override

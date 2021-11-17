@@ -10,30 +10,20 @@ import java.util.List;
 
 @Dao
 public interface RecipesDao {
+    //Get all recipes
     @Query("SELECT * FROM recipes")
     List<RecipeInformationResult> getAll();
 
+    //Get recipe by ID
     @Query("SELECT * FROM recipes WHERE " +
             "id = :id LIMIT 1")
     RecipeInformationResult findById(Integer id);
 
-    //Get all vegetarian recipes
-    @Query("SELECT * FROM recipes WHERE " +
-            "vegetarian = 1 AND " +
-            "readyInMinutes <= :level"
-    )
-    List<RecipeInformationResult> findVegRecipes(int level);
-
-    //Get all gluten free recipes
-    @Query("SELECT * FROM recipes WHERE " +
-            "glutenFree = 1 AND " +
-            "readyInMinutes <= :level"
-    )
-    List<RecipeInformationResult> findGlutenFRecipes(int level);
-
+    //Inserts recipes
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(RecipeInformationResult... recipes);
 
+    //Delete recipe
     @Delete
     void delete(RecipeInformationResult recipe);
 
