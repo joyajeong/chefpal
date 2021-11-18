@@ -31,6 +31,12 @@ public class DbQuery {
     public static int g_selected_test_index = 0;
     public static List <Question> g_quesList = new ArrayList<>();
 
+    public static final int NOT_VISITED =0;
+    public static final int UNANSWERED =1;
+    public static final int ANSWERED =2;
+    public static final int REVIEW =3;
+
+
 
 
 
@@ -85,7 +91,8 @@ public class DbQuery {
                                     doc.getString("D"),
                                     doc.getLong("ANSWER").intValue(),
                                     doc.getString("FEEDBACK"),
-                                    -1
+                                    -1,
+                                    NOT_VISITED
                                     ));
                             }
                             completeListener.onSuccess();

@@ -9,10 +9,11 @@ public class Question {
     private int correctAns;
     private String feedback;
     private int selectedAns;
-    //(A =1, B=2,....)
+    private int status;
 
 
-    public Question(String question, String optionA, String optionB, String optionC, String optionD, int correctAns, String feedback,int selectedAns) {
+
+    public Question(String question, String optionA, String optionB, String optionC, String optionD, int correctAns, String feedback,int selectedAns,int status) {
         this.question = question;
         this.optionA = optionA;
         this.optionB = optionB;
@@ -21,6 +22,15 @@ public class Question {
         this.correctAns = correctAns;
         this.feedback = feedback;
         this.selectedAns = selectedAns;
+        this.status = status;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public int getSelectedAns() {

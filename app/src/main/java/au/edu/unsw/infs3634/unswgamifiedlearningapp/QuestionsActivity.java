@@ -1,5 +1,7 @@
 package au.edu.unsw.infs3634.unswgamifiedlearningapp;
 
+import static au.edu.unsw.infs3634.unswgamifiedlearningapp.DbQuery.NOT_VISITED;
+import static au.edu.unsw.infs3634.unswgamifiedlearningapp.DbQuery.UNANSWERED;
 import static au.edu.unsw.infs3634.unswgamifiedlearningapp.DbQuery.g_categoryList;
 import static au.edu.unsw.infs3634.unswgamifiedlearningapp.DbQuery.g_quesList;
 import static au.edu.unsw.infs3634.unswgamifiedlearningapp.DbQuery.g_selected_cat_index;
@@ -7,6 +9,7 @@ import static au.edu.unsw.infs3634.unswgamifiedlearningapp.DbQuery.g_selected_te
 import static au.edu.unsw.infs3634.unswgamifiedlearningapp.DbQuery.g_testList;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.PagerSnapHelper;
@@ -68,6 +71,7 @@ public class QuestionsActivity extends AppCompatActivity {
         questID = 0;
         questionID.setText("1/"+String.valueOf(g_quesList.size()));
         catName.setText(g_categoryList.get(g_selected_cat_index).getName());
+        g_quesList.get(0).setStatus(UNANSWERED);
 
 
     }
@@ -83,7 +87,10 @@ public class QuestionsActivity extends AppCompatActivity {
                 View view = snapHelper.findSnapView(recyclerView.getLayoutManager());
                 //get pos
                 questID = recyclerView.getLayoutManager().getPosition(view);
-                questionID.setText(String.valueOf(questID + 1)+"/"+String.valueOf(g_quesList.size()));
+                if(g_quesList.get(questID).getStatus() == NOT_VISITED){
+                    g_quesList.get(questID).setStatus(UNANSWERED);
+                    questionID.setText(String.valueOf(questID + 1)+"/"+String.valueOf(g_quesList.size()));
+                }
 
             }
 
@@ -121,13 +128,34 @@ public class QuestionsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 g_quesList.get(questID).setSelectedAns(-1);
+                g_quesList.get(questID).setStatus(UNANSWERED);
                 //tell recycler view dataset has been changed
                 questionAdapter.notifyDataSetChanged();
 
             }
         });
 
+        submitB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                submitTest();
+            }
+        });
+
+
     }
+
+
+    private void submitTest(){
+        //take confirmation first before submitting
+        AlertDialog.Builder builder = new AlertDialog.Builder(QuestionsActivity.this);
+        builder.setCancelable(true);
+
+
+
+    }
+
+
     private void startTimer(){
         //getTime,convert minutes to milliseconds
         long totalTime = g_testList.get(g_selected_test_index).getTime()*60*1000;

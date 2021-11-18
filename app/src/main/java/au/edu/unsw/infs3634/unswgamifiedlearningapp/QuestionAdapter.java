@@ -1,5 +1,10 @@
 package au.edu.unsw.infs3634.unswgamifiedlearningapp;
 
+import static au.edu.unsw.infs3634.unswgamifiedlearningapp.DbQuery.ANSWERED;
+import static au.edu.unsw.infs3634.unswgamifiedlearningapp.DbQuery.REVIEW;
+import static au.edu.unsw.infs3634.unswgamifiedlearningapp.DbQuery.UNANSWERED;
+import static au.edu.unsw.infs3634.unswgamifiedlearningapp.DbQuery.g_quesList;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,8 +109,8 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
             if(prevSelectedB == null){
                 //change background, set optionId to selectedAns
                 btn.setBackgroundResource(R.drawable.selected_button);
-
                 DbQuery.g_quesList.get(quesID).setSelectedAns(option_num);
+                changeStatus(quesID, ANSWERED);
                 prevSelectedB = btn;
             }
             else{
@@ -113,14 +118,22 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
                     //selected -> unselected
                     btn.setBackgroundResource(R.drawable.unselected_button);
                     DbQuery.g_quesList.get(quesID).setSelectedAns(-1);
+                    changeStatus(quesID, UNANSWERED);
                     prevSelectedB = null;
                 }
                 else{
                     prevSelectedB.setBackgroundResource(R.drawable.unselected_button);
                     btn.setBackgroundResource(R.drawable.selected_button);
                     DbQuery.g_quesList.get(quesID).setSelectedAns(option_num);
+                    changeStatus(quesID, ANSWERED);
                     prevSelectedB = btn;
                 }
+            }
+        }
+
+        private void changeStatus(int id, int status){
+            if( g_quesList.get(id).getStatus() != REVIEW){
+                g_quesList.get(id).setStatus(status);
             }
         }
 
