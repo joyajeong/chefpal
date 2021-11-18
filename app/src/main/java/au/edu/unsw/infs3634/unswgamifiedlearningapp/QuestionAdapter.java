@@ -68,7 +68,7 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
             setOption(optionB,2,pos);
             setOption(optionC,3,pos);
             setOption(optionD,4,pos);
-//
+
 
             optionA.setOnClickListener(new View.OnClickListener() {
                 @Override

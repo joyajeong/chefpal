@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -33,7 +34,8 @@ public class QuestionsActivity extends AppCompatActivity {
     private ImageButton previousQ, nextQ;
     private ImageView questionListB;
     private int questID;
-    QuestionAdapter questionAdapter;
+    private QuestionAdapter questionAdapter;
+    private CountDownTimer countDownTimer;
 
 
     @Override
@@ -150,9 +152,33 @@ public class QuestionsActivity extends AppCompatActivity {
         //take confirmation first before submitting
         AlertDialog.Builder builder = new AlertDialog.Builder(QuestionsActivity.this);
         builder.setCancelable(true);
+        View view = getLayoutInflater().inflate(R.layout.alert_submit,null);
+        Button cancelB = view.findViewById(R.id.cancelB);
+        Button confirmB = view.findViewById(R.id.confirmB);
 
+        builder.setView(view);
 
+        AlertDialog alertDialog = builder.create();
 
+        cancelB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                alertDialog.dismiss();
+            }
+        });
+
+        confirmB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                countDownTimer.cancel();
+                alertDialog.dismiss();
+
+                Intent intent = new Intent(QuestionsActivity.this, ScoreActivity.class);
+                startActivity(intent);
+                QuestionsActivity.this.finish();
+            }
+        });
+        alertDialog.show();
     }
 
 
@@ -161,7 +187,7 @@ public class QuestionsActivity extends AppCompatActivity {
         long totalTime = g_testList.get(g_selected_test_index).getTime()*60*1000;
 
 
-        CountDownTimer countDownTimer = new CountDownTimer(totalTime + 1000,1000) {
+        countDownTimer = new CountDownTimer(totalTime + 1000,1000) {
             //every second, it will call onTick, change time display
             @Override
             public void onTick(long remainingTime) {
@@ -179,6 +205,11 @@ public class QuestionsActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 //finish, go to next activity
+
+                Intent intent = new Intent(QuestionsActivity.this, ScoreActivity.class);
+                startActivity(intent);
+                QuestionsActivity.this.finish();
+
 
             }
         };
