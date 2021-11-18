@@ -39,7 +39,6 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
         private TextView question;
         private Button optionA, optionB, optionC, optionD, prevSelectedB;
 
@@ -59,6 +58,11 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
             optionB.setText(questionList.get(pos).getOptionB());
             optionC.setText(questionList.get(pos).getOptionC());
             optionD.setText(questionList.get(pos).getOptionD());
+
+            setOption(optionA,1,pos);
+            setOption(optionB,2,pos);
+            setOption(optionC,3,pos);
+            setOption(optionD,4,pos);
 
 
             optionA.setOnClickListener(new View.OnClickListener() {
@@ -117,6 +121,15 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHo
                     DbQuery.g_quesList.get(quesID).setSelectedAns(option_num);
                     prevSelectedB = btn;
                 }
+            }
+        }
+
+        private void setOption (Button btn, int option_num, int quesID){
+            if(DbQuery.g_quesList.get(quesID).getSelectedAns() == option_num){
+                btn.setBackgroundResource(R.drawable.selected_button);
+            }
+            else{
+                btn.setBackgroundResource(R.drawable.unselected_button);
             }
         }
 

@@ -30,15 +30,17 @@ public class QuestionsActivity extends AppCompatActivity {
     private ImageButton previousQ, nextQ;
     private ImageView questionListB;
     private int questID;
+    QuestionAdapter questionAdapter;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions);
+        getSupportActionBar().hide();
 
         init();
-        QuestionAdapter questionAdapter = new QuestionAdapter(g_quesList);
+        questionAdapter = new QuestionAdapter(g_quesList);
         questionView.setAdapter(questionAdapter);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -111,6 +113,16 @@ public class QuestionsActivity extends AppCompatActivity {
                 if(questID<g_quesList.size()-1){
                     questionView.smoothScrollToPosition(questID +1);
                 }
+
+            }
+        });
+
+        clearSelectionB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                g_quesList.get(questID).setSelectedAns(-1);
+                //tell recycler view dataset has been changed
+                questionAdapter.notifyDataSetChanged();
 
             }
         });
