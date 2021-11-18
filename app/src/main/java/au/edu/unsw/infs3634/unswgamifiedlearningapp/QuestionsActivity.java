@@ -65,11 +65,11 @@ public class QuestionsActivity extends AppCompatActivity {
         timer = findViewById(R.id.tv_timer);
         catName = findViewById(R.id.quizCatName);
         submitB = findViewById(R.id.submitB);
-        markB = findViewById(R.id.markB);
+        //markB = findViewById(R.id.markB);
         clearSelectionB = findViewById(R.id.clearSelection);
         previousQ = findViewById(R.id.previousQ);
         nextQ = findViewById(R.id.nextQ);
-        questionListB = findViewById(R.id.questionsList_gridB);
+        //questionListB = findViewById(R.id.questionsList_gridB);
         questID = 0;
         questionID.setText("1/"+String.valueOf(g_quesList.size()));
         catName.setText(g_categoryList.get(g_selected_cat_index).getName());

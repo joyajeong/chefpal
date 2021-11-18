@@ -71,12 +71,7 @@
             android:textColor="@color/white"
             android:textSize="18sp"/>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/questionsList_gridB"
-            android:layout_weight="1"
-            android:src="@drawable/ic_right_menu"/>
+
 
     </LinearLayout>
 
@@ -115,16 +110,7 @@
 
 
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:layout_width="wrap_content"
-            android:layout_height="38dp"
-            android:layout_marginLeft="8dp"
-            android:background="@drawable/button_border"
-            android:id="@+id/markB"
-            android:paddingRight="5dp"
-            android:paddingLeft="5dp"
-            android:text="Mark For Review"
-            android:textColor="@color/white" />
+
 
 
         <ImageButton
