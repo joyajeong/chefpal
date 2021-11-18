@@ -7,7 +7,7 @@ import androidx.room.TypeConverters;
 
 //All the database entities used in the app
 @Database(entities = {User.class, UserFavouriteRecipe.class, RecipeInformationResult.class,
-            RecipeType.class, UserRecipeCompleted.class}, version = 4)
+            RecipeType.class, UserRecipeCompleted.class}, version = 3)
 //Converts custom types in the database/classes
 @TypeConverters({ObjectConverter.class, StringConverter.class, IngredientsConverter.class})
 

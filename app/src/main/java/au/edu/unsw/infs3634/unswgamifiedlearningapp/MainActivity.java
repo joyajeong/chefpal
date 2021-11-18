@@ -12,6 +12,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -26,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private static String TAG = "MainActivity";
-    public static String currUserID;
+    public static String currUserID, currUsername;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +44,30 @@ public class MainActivity extends AppCompatActivity {
         UserDao userDao = db.userDao();
         Executor myExecutor = Executors.newSingleThreadExecutor();
         myExecutor.execute(() -> {
-            //if user doesn't already exist add user to database TODO - need to check if it actually works
+            //If user doesn't already exist add user to database
             if (userDao.findById(mAuth.getCurrentUser().getUid()) == null) {
-                userDao.insertAll(new User(mAuth.getCurrentUser().getUid(), 0));
+                String username = getUsername(mAuth.getCurrentUser().getEmail());
+                userDao.insertAll(new User(mAuth.getCurrentUser().getUid(), 0, username));
                 Log.d(TAG, "Added new user!");
+            } else {
+                currUsername = userDao.findById(currUserID).getUsername();
+                Log.d(TAG, currUsername + " has logged in");
             }
             Log.d(TAG, "Current user points: " +  userDao.findPointsById(currUserID));
+
+        });
+
+        //Get an ordered list of users based on their points
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                List<User> orderedUsers = userDao.getOrderedUsersByPoints();
+                if (orderedUsers.size() > 0 && orderedUsers != null) {
+                    for (User user : orderedUsers) {
+                        Log.d(TAG, user.getUsername() + " has " + user.getPoints() + " points");
+                    }
+                }
+            }
         });
 
         //Setting up bottom navigation
@@ -88,5 +107,12 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private String getUsername(String email) {
+        String[] parts = mAuth.getCurrentUser().getEmail().split("\\@");
+        String username = parts[0];
+        Log.d(TAG, "username: " + username);
+
+        return username;
+    }
 
 }
