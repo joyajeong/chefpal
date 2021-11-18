@@ -12,6 +12,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -45,10 +46,22 @@ public class MainActivity extends AppCompatActivity {
         myExecutor.execute(() -> {
             //if user doesn't already exist add user to database TODO - need to check if it actually works
             if (userDao.findById(mAuth.getCurrentUser().getUid()) == null) {
-                userDao.insertAll(new User(mAuth.getCurrentUser().getUid(), 0));
-                Log.d(TAG, "Added new user!");
+                userDao.insertAll(new User(mAuth.getCurrentUser().getUid(), 0, mAuth.getCurrentUser().getDisplayName()));
+                Log.d(TAG, "Added new user named: " + mAuth.getCurrentUser().getDisplayName() + "!");
             }
             Log.d(TAG, "Current user points: " +  userDao.findPointsById(currUserID));
+        });
+
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                List<User> orderedUsers = userDao.getOrderedUsersByPoints();
+                if (orderedUsers.size() > 0 && orderedUsers != null) {
+                    for (User user : orderedUsers) {
+                        Log.d(TAG, user.getName() + "has " + user.getPoints() + " points");
+                    }
+                }
+            }
         });
 
         //Setting up bottom navigation

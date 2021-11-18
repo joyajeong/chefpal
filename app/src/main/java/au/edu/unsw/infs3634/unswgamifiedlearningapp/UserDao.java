@@ -34,6 +34,12 @@ public interface UserDao {
             "WHERE id LIKE :id")
     Integer updateUserPoints(String id, Integer points);
 
+    //Get the users ordered by their points - FOR LEADERBOARD
+    @Query("SELECT * " +
+            "FROM user " +
+            "ORDER BY points DESC ")
+    List<User> getOrderedUsersByPoints();
+
     //Insert users
     @Insert (onConflict = OnConflictStrategy.REPLACE)
     void insertAll(User... user);
