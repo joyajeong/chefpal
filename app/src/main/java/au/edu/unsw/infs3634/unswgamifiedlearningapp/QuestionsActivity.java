@@ -134,7 +134,6 @@ public class QuestionsActivity extends AppCompatActivity {
                         TimeUnit.MILLISECONDS.toSeconds(remainingTime) -TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(remainingTime))
                         );
                 timer.setText(time);
-
             }
 
             @Override

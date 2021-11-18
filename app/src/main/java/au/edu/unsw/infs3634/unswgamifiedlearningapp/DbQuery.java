@@ -84,7 +84,8 @@ public class DbQuery {
                                     doc.getString("C"),
                                     doc.getString("D"),
                                     doc.getLong("ANSWER").intValue(),
-                                    doc.getString("FEEDBACK")
+                                    doc.getString("FEEDBACK"),
+                                    -1
                                     ));
                             }
                             completeListener.onSuccess();

@@ -8,10 +8,11 @@ public class Question {
     private String optionD;
     private int correctAns;
     private String feedback;
+    private int selectedAns;
     //(A =1, B=2,....)
 
 
-    public Question(String question, String optionA, String optionB, String optionC, String optionD, int correctAns, String feedback) {
+    public Question(String question, String optionA, String optionB, String optionC, String optionD, int correctAns, String feedback,int selectedAns) {
         this.question = question;
         this.optionA = optionA;
         this.optionB = optionB;
@@ -19,6 +20,15 @@ public class Question {
         this.optionD = optionD;
         this.correctAns = correctAns;
         this.feedback = feedback;
+        this.selectedAns = selectedAns;
+    }
+
+    public int getSelectedAns() {
+        return selectedAns;
+    }
+
+    public void setSelectedAns(int selectedAns) {
+        this.selectedAns = selectedAns;
     }
 
     public String getQuestion() {
