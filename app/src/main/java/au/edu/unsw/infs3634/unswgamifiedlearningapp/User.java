@@ -17,14 +17,14 @@ public class User {
     @ColumnInfo(name = "points")
     public int points;
 
-    @ColumnInfo(name = "name")
-    public String name;
+    @ColumnInfo(name = "username")
+    public String username;
 
     //Constructor
-    public User(String id, int points, String name) {
+    public User(String id, int points, String username) {
         this.id = id;
         this.points = points;
-        this.name = name;
+        this.username = username;
     }
 
     //Create getter & setter methods
@@ -44,12 +44,12 @@ public class User {
         return points;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
 
