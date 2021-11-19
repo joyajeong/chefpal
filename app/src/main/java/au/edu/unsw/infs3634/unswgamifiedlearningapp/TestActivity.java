@@ -6,7 +6,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -14,10 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.List;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.Adapters.TestAdapter;
 
 public class TestActivity extends AppCompatActivity {
     private RecyclerView testView;

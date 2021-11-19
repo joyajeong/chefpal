@@ -1,4 +1,4 @@
-package au.edu.unsw.infs3634.unswgamifiedlearningapp;
+package au.edu.unsw.infs3634.unswgamifiedlearningapp.Adapters;
 
 import static au.edu.unsw.infs3634.unswgamifiedlearningapp.DbQuery.ANSWERED;
 import static au.edu.unsw.infs3634.unswgamifiedlearningapp.DbQuery.REVIEW;
@@ -15,6 +15,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.DbQuery;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.Model.Question;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.R;
 
 public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.ViewHolder> {
 

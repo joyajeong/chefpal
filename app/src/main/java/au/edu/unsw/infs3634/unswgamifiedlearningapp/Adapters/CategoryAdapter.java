@@ -1,4 +1,4 @@
-package au.edu.unsw.infs3634.unswgamifiedlearningapp;
+package au.edu.unsw.infs3634.unswgamifiedlearningapp.Adapters;
 
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -7,9 +7,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
+
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.DbQuery;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.Model.CategoryQuiz;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.R;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.TestActivity;
 
 public class CategoryAdapter extends BaseAdapter {
 
@@ -47,7 +50,7 @@ public class CategoryAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 DbQuery.g_selected_cat_index = i;
-                Intent intent = new Intent(view.getContext(),TestActivity.class);
+                Intent intent = new Intent(view.getContext(), TestActivity.class);
                 //pass position
                 //intent.putExtra("CAT_INDEX",i);
                 view.getContext().startActivity(intent);

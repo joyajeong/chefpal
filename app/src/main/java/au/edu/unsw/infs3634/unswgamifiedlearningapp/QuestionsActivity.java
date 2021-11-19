@@ -27,6 +27,8 @@ import android.widget.TextView;
 
 import java.util.concurrent.TimeUnit;
 
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.Adapters.QuestionAdapter;
+
 public class QuestionsActivity extends AppCompatActivity {
     private RecyclerView questionView;
     private TextView questionID, timer, catName;
@@ -36,6 +38,8 @@ public class QuestionsActivity extends AppCompatActivity {
     private int questID;
     private QuestionAdapter questionAdapter;
     private CountDownTimer countDownTimer;
+    private long timeLeft;
+
 
 
     @Override
@@ -174,6 +178,8 @@ public class QuestionsActivity extends AppCompatActivity {
                 alertDialog.dismiss();
 
                 Intent intent = new Intent(QuestionsActivity.this, ScoreActivity.class);
+                long totalTime = g_testList.get(g_selected_test_index).getTime()*60*1000;
+                intent.putExtra("Time Taken",totalTime - timeLeft);
                 startActivity(intent);
                 QuestionsActivity.this.finish();
             }
@@ -191,6 +197,7 @@ public class QuestionsActivity extends AppCompatActivity {
             //every second, it will call onTick, change time display
             @Override
             public void onTick(long remainingTime) {
+                timeLeft = remainingTime;
                 // 12 : 23 min
                 String time = String.format("%02d : %2d min",
                         //12:23 remaining, take 12 only
@@ -200,6 +207,10 @@ public class QuestionsActivity extends AppCompatActivity {
                         TimeUnit.MILLISECONDS.toSeconds(remainingTime) -TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(remainingTime))
                         );
                 timer.setText(time);
+
+
+
+
             }
 
             @Override
@@ -207,10 +218,10 @@ public class QuestionsActivity extends AppCompatActivity {
                 //finish, go to next activity
 
                 Intent intent = new Intent(QuestionsActivity.this, ScoreActivity.class);
+                long totalTime = g_testList.get(g_selected_test_index).getTime()*60*1000;
+                intent.putExtra("Time Taken",totalTime - timeLeft);
                 startActivity(intent);
                 QuestionsActivity.this.finish();
-
-
             }
         };
         countDownTimer.start();

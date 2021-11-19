@@ -5,7 +5,6 @@ import android.util.ArrayMap;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.common.api.Batch;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -17,10 +16,13 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.Model.CategoryQuiz;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.Model.Question;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.Model.TestQuestion;
 
 public class DbQuery {
     public static FirebaseFirestore g_firestore;
@@ -35,6 +37,8 @@ public class DbQuery {
     public static final int UNANSWERED =1;
     public static final int ANSWERED =2;
     public static final int REVIEW =3;
+
+
 
 
 
@@ -108,7 +112,34 @@ public class DbQuery {
                 });
     }
 
+    public static void saveResult(int score, MyCompleteListener completeListener){
+        WriteBatch batch = g_firestore.batch();
+        DocumentReference userDoc = g_firestore.collection("USER").document(FirebaseAuth.getInstance().getUid());
+        batch.update(userDoc, "TOTAL_SCORE", score);
 
+        if(score>g_testList.get(g_selected_test_index).getTopScore()){
+            DocumentReference scoreDoc = userDoc.collection("USER_DATA").document("MY_SCORES");
+            batch.update(scoreDoc,g_testList.get(g_selected_test_index).getTestID(), score);
+        }
+        batch.commit()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        if(score > g_testList.get(g_selected_test_index).getTopScore()){
+                            g_testList.get(g_selected_test_index).setTopScore(score);
+
+                        }
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+
+                    }
+                })
+
+    }
 
 
 

@@ -1,4 +1,4 @@
-package au.edu.unsw.infs3634.unswgamifiedlearningapp;
+package au.edu.unsw.infs3634.unswgamifiedlearningapp.Adapters;
 
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -11,6 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
+
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.DbQuery;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.Model.TestQuestion;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.R;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.StartTestActivity;
 
 public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
     private List<TestQuestion> testList;
@@ -65,7 +70,7 @@ public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
                 public void onClick(View view) {
                     //Position is the test index
                     DbQuery.g_selected_test_index = pos;
-                    Intent intent = new Intent(itemView.getContext(),StartTestActivity.class);
+                    Intent intent = new Intent(itemView.getContext(), StartTestActivity.class);
                     itemView.getContext().startActivity(intent);
                 }
             });

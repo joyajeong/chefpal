@@ -7,8 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 
-import java.util.ArrayList;
-import java.util.List;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.Adapters.CategoryAdapter;
 
 /**
  * A simple {@link Fragment} subclass.

@@ -2,20 +2,67 @@ package au.edu.unsw.infs3634.unswgamifiedlearningapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toolbar;
+
+import java.util.concurrent.TimeUnit;
 
 public class ScoreActivity extends AppCompatActivity {
     private TextView score, totalTime, totalQ, correctQ, wrongQ,unattempted;
     private Button leaderB, reattemptedB, viewAnsB;
+    private long timeTaken;
+    private Dialog progressDialog;
+    private TextView dialogueText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+
+//        setSupportActionBar(toolbar);
+//        getSupportActionBar().setDisplayShowTitleEnabled(true);
+
+        getSupportActionBar().setTitle("Result");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        progressDialog = new Dialog(ScoreActivity.this);
+        progressDialog.setContentView(R.layout.dialogue);
+        progressDialog.setCancelable(false);
+        progressDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        dialogueText = progressDialog.findViewById(R.id.dialogue_text);
+        dialogueText.setText("Loading...");
+        progressDialog.show();
+
         init();
         loadData();
+
+        viewAnsB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+            }
+        });
+
+        reattemptedB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                reAttempt();
+
+            }
+        });
+
+        saveResult();
     }
 
     private void init(){
@@ -31,10 +78,61 @@ public class ScoreActivity extends AppCompatActivity {
     }
 
     private void loadData(){
-        int correctQ = 0, wrongQ = 0, unattempted = 0;
-        //
+        int correctQues = 0, wrongQues = 0, unattemptedQues = 0;
+        //check all questions
+
+        for(int i =0; i<DbQuery.g_quesList.size(); i++){
+            //if default value is not changed -> unattempted
+            if(DbQuery.g_quesList.get(i).getSelectedAns() == -1){
+                unattemptedQues ++;
+            }
+            else{
+                if(DbQuery.g_quesList.get(i).getSelectedAns() == DbQuery.g_quesList.get(i).getCorrectAns()){
+                    correctQues++;
+                }
+                else{
+                    wrongQues++;
+                }
+
+            }
+
+        }
+        correctQ.setText(String.valueOf(correctQues));
+        wrongQ.setText(String.valueOf(wrongQues));
+        unattempted.setText(String.valueOf(unattemptedQues));
+        totalQ.setText(String.valueOf(DbQuery.g_quesList.size()));
+        //score in %
+        int finalScore = (correctQues*100)/DbQuery.g_quesList.size();
+        score.setText(String.valueOf(finalScore));
+
+        timeTaken = getIntent().getLongExtra("Time Taken",0);
+        String time = String.format("%02d : %2d min",
+                //12:23 remaining, take 12 only
+                TimeUnit.MILLISECONDS.toMinutes(timeTaken),
+                //extra 23
+                //total seconds - minute (12) in seconds
+                TimeUnit.MILLISECONDS.toSeconds(timeTaken) -TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeTaken))
+        );
+
+        totalTime.setText(time);
+
 
     }
+
+    private void reAttempt(){
+        for(int i = 0; i<DbQuery.g_quesList.size(); i++){
+            DbQuery.g_quesList.get(i).setSelectedAns(-1);
+            DbQuery.g_quesList.get(i).setStatus(DbQuery.NOT_VISITED);
+        }
+        Intent intent  = new Intent(ScoreActivity.this, StartTestActivity.class);
+        startActivity(intent);
+    }
+
+    private void  saveResult(){
+
+
+    }
+
 
 
 }
