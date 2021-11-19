@@ -244,15 +244,16 @@
                         android:text="Unattempted"
                         android:textSize="16sp"
                         android:textStyle="bold"/>
+
                     <TextView
+                        android:id="@+id/unattempted"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/unattempted"
                         android:layout_marginTop="8dp"
                         android:text="5"
-                        android:textSize="28sp"
                         android:textColor="@color/black"
-                        android:textStyle="bold"/>
+                        android:textSize="28sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
