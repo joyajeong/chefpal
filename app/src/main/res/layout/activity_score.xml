@@ -48,6 +48,7 @@
             android:layout_width="72dp"
             android:layout_height="72dp"
             android:gravity="center"
+            android:id="@+id/score"
             android:background="@drawable/circular_button"
             android:backgroundTint="@color/lightergreen"
             android:text="50"
@@ -88,6 +89,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/totalTime"
                     android:layout_weight="1"
                     android:textAlignment="center"
                     android:text="5 min"
@@ -114,6 +116,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/totalQ"
                     android:layout_weight="1"
                     android:textAlignment="center"
                     android:text="10"
@@ -166,6 +169,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:id="@+id/correctQ"
                         android:layout_marginTop="8dp"
                         android:text="5"
                         android:textSize="28sp"
@@ -204,6 +208,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:id="@+id/wrongQ"
                         android:layout_marginTop="8dp"
                         android:text="5"
                         android:textSize="28sp"
@@ -242,6 +247,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:id="@+id/unattempted"
                         android:layout_marginTop="8dp"
                         android:text="5"
                         android:textSize="28sp"
@@ -256,6 +262,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/white"
+            android:id="@+id/checkRankB"
             android:text="Check Your Ranking in LeaderBoard"
             android:textColor="@color/primary_dark"
             android:textStyle="bold"
@@ -281,6 +288,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/primary"
+            android:id="@+id/reattemptB"
             android:text="RE-ATTEMPT"
             android:textColor="@color/white"
             android:textSize="16sp"
@@ -294,6 +302,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/viewAnsB"
             android:background="@color/primary"
             android:text="VIEW ANSWERS"
             android:textColor="@color/white"
