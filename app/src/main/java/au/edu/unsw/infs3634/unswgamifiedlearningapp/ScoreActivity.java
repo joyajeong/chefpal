@@ -32,6 +32,7 @@ public class ScoreActivity extends AppCompatActivity {
 
     private void loadData(){
         int correctQ = 0, wrongQ = 0, unattempted = 0;
+        //
 
     }
 
