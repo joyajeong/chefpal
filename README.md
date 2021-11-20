@@ -1,4 +1,4 @@
-# 👩‍🍳 ChefPal: unsw-gamified-learning-app-group-76
+# 👩‍🍳 ChefPal
 unsw-gamified-learning-app-group-76 created by GitHub Classroom
 
 ## About the project 
