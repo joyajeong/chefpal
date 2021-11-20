@@ -83,8 +83,8 @@ public class AccountFragment extends Fragment {
                         if(DbQuery.isMeOnTopList){
                             calaculateRank();
                         }
-                        score.setText("Score : " + myPerformance.getScore());
-                        rank.setText("Rank - "+ myPerformance.getRank());
+                        score.setText(myPerformance.getScore());
+                        rank.setText(myPerformance.getRank());
 
                     }
                     progressDialog.dismiss();
