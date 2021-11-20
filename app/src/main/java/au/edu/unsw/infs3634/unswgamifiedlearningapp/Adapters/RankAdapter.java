@@ -1,5 +1,6 @@
 package au.edu.unsw.infs3634.unswgamifiedlearningapp.Adapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +14,13 @@ import java.util.Locale;
 
 import au.edu.unsw.infs3634.unswgamifiedlearningapp.Model.Rank;
 import au.edu.unsw.infs3634.unswgamifiedlearningapp.R;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.RecipeInformationResult;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.User;
 
 public class RankAdapter extends RecyclerView.Adapter<RankAdapter.ViewHolder> {
-    private List<Rank> userList;
+    private List<User> userList;
 
-    public RankAdapter(List<Rank> userList) {
+    public RankAdapter(List<User> userList) {
         this.userList = userList;
     }
 
@@ -30,9 +33,9 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull RankAdapter.ViewHolder holder, int position) {
-        String name = userList.get(position).getName();
-        int score = userList.get(position).getScore();
-        int rank = userList.get(position).getRank();
+        String name = userList.get(position).getUsername();
+        int score = userList.get(position).getPoints();
+        int rank = position + 1;
         holder.setData(name,score,rank);
     }
 
@@ -62,9 +65,16 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.ViewHolder> {
         private void setData(String name, int score, int rank){
             nameTV.setText(name);
             scoreTV.setText("Score : "+score);
-            rankTV.setText("Rank -- "+rank);
+            rankTV.setText("Rank - "+rank);
             imgTV.setText(name.toUpperCase().substring(0,1));
         }
 
+    }
+
+    public void updateRank(List<User> users) {
+        Log.d("RankAdapter", "Updating recycler view");
+        userList.removeAll(userList);
+        userList.addAll(users);
+        notifyDataSetChanged();
     }
 }

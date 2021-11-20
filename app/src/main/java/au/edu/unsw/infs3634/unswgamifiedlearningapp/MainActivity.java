@@ -57,19 +57,6 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        //Get an ordered list of users based on their points
-        Executors.newSingleThreadExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                List<User> orderedUsers = userDao.getOrderedUsersByPoints();
-                if (orderedUsers.size() > 0 && orderedUsers != null) {
-                    for (User user : orderedUsers) {
-                        Log.d(TAG, user.getUsername() + " has " + user.getPoints() + " points");
-                    }
-                }
-            }
-        });
-
         //Setting up bottom navigation
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setOnItemSelectedListener(changeListener);

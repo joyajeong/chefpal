@@ -299,7 +299,7 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
         //Add to the database that the user has completed the recipe
         String id = selectedRecipeId + MainActivity.currUserID;
         userRecipeCompletedDao.insertAll(new UserRecipeCompleted(id, selectedRecipeId, MainActivity.currUserID));
-        showToast("Congrats! You just earned 50 points!");
+        showToast("Congrats! You just earned " + points + " points!");
     }
 
     private void showToast(String message) {
