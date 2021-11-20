@@ -21,7 +21,9 @@ import java.util.List;
 import java.util.Map;
 
 import au.edu.unsw.infs3634.unswgamifiedlearningapp.Model.CategoryQuiz;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.Model.Profile;
 import au.edu.unsw.infs3634.unswgamifiedlearningapp.Model.Question;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.Model.Rank;
 import au.edu.unsw.infs3634.unswgamifiedlearningapp.Model.TestQuestion;
 
 public class DbQuery {
@@ -32,11 +34,14 @@ public class DbQuery {
     public static List<TestQuestion> g_testList = new ArrayList<>();
     public static int g_selected_test_index = 0;
     public static List <Question> g_quesList = new ArrayList<>();
+    private static Rank myPerformance = new Rank(0,-1);
+    private static Profile myProfile = new Profile("NA",null);
 
     public static final int NOT_VISITED =0;
     public static final int UNANSWERED =1;
     public static final int ANSWERED =2;
     public static final int REVIEW =3;
+
 
 
 
@@ -127,7 +132,8 @@ public class DbQuery {
                     public void onSuccess(Void unused) {
                         if(score > g_testList.get(g_selected_test_index).getTopScore()){
                             g_testList.get(g_selected_test_index).setTopScore(score);
-
+                            myPerformance.setScore(score);
+                            completeListener.onSuccess();
                         }
 
                     }
@@ -135,9 +141,10 @@ public class DbQuery {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        completeListener.onFailure();
 
                     }
-                })
+                });
 
     }
 
@@ -213,6 +220,44 @@ public class DbQuery {
                     }
                 });
     }
+
+    public static void geUserData(final MyCompleteListener completeListener){
+        g_firestore.collection("USERS").document(FirebaseAuth.getInstance().getUid())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        myProfile.setName(documentSnapshot.getString("NAME"));
+                        myProfile.setEmail(documentSnapshot.getString("EMAIL"));
+                        myPerformance.setScore(documentSnapshot.getLong("TOTAL_SCORE").intValue());
+                        completeListener.onSuccess();
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        completeListener.onFailure();
+                    }
+                });
+    }
+
+    public static void loadData (final MyCompleteListener completeListener){
+        loadCategories(new MyCompleteListener() {
+            @Override
+            public void onSuccess() {
+                geUserData(completeListener);
+            }
+
+            @Override
+            public void onFailure() {
+                completeListener.onFailure();
+
+            }
+        });
+    }
+
+
 
 
 

@@ -1,16 +1,19 @@
 package au.edu.unsw.infs3634.unswgamifiedlearningapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toolbar;
+import android.widget.Toast;
 
 import java.util.concurrent.TimeUnit;
 
@@ -20,6 +23,7 @@ public class ScoreActivity extends AppCompatActivity {
     private long timeTaken;
     private Dialog progressDialog;
     private TextView dialogueText;
+    private int finalScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,10 +31,10 @@ public class ScoreActivity extends AppCompatActivity {
         setContentView(R.layout.activity_score);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-
-//        setSupportActionBar(toolbar);
-//        getSupportActionBar().setDisplayShowTitleEnabled(true);
-
+//
+//       setSupportActionBar(toolbar);
+//       getSupportActionBar().setDisplayShowTitleEnabled(true);
+//
         getSupportActionBar().setTitle("Result");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -102,7 +106,7 @@ public class ScoreActivity extends AppCompatActivity {
         unattempted.setText(String.valueOf(unattemptedQues));
         totalQ.setText(String.valueOf(DbQuery.g_quesList.size()));
         //score in %
-        int finalScore = (correctQues*100)/DbQuery.g_quesList.size();
+        finalScore = (correctQues*100)/DbQuery.g_quesList.size();
         score.setText(String.valueOf(finalScore));
 
         timeTaken = getIntent().getLongExtra("Time Taken",0);
@@ -129,10 +133,28 @@ public class ScoreActivity extends AppCompatActivity {
     }
 
     private void  saveResult(){
+        DbQuery.saveResult(finalScore, new MyCompleteListener() {
+            @Override
+            public void onSuccess() {
+                progressDialog.dismiss();
+            }
 
+            @Override
+            public void onFailure() {
+                Toast.makeText(ScoreActivity.this, "Something went wrong! Please try again!", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+            }
+        });
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId()== android.R.id.home){
+            ScoreActivity.this.finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 
 }

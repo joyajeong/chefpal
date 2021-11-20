@@ -36,6 +36,7 @@ public class TestActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle(DbQuery.g_categoryList.get(DbQuery.g_selected_cat_index).getName());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().hide();
 
 
         progressDialog = new Dialog(TestActivity.this);
