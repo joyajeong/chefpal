@@ -93,17 +93,17 @@ public class AnswerAdapter extends RecyclerView.Adapter<AnswerAdapter.ViewHolder
         private void setOptionColor (int selected, int color){
             switch (selected){
                 case 1 :
-                    optionA.setText(itemView.getContext().getResources().getColor(color));
+                    optionA.setTextColor(itemView.getContext().getResources().getColor(color));
                 break;
 
                 case 2 :
-                    optionB.setText(itemView.getContext().getResources().getColor(color));
+                    optionB.setTextColor(itemView.getContext().getResources().getColor(color));
                     break;
                 case 3 :
-                    optionC.setText(itemView.getContext().getResources().getColor(color));
+                    optionC.setTextColor(itemView.getContext().getResources().getColor(color));
                     break;
                 case 4 :
-                    optionD.setText(itemView.getContext().getResources().getColor(color));
+                    optionD.setTextColor(itemView.getContext().getResources().getColor(color));
                     break;
 
                 default:

@@ -20,15 +20,15 @@ public class AnswerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_answer);
 
-        toolbar = findViewById(R.id.aa_toolbar);
+        //toolbar = findViewById(R.id.aa_toolbar);
         answersView = findViewById(R.id.aa_Recycler);
 
         //setSupportActionBar(toolbar);
         //getSupportActionBar().setDisplayShowTitleEnabled(true);
         //category name
 
-        getSupportActionBar().setTitle("Answers");
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setTitle("Answers");
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);

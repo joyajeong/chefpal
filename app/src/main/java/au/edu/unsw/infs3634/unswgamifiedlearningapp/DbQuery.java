@@ -243,7 +243,6 @@ public class DbQuery {
     }
 
 
-
     public static void loadCategories(final MyCompleteListener completeListener){
         //fetch data from DB
         g_categoryList.clear();
