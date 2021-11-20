@@ -54,8 +54,8 @@ public class ScoreActivity extends AppCompatActivity {
         viewAnsB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
+                Intent intent = new Intent(ScoreActivity.this,AnswerActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -141,8 +141,8 @@ public class ScoreActivity extends AppCompatActivity {
             }
             @Override
             public void onFailure() {
-                Toast.makeText(ScoreActivity.this, "Something went wrong! Please try again!", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
+                Toast.makeText(ScoreActivity.this, "Something went wrong! Please try again!", Toast.LENGTH_SHORT).show();
             }
         });
 

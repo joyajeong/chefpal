@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toolbar;
 
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.Adapters.AnswerAdapter;
+
 public class AnswerActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private RecyclerView answersView;
@@ -18,7 +20,8 @@ public class AnswerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_answer);
 
-        toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.aa_toolbar);
+        answersView = findViewById(R.id.aa_Recycler);
 
         //setSupportActionBar(toolbar);
         //getSupportActionBar().setDisplayShowTitleEnabled(true);
@@ -32,6 +35,8 @@ public class AnswerActivity extends AppCompatActivity {
         answersView.setLayoutManager(layoutManager);
 
         //adapter
+        AnswerAdapter adapter = new AnswerAdapter(DbQuery.g_quesList);
+        answersView.setAdapter(adapter);
     }
 
     @Override

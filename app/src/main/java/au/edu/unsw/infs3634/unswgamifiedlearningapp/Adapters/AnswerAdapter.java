@@ -18,6 +18,10 @@ import au.edu.unsw.infs3634.unswgamifiedlearningapp.R;
 public class AnswerAdapter extends RecyclerView.Adapter<AnswerAdapter.ViewHolder> {
     private List<Question> questList;
 
+    public AnswerAdapter(List<Question> questList) {
+        this.questList = questList;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -69,19 +73,43 @@ public class AnswerAdapter extends RecyclerView.Adapter<AnswerAdapter.ViewHolder
 
             if(selected == -1){
                 result.setText("Unanswered");
-                result.setTextColor(itemView.getContext().getColor(R.color.black));
+                result.setTextColor(itemView.getContext().getResources().getColor(R.color.black));
             }
             else{
                 if(selected == correctAns){
                     result.setText("Correct");
-                    result.setTextColor(itemView.getContext().getColor(R.color.green));
+                    result.setTextColor(itemView.getContext().getResources().getColor(R.color.green));
+                    setOptionColor(selected,R.color.green);
                 }
                 else{
                     result.setText("Wrong");
-                    result.setTextColor(itemView.getContext().getColor(R.color.red));
+                    result.setTextColor(itemView.getContext().getResources().getColor(R.color.red));
+                    setOptionColor(selected,R.color.red);
                 }
             }
 
         }
+
+        private void setOptionColor (int selected, int color){
+            switch (selected){
+                case 1 :
+                    optionA.setText(itemView.getContext().getResources().getColor(color));
+                break;
+
+                case 2 :
+                    optionB.setText(itemView.getContext().getResources().getColor(color));
+                    break;
+                case 3 :
+                    optionC.setText(itemView.getContext().getResources().getColor(color));
+                    break;
+                case 4 :
+                    optionD.setText(itemView.getContext().getResources().getColor(color));
+                    break;
+
+                default:
+
+            }
+        }
+
     }
 }
