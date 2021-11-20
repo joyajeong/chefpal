@@ -20,6 +20,8 @@ import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.util.Locale;
+
 import au.edu.unsw.infs3634.unswgamifiedlearningapp.Adapters.RankAdapter;
 import au.edu.unsw.infs3634.unswgamifiedlearningapp.Model.Rank;
 
@@ -71,7 +73,7 @@ public class HomeFragment extends Fragment {
         usersView.setLayoutManager(layoutManager);
 
         //adapter
-        adapter = new RankAdapter(DbQuery.g_userList);
+        adapter = new RankAdapter(g_userList);
 
         usersView.setAdapter(adapter);
 
@@ -100,7 +102,8 @@ public class HomeFragment extends Fragment {
         });
 
         totalUsersTV.setText("Total Users : "+ DbQuery.g_usersCount);
-        return  view;
+        //myImgTextTV.setText(myPerformance.getName().toUpperCase().substring(0,1));
+        return view;
 
     }
 

@@ -66,7 +66,7 @@ public class AccountFragment extends Fragment {
 
         dialogueText = progressDialog.findViewById(R.id.dialogue_text);
         dialogueText.setText("Loading...");
-        progressDialog.show();
+
 
         String userName = DbQuery.myProfile.getName();
         profile_img_text.setText(userName.toUpperCase().substring(0,1));
@@ -74,6 +74,7 @@ public class AccountFragment extends Fragment {
         score.setText(String.valueOf(DbQuery.myPerformance.getScore()));
 
         if(DbQuery.g_userList.size() == 0){
+            progressDialog.show();
             DbQuery.getTopUsers(new MyCompleteListener() {
                 @Override
                 public void onSuccess() {
@@ -97,6 +98,11 @@ public class AccountFragment extends Fragment {
 
                 }
             });
+        }else{
+            score.setText("Score : " + myPerformance.getScore());
+            if(myPerformance.getScore() !=0)
+            rank.setText("Rank - "+ myPerformance.getRank());
+
         }
 
 
