@@ -80,7 +80,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/ll3"
-        android:padding="10dp"
+        android:padding="6dp"
         android:gravity="center"
         android:background="@color/primary"
         app:layout_constraintStart_toStartOf="parent"

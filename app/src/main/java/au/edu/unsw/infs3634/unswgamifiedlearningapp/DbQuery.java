@@ -141,7 +141,7 @@ public class DbQuery {
 
     public static void saveResult(int score, MyCompleteListener completeListener){
         WriteBatch batch = g_firestore.batch();
-        DocumentReference userDoc = g_firestore.collection("USER").document(FirebaseAuth.getInstance().getUid());
+        DocumentReference userDoc = g_firestore.collection("USERS").document(FirebaseAuth.getInstance().getUid());
         batch.update(userDoc, "TOTAL_SCORE", score);
 
         if(score>g_testList.get(g_selected_test_index).getTopScore()){

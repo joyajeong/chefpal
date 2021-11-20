@@ -133,13 +133,12 @@ public class ScoreActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void  saveResult(){
+    private void saveResult(){
         DbQuery.saveResult(finalScore, new MyCompleteListener() {
             @Override
             public void onSuccess() {
                 progressDialog.dismiss();
             }
-
             @Override
             public void onFailure() {
                 Toast.makeText(ScoreActivity.this, "Something went wrong! Please try again!", Toast.LENGTH_SHORT).show();
