@@ -58,7 +58,8 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        ((MainActivity)getActivity()).getSupportActionBar().hide();
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Categories");
+
 
         //Initialise view elements
         initView(view);

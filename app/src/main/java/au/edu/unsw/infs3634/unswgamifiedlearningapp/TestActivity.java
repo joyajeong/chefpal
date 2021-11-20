@@ -30,13 +30,15 @@ public class TestActivity extends AppCompatActivity {
         testView = findViewById(R.id.test_Recycler);
         toolbar = findViewById(R.id.toolbar);
 
+       // ((MainActivity)getActivity()).getSupportActionBar().hide();
+
         //setSupportActionBar(toolbar);
         //getSupportActionBar().setDisplayShowTitleEnabled(true);
         //category name
         //??????????????!
 
-//        getSupportActionBar().setTitle(DbQuery.g_categoryList.get(DbQuery.g_selected_cat_index).getName());
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(DbQuery.g_categoryList.get(DbQuery.g_selected_cat_index).getName());
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //getSupportActionBar().hide();
 
 

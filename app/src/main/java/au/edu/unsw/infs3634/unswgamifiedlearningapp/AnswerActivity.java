@@ -27,8 +27,8 @@ public class AnswerActivity extends AppCompatActivity {
         //getSupportActionBar().setDisplayShowTitleEnabled(true);
         //category name
 
-//        getSupportActionBar().setTitle("Answers");
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Answers");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.VERTICAL);
