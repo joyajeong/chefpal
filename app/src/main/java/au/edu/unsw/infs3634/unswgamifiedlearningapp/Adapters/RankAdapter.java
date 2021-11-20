@@ -54,7 +54,7 @@ public class RankAdapter extends RecyclerView.Adapter<RankAdapter.ViewHolder> {
 
             nameTV = itemView.findViewById(R.id.name);
             rankTV= itemView.findViewById(R.id.rank);
-            imgTV = itemView.findViewById(R.id.imgText);
+            imgTV = itemView.findViewById(R.id.img_Text);
             scoreTV = itemView.findViewById(R.id.score);
 
 
