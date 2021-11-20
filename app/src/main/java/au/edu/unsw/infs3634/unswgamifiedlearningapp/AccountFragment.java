@@ -81,7 +81,7 @@ public class AccountFragment extends Fragment {
 
                     if(myPerformance.getScore() != 0){
                         if(DbQuery.isMeOnTopList){
-                            calaculateRank();
+                            calculateRank();
                         }
                         score.setText(myPerformance.getScore());
                         rank.setText(myPerformance.getRank());
@@ -170,12 +170,13 @@ public class AccountFragment extends Fragment {
         bottomNav = getActivity().findViewById(R.id.bottomNavigationView);
     }
 
-    private void calaculateRank(){
+
+    private void calculateRank(){
         //get last element
         int lowTopScore = g_userList.get(g_userList.size()-1).getScore();
 
         //how many remaining
-        int remaining_slots =g_usersCount - 10;
+        int remaining_slots = g_usersCount - 10;
 
         int mySlot = (myPerformance.getScore()*remaining_slots)/lowTopScore;
 
@@ -187,8 +188,7 @@ public class AccountFragment extends Fragment {
         else{
             rank = 11;
         }
-
-        myPerformance.setScore(rank);
+        myPerformance.setRank(rank);
 
     }
 }

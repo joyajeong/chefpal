@@ -81,23 +81,22 @@ public class HomeFragment extends Fragment {
             @Override
             public void onSuccess() {
                 adapter.notifyDataSetChanged();
-                if(myPerformance.getScore() != 0){
-                    if(DbQuery.isMeOnTopList){
-                        calaculateRank();
+                if(DbQuery.myPerformance.getScore() != 0){
+                    if(!DbQuery.isMeOnTopList){
+                        calculateRank();
                     }
                      myScoreTV.setText("Score : " + myPerformance.getScore());
                     myRankTV.setText("Rank -- "+ myPerformance.getRank());
 
                 }
                 progressDialog.dismiss();
-                Toast.makeText(getContext(), "Something went wrong! Please try again!",
-                        Toast.LENGTH_SHORT).show();
-            }
 
+            }
             @Override
             public void onFailure() {
                 progressDialog.dismiss();
-
+                Toast.makeText(getContext(), "Something went wrong! Please try again!",
+                        Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -116,7 +115,7 @@ public class HomeFragment extends Fragment {
     usersView = view.findViewById(R.id.user_view);
 }
 
-private void calaculateRank(){
+private void calculateRank(){
         //get last element
     int lowTopScore = g_userList.get(g_userList.size()-1).getScore();
 
@@ -133,8 +132,7 @@ private void calaculateRank(){
     else{
         rank = 11;
     }
-
-    myPerformance.setScore(rank);
+    myPerformance.setRank(rank);
 
 }
 

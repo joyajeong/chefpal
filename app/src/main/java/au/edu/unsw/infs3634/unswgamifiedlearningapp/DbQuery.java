@@ -342,7 +342,7 @@ public class DbQuery {
                 geUserData(new MyCompleteListener() {
                     @Override
                     public void onSuccess() {
-                        getTopUsers(completeListener);
+                        getUsersCount(completeListener);
 
                     }
 
