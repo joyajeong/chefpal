@@ -2,6 +2,7 @@ package au.edu.unsw.infs3634.unswgamifiedlearningapp;
 //everything related to Cloud Firestore (Firebase database)
 
 import android.util.ArrayMap;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -48,6 +49,7 @@ public class DbQuery {
     public static final int UNANSWERED =1;
     public static final int ANSWERED =2;
     public static final int REVIEW =3;
+    public static Long score;
 
 
 
@@ -146,15 +148,15 @@ public class DbQuery {
     }
 
 
-    //fetch top 10 users only
+    //fetch top users
     public static void getTopUsers(MyCompleteListener completeListener){
         g_userList.clear();
         String myUID = FirebaseAuth.getInstance().getUid();
 
         g_firestore.collection("USERS")
-                .whereGreaterThan("TOTAL_SCORE",0)
+//                .whereGreaterThan("TOTAL_SCORE",0)
                 .orderBy("TOTAL_SCORE", Query.Direction.DESCENDING)
-                .limit(10)
+//                .limit(10)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -236,7 +238,6 @@ public class DbQuery {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         completeListener.onFailure();
-
                     }
                 });
 
@@ -312,7 +313,7 @@ public class DbQuery {
                 });
     }
 
-    public static void geUserData(final MyCompleteListener completeListener){
+    public static void geUserData(final MyCompleteListener completeListener) {
         g_firestore.collection("USERS").document(FirebaseAuth.getInstance().getUid())
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -361,5 +362,70 @@ public class DbQuery {
             }
         });
      }
+
+    public static void getUserPoints(final MyCompleteListener completeListener) {
+        g_firestore.collection("USERS").document(FirebaseAuth.getInstance().getUid())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        score = (Long) documentSnapshot.getData().get("TOTAL_SCORE");
+                        Log.d("DbQuery", "TOTAL_SCORE " + score);
+                        completeListener.onSuccess();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("DBQuery", "Failed to get score");
+                        completeListener.onFailure();
+                    }
+                });
+    }
+
+    public static void updateUserPoints(int points, final MyCompleteListener completeListener) {
+        g_firestore.collection("USERS").document(FirebaseAuth.getInstance().getUid())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        //Get current score
+                        score = (Long) documentSnapshot.getData().get("TOTAL_SCORE");
+                        Log.d("DbQuery", "TOTAL_SCORE " + score);
+
+                        //Calculate cumulative score
+                        int cumulativeScore = score.intValue() + points;
+                        Log.d("DbQuery", "New score " + cumulativeScore);
+
+                        //Update score
+                        WriteBatch batch = g_firestore.batch();
+                        DocumentReference userDoc = g_firestore.collection("USERS").document(FirebaseAuth.getInstance().getUid());
+                        batch.update(userDoc, "TOTAL_SCORE", cumulativeScore);
+
+                        batch.commit()
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        myPerformance.setScore(cumulativeScore);
+                                        completeListener.onSuccess();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        completeListener.onFailure();
+                                    }
+                                });
+                        completeListener.onSuccess();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("DBQuery", "Failed to get score");
+                        completeListener.onFailure();
+                    }
+                });
+    }
 
 }

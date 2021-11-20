@@ -242,7 +242,14 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
                         }
                     }
                 });
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        btnComplete.setEnabled(false);
+                    }
+                });
             }
+
         });
     }
 
@@ -291,6 +298,29 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
     }
 
     private void giveUserPoints(int points) {
+//        int cumulativeScore = DbQuery.score.intValue() + points;
+        //Save points to Firebase DB
+//        DbQuery.saveResult(cumulativeScore, new MyCompleteListener() {
+//            @Override
+//            public void onSuccess() {
+//            }
+//            @Override
+//            public void onFailure() {
+//                showToast("Something went wrong! Please try again!");
+//            }
+//        });
+
+        DbQuery.updateUserPoints(points, new MyCompleteListener() {
+            @Override
+            public void onSuccess() {
+            }
+            @Override
+            public void onFailure() {
+                showToast("Something went wrong! Please try again!");
+            }
+        });
+
+        //Add to local DB
         //Get user's current points
         Integer currPoints = userDao.findPointsById(MainActivity.currUserID);
         //Add points & update the user database

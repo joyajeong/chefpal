@@ -4,6 +4,7 @@ import static au.edu.unsw.infs3634.unswgamifiedlearningapp.DbQuery.g_userList;
 import static au.edu.unsw.infs3634.unswgamifiedlearningapp.DbQuery.g_usersCount;
 import static au.edu.unsw.infs3634.unswgamifiedlearningapp.DbQuery.myPerformance;
 
+import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -19,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +41,9 @@ public class HomeFragment extends Fragment {
     private int progress;
     public static int EASY_LIMIT = 1000;
     public static int MED_LIMIT = 5000;
+    private Dialog progressDialog;
+    private TextView dialogueText;
+    private int currPoint;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -60,6 +65,16 @@ public class HomeFragment extends Fragment {
 
         ((MainActivity)getActivity()).getSupportActionBar().setTitle("Categories");
 
+        DbQuery.getUserPoints(new MyCompleteListener() {
+            @Override
+            public void onSuccess() {
+                currPoint = DbQuery.score.intValue();
+                Log.d(TAG, "curr score: " + currPoint);
+            }
+            @Override
+            public void onFailure() {
+            }
+        });
 
         //Initialise view elements
         initView(view);
@@ -70,7 +85,7 @@ public class HomeFragment extends Fragment {
         usersView.setLayoutManager(layoutManager);
 
         //Adapter
-        adapter = new RankAdapter(initialList);
+        adapter = new RankAdapter(g_userList);
         usersView.setAdapter(adapter);
 
         //User database
@@ -79,25 +94,25 @@ public class HomeFragment extends Fragment {
         userDao = db.userDao();
 
         //Get an ordered list of users based on their points
-        Executors.newSingleThreadExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                orderedUsers = userDao.getOrderedUsersByPoints();
-                if (orderedUsers.size() > 0 && orderedUsers != null) {
-                    for (User user : orderedUsers) {
-                        Log.d(TAG, user.getUsername() + " has " + user.getPoints() + " points");
-                    }
-                    Log.d(TAG, "Number of users: " + userDao.getAll().size());
-
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            adapter.updateRank(orderedUsers);
-                        }
-                    });
-                }
-            }
-        });
+//        Executors.newSingleThreadExecutor().execute(new Runnable() {
+//            @Override
+//            public void run() {
+//                orderedUsers = userDao.getOrderedUsersByPoints();
+//                if (orderedUsers.size() > 0 && orderedUsers != null) {
+//                    for (User user : orderedUsers) {
+//                        Log.d(TAG, user.getUsername() + " has " + user.getPoints() + " points");
+//                    }
+//                    Log.d(TAG, "Number of users: " + userDao.getAll().size());
+//
+//                    getActivity().runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            adapter.updateRank(orderedUsers);
+//                        }
+//                    });
+//                }
+//            }
+//        });
 
         //Update number of hats depending on user's level
         Executors.newSingleThreadExecutor().execute(new Runnable() {
@@ -125,7 +140,38 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        //Setting progress bar
+        progressDialog = new Dialog(getContext());
+        progressDialog.setContentView(R.layout.dialogue);
+        progressDialog.setCancelable(false);
+        progressDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        dialogueText = progressDialog.findViewById(R.id.dialogue_text);
+        dialogueText.setText("Loading...");
+        progressDialog.show();
+
+        usersView.setAdapter(adapter);
+
+        DbQuery.getTopUsers(new MyCompleteListener() {
+            @Override
+            public void onSuccess() {
+                adapter.notifyDataSetChanged();
+                if(DbQuery.myPerformance.getScore() != 0){
+                    if(!DbQuery.isMeOnTopList){
+                        calculateRank();
+                    }
+                }
+                progressDialog.dismiss();
+
+            }
+            @Override
+            public void onFailure() {
+                progressDialog.dismiss();
+                Toast.makeText(getContext(), "Something went wrong! Please try again!",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        //Setting header progress
         calculateProgress();
         return view;
     }
@@ -167,6 +213,27 @@ public class HomeFragment extends Fragment {
                         level +" recipes!");
             }
         });
+    }
+
+    private void calculateRank(){
+        //get last element
+        int lowTopScore = g_userList.get(g_userList.size()-1).getScore();
+
+        //how many remaining
+        int remaining_slots = g_usersCount - 10;
+
+        int mySlot = (myPerformance.getScore()*remaining_slots)/lowTopScore;
+
+        int rank;
+
+        if(lowTopScore != myPerformance.getScore()){
+            rank = g_usersCount - mySlot;
+        }
+        else{
+            rank = 11;
+        }
+        myPerformance.setRank(rank);
+
     }
 
 }
