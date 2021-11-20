@@ -36,7 +36,7 @@ public class DbQuery {
     public static List<TestQuestion> g_testList = new ArrayList<>();
     public static int g_selected_test_index = 0;
     public static List <Question> g_quesList = new ArrayList<>();
-    public static Rank myPerformance = new Rank(null,0,-1);
+    public static Rank myPerformance = new Rank("NULL",0,-1);
     public static boolean isMeOnTopList = false;
 
     public static Profile myProfile = new Profile("NA",null);
@@ -324,6 +324,7 @@ public class DbQuery {
                         myProfile.setName(documentSnapshot.getString("NAME"));
                         myProfile.setEmail(documentSnapshot.getString("EMAIL"));
                         myPerformance.setScore(documentSnapshot.getLong("TOTAL_SCORE").intValue());
+                        myPerformance.setName(documentSnapshot.getString("NAME"));
                         completeListener.onSuccess();
 
                     }
