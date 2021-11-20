@@ -36,7 +36,7 @@ public class TestActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle(DbQuery.g_categoryList.get(DbQuery.g_selected_cat_index).getName());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().hide();
+        //getSupportActionBar().hide();
 
 
         progressDialog = new Dialog(TestActivity.this);
@@ -56,10 +56,23 @@ public class TestActivity extends AppCompatActivity {
         DbQuery.loadTestData(new MyCompleteListener() {
             @Override
             public void onSuccess() {
-                progressDialog.dismiss();
-                //setAdapter
-                adapter = new TestAdapter(DbQuery.g_testList);
-                testView.setAdapter(adapter);
+                DbQuery.loadMyScores(new MyCompleteListener() {
+                    @Override
+                    public void onSuccess() {
+                        progressDialog.dismiss();
+                        //setAdapter
+                        adapter = new TestAdapter(DbQuery.g_testList);
+                        testView.setAdapter(adapter);
+                    }
+
+                    @Override
+                    public void onFailure() {
+                        progressDialog.dismiss();
+                        Toast.makeText(TestActivity.this, "Something went wrong! Please try again!",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+
             }
 
             @Override

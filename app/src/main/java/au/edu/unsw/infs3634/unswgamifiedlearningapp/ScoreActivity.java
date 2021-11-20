@@ -38,6 +38,7 @@ public class ScoreActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Result");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
         progressDialog = new Dialog(ScoreActivity.this);
         progressDialog.setContentView(R.layout.dialogue);
         progressDialog.setCancelable(false);

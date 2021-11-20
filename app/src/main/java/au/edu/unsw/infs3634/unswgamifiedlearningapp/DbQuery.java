@@ -14,6 +14,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.WriteBatch;
 
 import java.util.ArrayList;
@@ -41,11 +42,6 @@ public class DbQuery {
     public static final int UNANSWERED =1;
     public static final int ANSWERED =2;
     public static final int REVIEW =3;
-
-
-
-
-
 
 
 
@@ -117,6 +113,32 @@ public class DbQuery {
                 });
     }
 
+    public static void loadMyScores(MyCompleteListener completeListener){
+        g_firestore.collection("USERS").document(FirebaseAuth.getInstance().getUid())
+                .collection("USER_DATA").document("MY_SCORES")
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        for(int i=0; i<g_testList.size();i++){
+                            int top = 0;
+                            if(documentSnapshot.get(g_testList.get(i).getTestID())!=null){
+                                //change top score
+                                top = documentSnapshot.getLong(g_testList.get(i).getTestID()).intValue();
+                            }
+                            g_testList.get(i).setTopScore(top);
+                        }
+                        completeListener.onSuccess();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        completeListener.onFailure();
+                    }
+                });
+    }
+
     public static void saveResult(int score, MyCompleteListener completeListener){
         WriteBatch batch = g_firestore.batch();
         DocumentReference userDoc = g_firestore.collection("USER").document(FirebaseAuth.getInstance().getUid());
@@ -124,7 +146,9 @@ public class DbQuery {
 
         if(score>g_testList.get(g_selected_test_index).getTopScore()){
             DocumentReference scoreDoc = userDoc.collection("USER_DATA").document("MY_SCORES");
-            batch.update(scoreDoc,g_testList.get(g_selected_test_index).getTestID(), score);
+            Map<String, Object> testData = new ArrayMap<>();
+            testData.put(g_testList.get(g_selected_test_index).getTestID(),score);
+            batch.set(scoreDoc,testData, SetOptions.merge());
         }
         batch.commit()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
