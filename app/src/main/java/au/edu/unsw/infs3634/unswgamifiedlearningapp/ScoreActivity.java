@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -51,8 +53,20 @@ public class ScoreActivity extends AppCompatActivity {
         progressDialog.show();
 
 
+
+
                 init();
                 loadData();
+
+        //BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+
+                leaderB.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //bottomNavigationView.setSelectedItemId(R.id.home);
+
+                    }
+                });
 
                 viewAnsB.setOnClickListener(new View.OnClickListener() {
                     @Override
