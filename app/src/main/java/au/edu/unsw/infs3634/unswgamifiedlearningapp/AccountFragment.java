@@ -99,9 +99,9 @@ public class AccountFragment extends Fragment {
                 }
             });
         }else{
-            score.setText("Score : " + myPerformance.getScore());
+            score.setText(myPerformance.getScore());
             if(myPerformance.getScore() !=0)
-            rank.setText("Rank - "+ myPerformance.getRank());
+            rank.setText(myPerformance.getRank());
 
         }
 
@@ -132,8 +132,9 @@ public class AccountFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 //favorites
-                Intent intent = new Intent(getContext(), FavoriteActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(getContext(), FavoriteActivity.class);
+//                startActivity(intent);
+
 
             }
         });
@@ -149,6 +150,7 @@ public class AccountFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 // leaderBoard!!!!!, 28-9:30
+                // bottomNav.setSelectedItemId(R.id.home);
 
             }
         });

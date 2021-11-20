@@ -121,6 +121,7 @@
         android:text="SIGN UP"
         android:textColor="@color/primary"
         android:textSize="18sp"
+        android:visibility="visible"
         app:layout_constraintStart_toEndOf="@+id/textView2"
         app:layout_constraintTop_toBottomOf="@+id/loginB" />
 

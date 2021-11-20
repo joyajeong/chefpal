@@ -52,6 +52,8 @@ public class LoginActivity extends AppCompatActivity {
         forgotPassB = findViewById(R.id.forgot_pass);
         gSignB = findViewById(R.id.g_signB);
 
+        getSupportActionBar().hide();
+
 
         progressDialog = new Dialog(LoginActivity.this);
         progressDialog.setContentView(R.layout.dialogue);
@@ -90,6 +92,8 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
 
         gSignB.setOnClickListener(new View.OnClickListener() {
             @Override

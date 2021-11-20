@@ -298,10 +298,8 @@ public class DbQuery {
                                     documentSnapshot.getString("TEST"+String.valueOf(i)+"_ID"),
                                             0,
                                             documentSnapshot.getLong("TEST"+String.valueOf(i)+"_TIME").intValue()
-
                             ));
                         }
-
 
                         completeListener.onSuccess();
 
@@ -346,7 +344,6 @@ public class DbQuery {
                     public void onSuccess() {
                         getTopUsers(completeListener);
 
-
                     }
 
                     @Override
@@ -358,17 +355,12 @@ public class DbQuery {
 
             }
 
-
             @Override
             public void onFailure() {
                 completeListener.onFailure();
 
             }
         });
-    }
-
-
-
-
+     }
 
 }

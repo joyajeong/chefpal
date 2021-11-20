@@ -86,7 +86,7 @@ public class HomeFragment extends Fragment {
                         calaculateRank();
                     }
                      myScoreTV.setText("Score : " + myPerformance.getScore());
-                    myRankTV.setText("Rank - "+ myPerformance.getRank());
+                    myRankTV.setText("Rank -- "+ myPerformance.getRank());
 
                 }
                 progressDialog.dismiss();
@@ -114,7 +114,6 @@ public class HomeFragment extends Fragment {
     myScoreTV = view.findViewById(R.id.totalScore);
     myRankTV = view.findViewById(R.id.rank);
     usersView = view.findViewById(R.id.user_view);
-
 }
 
 private void calaculateRank(){
@@ -122,7 +121,7 @@ private void calaculateRank(){
     int lowTopScore = g_userList.get(g_userList.size()-1).getScore();
 
         //how many remaining
-    int remaining_slots =g_usersCount - 10;
+    int remaining_slots = g_usersCount - 10;
 
     int mySlot = (myPerformance.getScore()*remaining_slots)/lowTopScore;
 
