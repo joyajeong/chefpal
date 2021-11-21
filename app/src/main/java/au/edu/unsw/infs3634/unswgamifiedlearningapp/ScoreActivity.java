@@ -171,6 +171,7 @@ public class ScoreActivity extends AppCompatActivity {
                 //Add points & update the user database
                 Integer newPoints = currPoints + finalScore;
                 userDao.updateUserPoints(MainActivity.currUserID, newPoints);
+                Log.d("ScoreActivity", "Updated points in the database!");
             }});
     }
 

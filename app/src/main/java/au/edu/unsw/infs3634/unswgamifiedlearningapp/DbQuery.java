@@ -157,9 +157,7 @@ public class DbQuery {
         String myUID = FirebaseAuth.getInstance().getUid();
 
         g_firestore.collection("USERS")
-//                .whereGreaterThan("TOTAL_SCORE",0)
                 .orderBy("TOTAL_SCORE", Query.Direction.DESCENDING)
-//                .limit(10)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
