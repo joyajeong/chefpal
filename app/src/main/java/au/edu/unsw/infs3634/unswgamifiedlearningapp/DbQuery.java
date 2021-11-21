@@ -54,8 +54,7 @@ public class DbQuery {
     public static final int ANSWERED =2;
     public static final int REVIEW =3;
     public static Long score;
-
-
+    public static String name;
 
     public static void createUserData(String email,String name,MyCompleteListener comepleteListener){
 
@@ -374,6 +373,7 @@ public class DbQuery {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         score = (Long) documentSnapshot.getData().get("TOTAL_SCORE");
+                        name = (String) documentSnapshot.getData().get("NAME");
                         Log.d("DbQuery", "TOTAL_SCORE " + score);
                         completeListener.onSuccess();
                     }

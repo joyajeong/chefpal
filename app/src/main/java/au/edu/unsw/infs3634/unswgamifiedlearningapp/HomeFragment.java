@@ -57,7 +57,7 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Home");
+
         ((MainActivity)getActivity()).getSupportActionBar().setElevation(0);
 
         //Get user points from Firebase database
@@ -66,6 +66,10 @@ public class HomeFragment extends Fragment {
             public void onSuccess() {
                 currPoint = DbQuery.score.intValue();
                 Log.d(TAG, "curr score: " + currPoint);
+
+                //Personalise home page heading
+                ((MainActivity)getActivity()).getSupportActionBar().setTitle("Welcome, " + DbQuery.name);
+                Log.d(TAG, "name: " + DbQuery.name);
             }
             @Override
             public void onFailure() {
