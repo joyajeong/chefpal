@@ -13,7 +13,7 @@ ChefPal is a gamified learning app targeted towards university students and youn
 * When singing up, please make sure the password is at least 6 characters (Firebase requirement)
 * If the sign up function does not work, a sample account is: 
   - Email: joylala123@gmail.com
-  - Password: test123
+  - Password: Test123
 
 
 
