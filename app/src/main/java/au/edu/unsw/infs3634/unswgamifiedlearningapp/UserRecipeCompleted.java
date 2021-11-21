@@ -24,5 +24,6 @@ public class UserRecipeCompleted {
         this.id = id;
         this.recipeId = recipeId;
         this.userId = userId;
+        //
     }
 }
