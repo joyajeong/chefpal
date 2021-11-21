@@ -115,7 +115,8 @@ public class ScoreActivity extends AppCompatActivity {
         wrongQ.setText(String.valueOf(wrongQues));
         unattempted.setText(String.valueOf(unattemptedQues));
         totalQ.setText(String.valueOf(DbQuery.g_quesList.size()));
-        //score in %
+
+        //take accuracy rate as score i.e. 50% correct -> 50 points
         finalScore = (correctQues*100)/DbQuery.g_quesList.size();
         score.setText(String.valueOf(finalScore));
 
@@ -142,7 +143,7 @@ public class ScoreActivity extends AppCompatActivity {
     }
 
 
-
+    // this could take time!
     private void saveResult() {
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override

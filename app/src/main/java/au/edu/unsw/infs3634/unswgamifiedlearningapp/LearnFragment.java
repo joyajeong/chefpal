@@ -47,13 +47,6 @@ public class LearnFragment extends Fragment {
 
         return view;
     }
+//will fetch this data from firebase loadCategories()
 
-//    private void loadCategories(){
-//        categoryList.clear();
-//        //will fetch this data from firebase
-//        // 3 category for now
-//        categoryList.add(new CategoryQuiz("1","Kitchen Safety",4));
-//        categoryList.add(new CategoryQuiz("2","Food Safety",4));
-//        categoryList.add(new CategoryQuiz("3","Nutrition",4));
-//    }
 }

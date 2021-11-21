@@ -68,7 +68,7 @@ public class FavouriteRecipeDetailActivity extends AppCompatActivity {
         //The id for UserFavouriteRecipe class
         id = MainActivity.currUserID + selectedRecipeId;
 
-        //Initalising the UI elements
+        //Initialising the UI elements
         layout = findViewById(R.id.ingredient_checkboxes_layout);
         tvRecipeName  = findViewById(R.id.tvRecipeName);
         tvRecipeTime = findViewById(R.id.tvRecipeTime);

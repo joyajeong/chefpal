@@ -132,7 +132,6 @@ public class SignUpActivity extends AppCompatActivity {
                                             startActivity(intent);
                                             SignUpActivity.this.finish();
                                             Log.d(TAG, "createUserWithEmail:success");
-
                                         }
 
                                         @Override

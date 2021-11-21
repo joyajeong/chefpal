@@ -94,7 +94,6 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-
         gSignB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

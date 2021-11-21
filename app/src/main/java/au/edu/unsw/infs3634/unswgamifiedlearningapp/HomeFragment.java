@@ -136,7 +136,6 @@ public class HomeFragment extends Fragment {
                     }
                 }
                 progressDialog.dismiss();
-
             }
             @Override
             public void onFailure() {

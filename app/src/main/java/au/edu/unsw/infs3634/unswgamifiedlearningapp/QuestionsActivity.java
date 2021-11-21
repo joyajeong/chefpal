@@ -32,7 +32,7 @@ import au.edu.unsw.infs3634.unswgamifiedlearningapp.QuizAdapters.QuestionAdapter
 public class QuestionsActivity extends AppCompatActivity {
     private RecyclerView questionView;
     private TextView questionID, timer, catName;
-    private Button submitB,markB, clearSelectionB;
+    private Button submitB,clearSelectionB;
     private ImageButton previousQ, nextQ;
     private ImageView questionListB;
     private int questID;
@@ -69,11 +69,9 @@ public class QuestionsActivity extends AppCompatActivity {
         timer = findViewById(R.id.tv_timer);
         catName = findViewById(R.id.quizCatName);
         submitB = findViewById(R.id.submitB);
-        //markB = findViewById(R.id.markB);
         clearSelectionB = findViewById(R.id.clearSelection);
         previousQ = findViewById(R.id.previousQ);
         nextQ = findViewById(R.id.nextQ);
-        //questionListB = findViewById(R.id.questionsList_gridB);
         questID = 0;
         questionID.setText("1/"+String.valueOf(g_quesList.size()));
         catName.setText(g_categoryList.get(g_selected_cat_index).getName());
@@ -147,7 +145,6 @@ public class QuestionsActivity extends AppCompatActivity {
                 submitTest();
             }
         });
-
 
     }
 

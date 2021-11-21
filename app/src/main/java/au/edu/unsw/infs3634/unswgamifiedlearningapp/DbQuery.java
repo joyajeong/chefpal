@@ -34,9 +34,12 @@ public class DbQuery {
     //FirebaseFirestore.getInstance();
     public static List<CategoryQuiz> g_categoryList = new ArrayList<>();
     public static int g_selected_cat_index = 0;
+
     public static List<TestQuestion> g_testList = new ArrayList<>();
     public static int g_selected_test_index = 0;
+
     public static List <Question> g_quesList = new ArrayList<>();
+
     public static Rank myPerformance = new Rank("NULL",0,-1);
     public static boolean isMeOnTopList = false;
 
@@ -45,6 +48,7 @@ public class DbQuery {
     public static List<Rank> g_userList = new ArrayList<>();
     public static int g_usersCount = 0;
 
+    //4 statuses of question result
     public static final int NOT_VISITED =0;
     public static final int UNANSWERED =1;
     public static final int ANSWERED =2;

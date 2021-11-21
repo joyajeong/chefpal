@@ -160,6 +160,7 @@ public class RecipeDetailActivity extends AppCompatActivity {
     }
 
     private void setRecipeInfo() {
+        //Asynchronous Task execution
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {

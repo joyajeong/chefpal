@@ -46,7 +46,7 @@ public class RecipeLevelsListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_levels_list);
 
-        //Initalise the recycler view
+        //Initialise the recycler view
         recyclerView = findViewById(R.id.rvRecipes);
 
         //Receive the recipe type and difficulty level chosen by the user
