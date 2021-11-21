@@ -12,8 +12,8 @@ ChefPal is a gamified learning app targeted towards university students and youn
 * As we are using a free version of the [Spoonacular API](https://spoonacular.com/food-api/docs), there is a daily quota limit on how many times the API can be called. Therefore, if you are re-running the app many times, the API might stop returning data (however, we have rarely have come across this issue)
 * When singing up, please make sure the password is at least 6 characters (Firebase requirement)
 * If the sign up function does not work, a sample account is: 
-  - Email: joylala123@gmail.com
-  - Password: Test123
+  - Email: joya1103@hotmail.com
+  - Password: infs3634
 
 
 
