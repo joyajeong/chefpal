@@ -1,4 +1,4 @@
-package au.edu.unsw.infs3634.unswgamifiedlearningapp;
+package au.edu.unsw.infs3634.unswgamifiedlearningapp.DatabaseDao;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -8,6 +8,8 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import java.util.List;
+
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.UserFavouriteRecipe;
 
 @Dao
 public interface UserFavouriteRecipeDao {

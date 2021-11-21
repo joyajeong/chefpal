@@ -13,15 +13,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.SearchView;
-import android.widget.TextView;
-
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.DatabaseDao.RecipeTypeDao;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.DatabaseDao.RecipesDao;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.RecipeAPIEntities.RecipeInformationResult;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.RecipeAPIEntities.RecipeSearchResult;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

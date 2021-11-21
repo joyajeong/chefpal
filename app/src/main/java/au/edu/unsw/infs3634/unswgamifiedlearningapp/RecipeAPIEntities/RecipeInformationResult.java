@@ -1,12 +1,8 @@
-package au.edu.unsw.infs3634.unswgamifiedlearningapp;
-
-import android.util.Log;
+package au.edu.unsw.infs3634.unswgamifiedlearningapp.RecipeAPIEntities;
 
 import androidx.annotation.NonNull;
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-import androidx.room.TypeConverters;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;

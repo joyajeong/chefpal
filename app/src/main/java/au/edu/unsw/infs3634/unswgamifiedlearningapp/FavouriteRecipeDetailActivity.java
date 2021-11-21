@@ -23,11 +23,18 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.DatabaseDao.RecipeTypeDao;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.DatabaseDao.RecipesDao;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.DatabaseDao.UserDao;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.DatabaseDao.UserFavouriteRecipeDao;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.DatabaseDao.UserRecipeCompletedDao;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.RecipeAPIEntities.ExtendedIngredient;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.RecipeAPIEntities.RecipeInformationResult;
 
 public class FavouriteRecipeDetailActivity extends AppCompatActivity {
 

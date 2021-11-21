@@ -29,6 +29,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.concurrent.Executors;
 
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.DatabaseDao.UserDao;
 import au.edu.unsw.infs3634.unswgamifiedlearningapp.QuizAdapters.RankAdapter;
 
 

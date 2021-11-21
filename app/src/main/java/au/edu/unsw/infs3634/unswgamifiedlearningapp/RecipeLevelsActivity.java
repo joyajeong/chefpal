@@ -1,8 +1,6 @@
 package au.edu.unsw.infs3634.unswgamifiedlearningapp;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import android.content.Intent;
@@ -11,16 +9,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.DatabaseDao.UserDao;
 
 public class RecipeLevelsActivity extends AppCompatActivity {
 

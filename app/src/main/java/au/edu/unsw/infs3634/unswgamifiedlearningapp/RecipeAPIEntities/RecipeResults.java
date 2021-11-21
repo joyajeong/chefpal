@@ -1,9 +1,7 @@
-package au.edu.unsw.infs3634.unswgamifiedlearningapp;
+package au.edu.unsw.infs3634.unswgamifiedlearningapp.RecipeAPIEntities;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-import java.util.ArrayList;
 
 public class RecipeResults {
 

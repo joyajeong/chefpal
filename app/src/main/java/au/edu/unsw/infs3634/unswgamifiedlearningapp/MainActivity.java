@@ -12,9 +12,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.DatabaseDao.UserDao;
 
 public class MainActivity extends AppCompatActivity {
 

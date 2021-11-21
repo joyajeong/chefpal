@@ -19,16 +19,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.DatabaseDao.RecipesDao;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.DatabaseDao.UserFavouriteRecipeDao;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.RecipeAPIEntities.RecipeInformationResult;
 
 
 public class FavouritesFragment extends Fragment {

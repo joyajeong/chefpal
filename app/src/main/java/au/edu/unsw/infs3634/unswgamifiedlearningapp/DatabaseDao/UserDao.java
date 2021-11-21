@@ -1,4 +1,4 @@
-package au.edu.unsw.infs3634.unswgamifiedlearningapp;
+package au.edu.unsw.infs3634.unswgamifiedlearningapp.DatabaseDao;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -7,6 +7,8 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import java.util.List;
+
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.User;
 
 @Dao
 public interface UserDao {

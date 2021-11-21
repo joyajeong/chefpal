@@ -1,4 +1,4 @@
-package au.edu.unsw.infs3634.unswgamifiedlearningapp;
+package au.edu.unsw.infs3634.unswgamifiedlearningapp.RecipeAPIEntities;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;

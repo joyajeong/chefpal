@@ -1,15 +1,11 @@
 package au.edu.unsw.infs3634.unswgamifiedlearningapp;
 
-import java.util.Map;
-
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.RecipeAPIEntities.RecipeInformationResult;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.RecipeAPIEntities.RecipeSearchResult;
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.http.FieldMap;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
-
-import retrofit2.http.QueryMap;
 
 public interface SpoonacularClient {
 
