@@ -1,4 +1,4 @@
-package au.edu.unsw.infs3634.unswgamifiedlearningapp.Model;
+package au.edu.unsw.infs3634.unswgamifiedlearningapp.QuizModel;
 
 public class TestQuestion {
     private String testID;

@@ -23,11 +23,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import au.edu.unsw.infs3634.unswgamifiedlearningapp.Model.CategoryQuiz;
-import au.edu.unsw.infs3634.unswgamifiedlearningapp.Model.Profile;
-import au.edu.unsw.infs3634.unswgamifiedlearningapp.Model.Question;
-import au.edu.unsw.infs3634.unswgamifiedlearningapp.Model.Rank;
-import au.edu.unsw.infs3634.unswgamifiedlearningapp.Model.TestQuestion;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.QuizModel.CategoryQuiz;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.QuizModel.Profile;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.QuizModel.Question;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.QuizModel.Rank;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.QuizModel.TestQuestion;
 
 public class DbQuery {
     public static FirebaseFirestore g_firestore;

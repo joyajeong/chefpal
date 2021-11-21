@@ -1,4 +1,4 @@
-package au.edu.unsw.infs3634.unswgamifiedlearningapp.Adapters;
+package au.edu.unsw.infs3634.unswgamifiedlearningapp.QuizAdapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,11 +8,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
-import au.edu.unsw.infs3634.unswgamifiedlearningapp.Model.Question;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.QuizModel.Question;
 import au.edu.unsw.infs3634.unswgamifiedlearningapp.R;
 
 public class AnswerAdapter extends RecyclerView.Adapter<AnswerAdapter.ViewHolder> {

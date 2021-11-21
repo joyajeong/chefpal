@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
 
-import au.edu.unsw.infs3634.unswgamifiedlearningapp.Adapters.CategoryAdapter;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.QuizAdapters.CategoryAdapter;
 
 /**
  * A simple {@link Fragment} subclass.

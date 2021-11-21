@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toolbar;
 
-import au.edu.unsw.infs3634.unswgamifiedlearningapp.Adapters.AnswerAdapter;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.QuizAdapters.AnswerAdapter;
 
 public class AnswerActivity extends AppCompatActivity {
     private Toolbar toolbar;

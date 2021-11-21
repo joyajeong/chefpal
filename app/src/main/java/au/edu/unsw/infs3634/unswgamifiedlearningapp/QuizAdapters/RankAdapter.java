@@ -1,4 +1,4 @@
-package au.edu.unsw.infs3634.unswgamifiedlearningapp.Adapters;
+package au.edu.unsw.infs3634.unswgamifiedlearningapp.QuizAdapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
-import java.util.Locale;
 
-import au.edu.unsw.infs3634.unswgamifiedlearningapp.Model.Rank;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.QuizModel.Rank;
 import au.edu.unsw.infs3634.unswgamifiedlearningapp.R;
 
 public class RankAdapter extends RecyclerView.Adapter<RankAdapter.ViewHolder> {

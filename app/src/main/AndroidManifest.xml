@@ -31,9 +31,6 @@
             android:name=".FavouriteRecipeDetailActivity"
             android:exported="true" />
         <activity
-            android:name=".FavoriteActivity"
-            android:exported="true" />
-        <activity
             android:name=".RecipeDetailActivity"
             android:exported="true" />
         <activity

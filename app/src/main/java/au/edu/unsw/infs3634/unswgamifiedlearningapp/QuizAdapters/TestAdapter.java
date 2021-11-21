@@ -1,4 +1,4 @@
-package au.edu.unsw.infs3634.unswgamifiedlearningapp.Adapters;
+package au.edu.unsw.infs3634.unswgamifiedlearningapp.QuizAdapters;
 
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import au.edu.unsw.infs3634.unswgamifiedlearningapp.DbQuery;
-import au.edu.unsw.infs3634.unswgamifiedlearningapp.Model.TestQuestion;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.QuizModel.TestQuestion;
 import au.edu.unsw.infs3634.unswgamifiedlearningapp.R;
 import au.edu.unsw.infs3634.unswgamifiedlearningapp.StartTestActivity;
 

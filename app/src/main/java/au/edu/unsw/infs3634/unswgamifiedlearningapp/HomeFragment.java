@@ -17,10 +17,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,20 +27,16 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Executors;
 
-import au.edu.unsw.infs3634.unswgamifiedlearningapp.Adapters.RankAdapter;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.QuizAdapters.RankAdapter;
 
 
 public class HomeFragment extends Fragment {
-    private TextView myImgTextTV, tvPoints, tvProgress;
+    private TextView tvPoints, tvProgress;
     private RecyclerView usersView;
     private RankAdapter adapter;
-    private List<User> initialList = new ArrayList<>();
     private static String TAG = "HomeFragment";
-    private List<User> orderedUsers = new ArrayList<>();
     private ImageView hat1, hat2, hat3;
     private UserDao userDao;
     private int progress;
@@ -51,31 +45,21 @@ public class HomeFragment extends Fragment {
     private Dialog progressDialog;
     private TextView dialogueText;
     private int currPoint;
-    private Button logoutB;
+    private ImageButton logoutB;
 
     public HomeFragment() {
         // Required empty public constructor
     }
-
-
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//
-//        }
-//    }
-
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Home");
+        ((MainActivity)getActivity()).getSupportActionBar().setElevation(0);
 
-
-        ((MainActivity)getActivity()).getSupportActionBar().hide();
-
-
-
+        //Get user points from Firebase database
         DbQuery.getUserPoints(new MyCompleteListener() {
             @Override
             public void onSuccess() {
@@ -103,27 +87,6 @@ public class HomeFragment extends Fragment {
         AppDatabase db = Room.databaseBuilder(getContext(),
                 AppDatabase.class, "user").fallbackToDestructiveMigration().build();
         userDao = db.userDao();
-
-        //Get an ordered list of users based on their points
-//        Executors.newSingleThreadExecutor().execute(new Runnable() {
-//            @Override
-//            public void run() {
-//                orderedUsers = userDao.getOrderedUsersByPoints();
-//                if (orderedUsers.size() > 0 && orderedUsers != null) {
-//                    for (User user : orderedUsers) {
-//                        Log.d(TAG, user.getUsername() + " has " + user.getPoints() + " points");
-//                    }
-//                    Log.d(TAG, "Number of users: " + userDao.getAll().size());
-//
-//                    getActivity().runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            adapter.updateRank(orderedUsers);
-//                        }
-//                    });
-//                }
-//            }
-//        });
 
         //Update number of hats depending on user's level
         Executors.newSingleThreadExecutor().execute(new Runnable() {
@@ -182,6 +145,28 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        logoutB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+
+                GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken("27382583312-3l51j2snafns9m81taca1fdtoc440udf.apps.googleusercontent.com")
+                        .requestEmail()
+                        .build();
+
+                GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(getContext(), gso);
+
+                mGoogleSignInClient.signOut().addOnCompleteListener((task) -> {
+                    Intent intent = new Intent(getContext(), LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    getActivity().finish();
+
+                });
+            }
+        });
+
         //Setting header progress
         calculateProgress();
         return view;
@@ -197,27 +182,6 @@ public class HomeFragment extends Fragment {
         logoutB = view.findViewById(R.id.logoutB);
     }
 
-     logoutB.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            FirebaseAuth.getInstance().signOut();
-
-            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken("27382583312-3l51j2snafns9m81taca1fdtoc440udf.apps.googleusercontent.com")
-                    .requestEmail()
-                    .build();
-
-            GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(getContext(), gso);
-
-            mGoogleSignInClient.signOut().addOnCompleteListener((task) -> {
-                Intent intent = new Intent(getContext(), LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                getActivity().finish();
-
-            });
-        }
-    });
 
     private int calculateProgress() {
         Executors.newSingleThreadExecutor().execute(new Runnable() {
@@ -260,14 +224,12 @@ public class HomeFragment extends Fragment {
 
         int rank;
 
-        if(lowTopScore != myPerformance.getScore()){
+        if (lowTopScore != myPerformance.getScore()){
             rank = g_usersCount - mySlot;
-        }
-        else{
+        } else {
             rank = 11;
         }
         myPerformance.setRank(rank);
-
     }
 
 }

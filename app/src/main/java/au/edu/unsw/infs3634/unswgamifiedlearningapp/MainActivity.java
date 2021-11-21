@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
     LearnFragment learnFragment = new LearnFragment();
     RecipesFragment recipesFragment = new RecipesFragment();
     FavouritesFragment favouritesFragment = new FavouritesFragment();
-    AccountFragment accountFragment = new AccountFragment();
 
     private FirebaseAuth mAuth;
     private static String TAG = "MainActivity";
@@ -84,10 +83,6 @@ public class MainActivity extends AppCompatActivity {
 
                 case R.id.favourites:
                     getSupportFragmentManager().beginTransaction().replace(R.id.container, favouritesFragment).commit();
-                    return true;
-
-                case R.id.account:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container, accountFragment).commit();
                     return true;
             }
             return false;

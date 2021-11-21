@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import au.edu.unsw.infs3634.unswgamifiedlearningapp.Adapters.TestAdapter;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.QuizAdapters.TestAdapter;
 
 public class TestActivity extends AppCompatActivity {
     private RecyclerView testView;

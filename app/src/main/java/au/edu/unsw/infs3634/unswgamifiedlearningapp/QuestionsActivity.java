@@ -27,7 +27,7 @@ import android.widget.TextView;
 
 import java.util.concurrent.TimeUnit;
 
-import au.edu.unsw.infs3634.unswgamifiedlearningapp.Adapters.QuestionAdapter;
+import au.edu.unsw.infs3634.unswgamifiedlearningapp.QuizAdapters.QuestionAdapter;
 
 public class QuestionsActivity extends AppCompatActivity {
     private RecyclerView questionView;
